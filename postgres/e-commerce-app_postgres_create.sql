@@ -2,7 +2,7 @@ CREATE TABLE customer (
 	id integer PRIMARY KEY,
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NOT NULL,
-	gender char(1),
+	gender varchar(30),
 	date_of_birth date,
 	street_address varchar(50) NOT NULL,
 	city varchar(30) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE orders (
 	id integer PRIMARY KEY,
 	date date NOT NULL,
 	status varchar(20) NOT NULL,
-	ship_date date NOT NULL,
+	ship_date date,
 	total money NOT NULL,
 	customer_id integer REFERENCES customer(id)
 );

@@ -1,8 +1,8 @@
 const express = require('express');
 const customersRouter = express.Router();
-const cartRouter = require('./cart');
+const cartsRouter = require('./carts');
 const ordersRouter = require('./orders');
-const db = require('../../db');
+const db = require('../../db/');
 
 // GET /api/customers to get an array of all customers
 
@@ -68,7 +68,7 @@ customersRouter.delete('/:customerId', (req, res) => {
     }
 });
 
-customersRouter.use('/:customerId/cart', cartRouter);
+customersRouter.use('/:customerId/cart', cartsRouter);
 customersRouter.use('/:customerId/orders', ordersRouter);
 
 module.exports = customersRouter;

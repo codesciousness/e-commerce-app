@@ -1,13 +1,11 @@
 const express = require('express');
 const apiRouter = express.Router();
-const customersRouter = require('./customers');
-const productsRouter = require('./products');
-const cartsRouter = require('./carts');
-const ordersRouter = require('./orders');
+const customersRouter = require('./routes/customers');
+const productsRouter = require('./routes/products');
+const cartsRouter = require('./routes/carts');
 
 apiRouter.use('/customers', customersRouter);
 apiRouter.use('/products', productsRouter);
-apiRouter.use('/carts', cartsRouter);
-apiRouter.use('/orders', ordersRouter);
+apiRouter.use('/cart', cartsRouter);
 
 module.exports = apiRouter;
