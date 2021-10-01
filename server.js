@@ -30,7 +30,7 @@ app.use('/api', apiRouter);
 
 // Add your code to start the server listening at PORT below:
 app.listen(PORT, () => {
-    console.log(`Server listening on Port ${PORT}`)
+  console.log(`Server listening on Port ${PORT}`)
 });
 
 module.exports = app;

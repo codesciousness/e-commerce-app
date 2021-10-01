@@ -4,13 +4,13 @@ const db = require('../../db');
 
 // GET /api/orders to get an array of all orders
 
-ordersRouter.get('/', (req, res) => {
-    const orders = db.query('SELECT * FROM orders', [req.params.id], (err, result) => {
-        if (err) {
-          return next(err);
-        }
-        res.send(result.rows[0]);
-    });
+ordersRouter.get('/', (req, res, next) => {
+  db.query('SELECT * FROM orders', (err, result) => {
+    if (err) {
+      return next(err);
+    }
+    res.send(result.rows);
+  });
 });
 
 module.exports = ordersRouter;

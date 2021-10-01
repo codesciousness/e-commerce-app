@@ -1,5 +1,5 @@
 CREATE TABLE customer (
-	id integer PRIMARY KEY,
+	id serial PRIMARY KEY,
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NOT NULL,
 	gender varchar(30),
@@ -13,21 +13,21 @@ CREATE TABLE customer (
 );
 
 CREATE TABLE cart (
-	id integer PRIMARY KEY,
-	customer_id integer REFERENCES customer(id)
+	id serial PRIMARY KEY,
+	customer_id serial REFERENCES customer(id)
 );
 
 CREATE TABLE orders (
-	id integer PRIMARY KEY,
+	id serial PRIMARY KEY,
 	date date NOT NULL,
 	status varchar(20) NOT NULL,
 	ship_date date,
 	total money NOT NULL,
-	customer_id integer REFERENCES customer(id)
+	customer_id serial REFERENCES customer(id)
 );
 
 CREATE TABLE product (
-	id integer PRIMARY KEY,
+	id serial PRIMARY KEY,
 	name varchar(50) NOT NULL,
 	manufacturer varchar(50) NOT NULL,
 	category varchar(50) NOT NULL,
@@ -36,15 +36,15 @@ CREATE TABLE product (
 );
 
 CREATE TABLE cart_products (
-	cart_id integer REFERENCES cart(id),
-	product_id integer REFERENCES product(id),
+	cart_id serial REFERENCES cart(id),
+	product_id serial REFERENCES product(id),
 	cart_quantity integer NOT NULL,
 	PRIMARY KEY (cart_id, product_id)
 );
 
 CREATE TABLE order_details (
-	order_id integer REFERENCES orders(id),
-	product_id integer REFERENCES product(id),
+	order_id serial REFERENCES orders(id),
+	product_id serial REFERENCES product(id),
 	order_quantity integer NOT NULL,
 	item_price money NOT NULL,
 	PRIMARY KEY (order_id, product_id)
