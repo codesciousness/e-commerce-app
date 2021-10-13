@@ -1,13 +1,15 @@
 CREATE TABLE customer (
 	id serial PRIMARY KEY,
+	username varchar(30) NOT NULL,
+	password varchar(12) NOT NULL,
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NOT NULL,
 	gender varchar(30),
 	date_of_birth date,
-	street_address varchar(50) NOT NULL,
-	city varchar(30) NOT NULL,
-	state char(2) NOT NULL,
-	zip_code varchar(10) NOT NULL,
+	street_address varchar(50),
+	city varchar(30),
+	state char(2),
+	zip_code varchar(10),
 	email varchar(100) NOT NULL UNIQUE,
 	phone varchar(12)
 );
