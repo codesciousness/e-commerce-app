@@ -16,19 +16,9 @@ customersRouter.get('/register', (req, res, next) => {
 
 customersRouter.post('/register', db.registerUser);
 
-customersRouter.get('/login', (req, res, next) => {
-    res.send('Login');
-});
-
-// POST /api/customers to login a customer
-
-customersRouter.post('/login', db.loginUser);
-
 customersRouter.get('/dashboard', (req, res, next) => {
     res.send('Dashboard');
 });
-
-customersRouter.get('/logout', db.logoutUser);
 
 //customerId param
 
