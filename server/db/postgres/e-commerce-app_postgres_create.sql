@@ -1,7 +1,8 @@
-CREATE TABLE customer (
+CREATE TABLE users (
 	id serial PRIMARY KEY,
+	google_id varchar(30),
 	username varchar(30) NOT NULL,
-	password varchar(12) NOT NULL,
+	password varchar(12),
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NOT NULL,
 	gender varchar(30),
@@ -16,7 +17,7 @@ CREATE TABLE customer (
 
 CREATE TABLE cart (
 	id serial PRIMARY KEY,
-	customer_id serial REFERENCES customer(id)
+	users_id serial REFERENCES users(id)
 );
 
 CREATE TABLE orders (
@@ -25,7 +26,7 @@ CREATE TABLE orders (
 	status varchar(20) NOT NULL,
 	ship_date date,
 	total money NOT NULL,
-	customer_id serial REFERENCES customer(id)
+	users_id serial REFERENCES users(id)
 );
 
 CREATE TABLE product (

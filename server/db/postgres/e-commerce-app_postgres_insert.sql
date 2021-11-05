@@ -1,25 +1,25 @@
-INSERT INTO customer (username, password, first_name, last_name, gender, date_of_birth, street_address, city, state, zip_code, email, phone)
+INSERT INTO users (google_id, username, password, first_name, last_name, gender, date_of_birth, street_address, city, state, zip_code, email, phone)
 VALUES
-('hdiamant0', 'T3fz3WC2', 'Hana', 'Diamant', 'Genderqueer', '1989-10-14', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', '425-594-5673'),
-('klukash1', '5vjYrn', 'Karyn', 'Lukash', 'Genderqueer', '1977-10-14', '9 Artisan Way', 'Saint Paul', 'MN', 55115, 'klukash1@prnewswire.com', '651-709-5985'),
-('awillan2', 'I1ywZY', 'Arvin', 'Willan', 'Male', '1943-06-13', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', '972-285-0610'),
-('lharrie3', 'rafulp', 'Launce', 'Harrie', 'Genderqueer', '1965-11-16', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', '518-598-2111'),
-('mdoore4', 'oSmVSa', 'Madlin', 'Doore', 'Polygender', '1959-12-16', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', '210-520-6667'),
-('bdomney5', 'KFX9ExqzQ', 'Bobbye', 'Domney', 'Bigender', '1934-11-04', '70032 Twin Pines Junction', 'Dayton', 'OH', 45426, 'bdomney5@woothemes.com', '937-826-8337'),
-('elantuffe6', 'czWCsteyr4', 'Edmund', 'Lantuffe', 'Agender', '1946-02-01', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', '901-975-3121'),
-('gboog7', 'GY3Zzu', 'Gard', 'Boog', 'Male', '1939-12-29', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', '239-853-3089'),
-('srennard8', 'xEwlyYV9', 'Sophronia', 'Rennard', 'Bigender', '1987-11-12', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', '260-174-8850'),
-('aselbach9', 'oia04RIzzBNe', 'Adolphe', 'Selbach', 'Non-binary', '1934-07-21', '3155 Menomonie Plaza', 'Dallas', 'TX', 75287, 'aselbach9@vk.com', '214-106-9403'),
-('bgoodingea', 'jbpBop', 'Berry', 'Goodinge', 'Agender', '1991-10-20', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', '936-537-5466'),
-('omeritonb', 'eDRcLBJPXw', 'Onfre', 'Meriton', 'Genderfluid', '1949-04-12', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', '952-466-9105'),
-('ahurrionc', 'UDigmfRi', 'Averil', 'Hurrion', 'Female', '1972-10-10', '7675 Butternut Circle', 'Migrate', 'KY', 41905, 'ahurrionc@omniture.com', '502-433-2149'),
-('wkoopd', 'NByJaAb', 'Whitney', 'Koop', 'Genderqueer', '1927-11-19', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', '239-760-8037'),
-('psaltsberge', 'Sn7o0XHTV', 'Pate', 'Saltsberg', 'Bigender', '1921-07-06', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', '941-958-8929'),
-('egiacomellof', 'DL235vUA2w8n', 'Earle', 'Giacomello', 'Genderfluid', '1923-09-26', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', '808-435-2323'),
-('oweatherbyg', 'V1JTv5cTlCkt', 'Olivero', 'Weatherby', 'Genderfluid', '1938-02-12', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', '405-945-0308'),
-('dfloodgateh', '4rr7H0eG', 'Dalston', 'Floodgate', 'Genderfluid', '1936-11-25', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', '650-728-2060'),
-('emaunselli', '2UnmJ2pho', 'Elvis', 'Maunsell', 'Female', '1941-06-10', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', '262-249-2608'),
-('randrickj', 'Nnn6t0Gm9Y', 'Reggy', 'Andrick', 'Female', '1939-03-19', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', '714-286-7887');
+(NULL, 'hdiamant0', 'T3fz3WC2', 'Hana', 'Diamant', 'Genderqueer', '1989-10-14', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', '425-594-5673'),
+(NULL, 'klukash1', '5vjYrn', 'Karyn', 'Lukash', 'Genderqueer', '1977-10-14', '9 Artisan Way', 'Saint Paul', 'MN', 55115, 'klukash1@prnewswire.com', '651-709-5985'),
+(NULL, 'awillan2', 'I1ywZY', 'Arvin', 'Willan', 'Male', '1943-06-13', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', '972-285-0610'),
+(NULL, 'lharrie3', 'rafulp', 'Launce', 'Harrie', 'Genderqueer', '1965-11-16', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', '518-598-2111'),
+(NULL, 'mdoore4', 'oSmVSa', 'Madlin', 'Doore', 'Polygender', '1959-12-16', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', '210-520-6667'),
+(NULL, 'bdomney5', 'KFX9ExqzQ', 'Bobbye', 'Domney', 'Bigender', '1934-11-04', '70032 Twin Pines Junction', 'Dayton', 'OH', 45426, 'bdomney5@woothemes.com', '937-826-8337'),
+(NULL, 'elantuffe6', 'czWCsteyr4', 'Edmund', 'Lantuffe', 'Agender', '1946-02-01', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', '901-975-3121'),
+(NULL, 'gboog7', 'GY3Zzu', 'Gard', 'Boog', 'Male', '1939-12-29', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', '239-853-3089'),
+(NULL, 'srennard8', 'xEwlyYV9', 'Sophronia', 'Rennard', 'Bigender', '1987-11-12', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', '260-174-8850'),
+(NULL, 'aselbach9', 'oia04RIzzBNe', 'Adolphe', 'Selbach', 'Non-binary', '1934-07-21', '3155 Menomonie Plaza', 'Dallas', 'TX', 75287, 'aselbach9@vk.com', '214-106-9403'),
+(NULL, 'bgoodingea', 'jbpBop', 'Berry', 'Goodinge', 'Agender', '1991-10-20', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', '936-537-5466'),
+(NULL, 'omeritonb', 'eDRcLBJPXw', 'Onfre', 'Meriton', 'Genderfluid', '1949-04-12', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', '952-466-9105'),
+(NULL, 'ahurrionc', 'UDigmfRi', 'Averil', 'Hurrion', 'Female', '1972-10-10', '7675 Butternut Circle', 'Migrate', 'KY', 41905, 'ahurrionc@omniture.com', '502-433-2149'),
+(NULL, 'wkoopd', 'NByJaAb', 'Whitney', 'Koop', 'Genderqueer', '1927-11-19', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', '239-760-8037'),
+(NULL, 'psaltsberge', 'Sn7o0XHTV', 'Pate', 'Saltsberg', 'Bigender', '1921-07-06', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', '941-958-8929'),
+(NULL, 'egiacomellof', 'DL235vUA2w8n', 'Earle', 'Giacomello', 'Genderfluid', '1923-09-26', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', '808-435-2323'),
+(NULL, 'oweatherbyg', 'V1JTv5cTlCkt', 'Olivero', 'Weatherby', 'Genderfluid', '1938-02-12', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', '405-945-0308'),
+(NULL, 'dfloodgateh', '4rr7H0eG', 'Dalston', 'Floodgate', 'Genderfluid', '1936-11-25', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', '650-728-2060'),
+(NULL, 'emaunselli', '2UnmJ2pho', 'Elvis', 'Maunsell', 'Female', '1941-06-10', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', '262-249-2608'),
+(NULL, 'randrickj', 'Nnn6t0Gm9Y', 'Reggy', 'Andrick', 'Female', '1939-03-19', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', '714-286-7887');
 
 INSERT INTO cart
 VALUES
@@ -44,7 +44,7 @@ VALUES
 (19, 19),
 (20, 20);
 
-INSERT INTO orders (date, status, ship_date, total, customer_id)
+INSERT INTO orders (date, status, ship_date, total, users_id)
 VALUES
 ('2015-11-05', 'returned', '2015-11-09', 215.58, 18),
 ('2010-04-05', 'shipped', '2010-04-09', 1740.09, 19),
