@@ -25,31 +25,30 @@ app.get('/', (req, res, next) => {
 // Add middleware for handling CORS requests from index.html
 app.use(cors());
 
+app.use(flash());
+
 // Add middware for parsing request bodies here:
 app.use(bodyParser.json());
 
 // Logging
 app.use(morgan('dev'));
 
-app.use(passport.initialize());
-
-// Mount your existing apiRouter below.
-app.use(apiRouter);
+app.use(cookieParser());
 
 //Add middleware for sessions
 app.use(session({
   secret: keys.session.secret,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
-  cookie: { secure: true },
+  //cookie: { secure: true },
   maxAge: 24 * 60 * 60 * 1000
 }));
 
-app.use(cookieParser());
-
+app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(flash());
+// Mount your existing apiRouter below.
+app.use(apiRouter);
 
 // Add your code to start the server listening at PORT below:
 app.listen(PORT, () => {

@@ -30,18 +30,6 @@ const registerUser = (req, res, next) => {
     });
 };
   
-const loginUser = (req, res, next) => {
-    passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: true })(req, res, next);
-        /*const user = req.body;
-        console.log(user);
-        res.json(user);*/
-};
-  
-const logoutUser = (req, res) => {
-    req.logout();
-    res.redirect('/login');
-};
-  
 const setUserId = (req, res, next, id) => {
     const userId = id;
     const text = 'SELECT * FROM users WHERE id = $1';
@@ -101,13 +89,100 @@ const deleteUser = (req, res) => {
     });
 };
 
+const getProducts = (req, res, next) => {
+    let category;
+    const input = req.query.category;
+    const sortOption = req.query.sort;
+    const categories = ['automotive', 'beauty', 'books', 'computers', 'electronics', 'games', 'grocery', 'health', 'home', 'kids', 'sports', 'tools', 'toys'];
+    if (categories.includes(input)) {
+        category = input[0].toUpperCase() + input.slice(1);
+    }
+    if (category) {
+        if (!sortOption) {
+            pg.query('SELECT * FROM product WHERE category = $1', [category], (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                res.send(result.rows);
+            });
+        }
+        else if (sortOption === 'lowest') {
+            pg.query('SELECT * FROM product WHERE category = $1 ORDER BY sell_price', [category], (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                res.send(result.rows);
+            });
+        }
+        else if (sortOption === 'highest') {
+            pg.query('SELECT * FROM product WHERE category = $1 ORDER BY sell_price DESC', [category], (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                res.send(result.rows);
+            });
+        }
+        else {
+            res.status(400).send('Bad Request');
+        }
+    }
+    if (!category) {
+        if (!sortOption) {
+            pg.query('SELECT * FROM product', (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                res.send(result.rows);
+            });
+        }
+        else if (sortOption === 'lowest') {
+            pg.query('SELECT * FROM product ORDER BY sell_price', (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                res.send(result.rows);
+            });
+        }
+        else if (sortOption === 'highest') {
+            pg.query('SELECT * FROM product ORDER BY sell_price DESC', (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                res.send(result.rows);
+            });
+        }
+        else {
+            res.status(400).send('Bad Request');
+        }
+    }
+    
+};
+
+const getProductById = (req, res, next, id) => {
+    const productId = id;
+    const text = 'SELECT * FROM product WHERE id = $1';
+    const values = [productId];
+    pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        if (result) {
+            const product = result.rows[0];
+            res.send(product);
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
+    });
+};
+
 module.exports = {
     getUsers,
     registerUser,
-    loginUser,
-    logoutUser,
     setUserId,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    getProducts,
+    getProductById
 };

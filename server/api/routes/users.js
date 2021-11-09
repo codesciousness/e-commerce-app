@@ -8,7 +8,7 @@ const db = require('../../db/queries');
 
 usersRouter.get('/', db.getUsers);
 
-usersRouter.get('/register', (req, res, next) => {
+usersRouter.get('/register', (req, res) => {
     res.send('Register');
 });
 
@@ -16,8 +16,11 @@ usersRouter.get('/register', (req, res, next) => {
 
 usersRouter.post('/register', db.registerUser);
 
-usersRouter.get('/dashboard', (req, res, next) => {
-    res.send('Dashboard');
+usersRouter.get('/profile', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send('You are logged in ' + req.user.first_name);
+    }
+    else res.redirect('/auth/login');
 });
 
 //userId param

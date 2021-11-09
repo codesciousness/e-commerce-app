@@ -1,16 +1,13 @@
 const express = require('express');
 const productsRouter = express.Router();
-const db = require('../../db');
+const db = require('../../db/queries');
 
-// GET /api/products to get an array of all products
+// GET /products to get an array of all products
 
-productsRouter.get('/', (req, res, next) => {
-  db.query('SELECT * FROM product', (err, result) => {
-    if (err) {
-      return next(err);
-    }
-    res.send(result.rows);
-  });
-});
+productsRouter.get('/', db.getProducts);
+
+// GET /products/:productId to get a single product by id
+
+productsRouter.get('/:productId', db.getProductById);
 
 module.exports = productsRouter;

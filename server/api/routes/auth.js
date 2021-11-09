@@ -4,17 +4,24 @@ const db = require('../../db/queries');
 const passport = require('passport');
 
 authRouter.get('/login', (req, res) => {
-    res.send('Login');
+    res.send('Please login');
 });
 
-authRouter.post('/login', db.loginUser);
+authRouter.post('/login', passport.authenticate('local', { successRedirect: '/users/profile', failureRedirect: '/auth/login', failureFlash: true }), (req, res, next) => {
+    const user = req.user;
+    console.log(user);
+    res.json(user);
+});
 
-authRouter.get('/logout', db.logoutUser);
+authRouter.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/auth/login');
+});
 
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 authRouter.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.send(req.user);
+    res.redirect('/users/profile');
 });
 
 module.exports = authRouter;
