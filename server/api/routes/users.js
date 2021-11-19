@@ -1,8 +1,9 @@
 const express = require('express');
 const usersRouter = express.Router();
-const cartsRouter = require('./carts');
+const cartRouter = require('./cart');
 const ordersRouter = require('./orders');
 const db = require('../../db/queries');
+const { authenticateToken } = require('../../util/jwt');
 
 // GET /users to get an array of all users
 
@@ -33,13 +34,13 @@ usersRouter.get('/:userId', db.getUserById);
 
 // PUT /users/:userId to update a single user by id
 
-usersRouter.put('/:userId', db.updateUser);
+usersRouter.put('/:userId', authenticateToken, db.updateUser);
 
 // DELETE /users/:userId to delete a single user by id
 
-usersRouter.delete('/:userId', db.deleteUser);
+usersRouter.delete('/:userId', authenticateToken, db.deleteUser);
 
-usersRouter.use('/:userId/cart', cartsRouter);
+usersRouter.use('/:userId/cart', cartRouter);
 usersRouter.use('/:userId/orders', ordersRouter);
 
 module.exports = usersRouter;

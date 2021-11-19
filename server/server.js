@@ -5,16 +5,19 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
-const cookieParser = require('cookie-parser');
-require('dotenv').config();
 const keys = require('./config/keys');
+const { PORT = 4001, NODE_ENV = 'development' } = process.env;
+const IN_PROD = NODE_ENV === 'production';
+const oneDay = 1000 * 60 * 60 * 24;
+
+//Config dotenv
+require('dotenv').config();
 
 //Passport config
 require('./config/passport')(passport);
-
-const PORT = process.env.PORT || 4001;
 
 app.use('/public', express.static('public'));
 
@@ -37,11 +40,15 @@ app.use(cookieParser());
 
 //Add middleware for sessions
 app.use(session({
-  secret: keys.session.secret,
+  name: 'sid',
   resave: false,
-  saveUninitialized: true,
-  //cookie: { secure: true },
-  maxAge: 24 * 60 * 60 * 1000
+  saveUninitialized: false,
+  secret: keys.session.secret,
+  cookie: {
+    maxAge: oneDay,
+    sameSite: true,
+    secure: IN_PROD,
+  }
 }));
 
 app.use(passport.initialize());
@@ -53,6 +60,7 @@ app.use(apiRouter);
 // Add your code to start the server listening at PORT below:
 app.listen(PORT, () => {
   console.log(`Server listening on Port ${PORT}`);
+  //To generate jwt token secret: console.log(require('crypto').randomBytes(64).toString('hex'));
 });
 
 module.exports = app;

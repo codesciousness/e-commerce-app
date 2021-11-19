@@ -3,11 +3,11 @@ const apiRouter = express.Router();
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const productsRouter = require('./routes/products');
-const cartsRouter = require('./routes/carts');
+const cartRouter = require('./routes/cart');
 
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/products', productsRouter);
-apiRouter.use('/cart', cartsRouter);
+apiRouter.use('/cart', cartRouter);
 
 module.exports = apiRouter;

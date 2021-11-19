@@ -176,6 +176,64 @@ const getProductById = (req, res, next, id) => {
     });
 };
 
+const getCart = (req, res, next) => {
+    const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price
+    FROM cart_products
+    JOIN product
+    ON cart_products.product_id = product.id
+    WHERE cart_id = $1`;
+    const values = [req.userId];
+    pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        res.send(result.rows);
+    });
+};
+
+const updateCart = (req, res, next) => {
+    const { cartId, productId, cartQuantity } = req.body;
+    if (cartQuantity <= 0) {
+        res.redirect(`/users/${req.userId}/cart/remove`);
+    }
+    const text = `UPDATE cart_products
+    SET cart_quantity = $3
+    WHERE cart_id = $1 AND product_id = $2
+    RETURNING *`;
+    const values = [req.userId, productId, cartQuantity];
+    console.log(req.userId, productId, cartQuantity);
+    pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        const updatedCart = result.rows[0];
+        if (updatedCart) {
+            res.status(201).send(updatedCart);
+        }
+        else {
+            res.status(400).send('Bad Request');
+        }
+    });
+};
+
+const deleteCartItem = (req, res, next) => {
+    const { productId } = req.body;
+    const text = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
+    const values = [req.userId, productId];
+    pg.query(text, values, (err, result) => {
+        const deletedItem = pg.query('SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2', (err, result) => result);
+        if (err) {
+            return next(err);
+        }
+        if (deletedItem === undefined) {
+            res.status(204).send();
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
+    });
+};
+
 module.exports = {
     getUsers,
     registerUser,
@@ -184,5 +242,8 @@ module.exports = {
     updateUser,
     deleteUser,
     getProducts,
-    getProductById
+    getProductById,
+    getCart,
+    updateCart,
+    deleteCartItem
 };

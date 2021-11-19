@@ -2,6 +2,8 @@ const express = require('express');
 const authRouter = express.Router();
 const db = require('../../db/queries');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const { generateAccessToken } = require('../../util/jwt');
 
 authRouter.get('/login', (req, res) => {
     res.send('Please login');
@@ -10,7 +12,8 @@ authRouter.get('/login', (req, res) => {
 authRouter.post('/login', passport.authenticate('local', { successRedirect: '/users/profile', failureRedirect: '/auth/login', failureFlash: true }), (req, res, next) => {
     const user = req.user;
     console.log(user);
-    res.json(user);
+    const token = generateAccessToken({ user: user });
+    res.json(token);
 });
 
 authRouter.get('/logout', (req, res) => {
