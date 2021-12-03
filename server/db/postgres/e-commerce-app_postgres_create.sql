@@ -2,7 +2,7 @@ CREATE TABLE users (
 	id serial PRIMARY KEY,
 	google_id varchar(30),
 	username varchar(30) NOT NULL,
-	password varchar(12),
+	password varchar(64),
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NOT NULL,
 	gender varchar(30),

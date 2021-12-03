@@ -1,5 +1,5 @@
 const pg = require('./index');
-const passport = require('passport');
+const bcrypt = require('bcrypt');
 
 const getUsers = (req, res, next) => {
     pg.query('SELECT * FROM users', (err, result) => {
@@ -12,21 +12,37 @@ const getUsers = (req, res, next) => {
   
 const registerUser = (req, res, next) => {
     const { username, password, firstName, lastName, email } = req.body;
-    const text = `INSERT INTO users (username, password, first_name, last_name, email)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING *`;
-    const values = [username, password, firstName, lastName, email];
-    pg.query(text, values, (err, result) => {
-      const newUser = result.rows[0];
+    const saltRounds = 10
+    bcrypt.genSalt(saltRounds, function(err, salt) {
         if (err) {
-            return next(err);
-        }
-        if (newUser) {
-            res.status(201).send(newUser);
+            throw err;
         }
         else {
-            res.status(400).send('Bad Request');
-        }
+            bcrypt.hash(password, salt, function(err, hash) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    const passwordHash = hash;
+                    const text = `INSERT INTO users (username, password, first_name, last_name, email)
+                    VALUES ($1, $2, $3, $4, $5)
+                    RETURNING *`;
+                    const values = [username, passwordHash, firstName, lastName, email];
+                    pg.query(text, values, (err, result) => {
+                        const newUser = result.rows[0];
+                        if (err) {
+                            return next(err);
+                        }
+                        if (newUser) {
+                            res.status(201).send(newUser);
+                        }
+                        else {
+                            res.status(400).send('Bad Request');
+                        }
+                    });
+                }
+            });
+        };
     });
 };
   
