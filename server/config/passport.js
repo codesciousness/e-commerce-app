@@ -49,18 +49,16 @@ module.exports = (passport) => {
     const values1 = [email];
     const values2 = [googleId, username, firstName, lastName, email];
     db.query(findText, values1, (err, result) => {
-      let user;
       if (err) {
         console.log(err.message);
         return done(err);
       }
 
       if(result.rows.length > 0) {
-        user = result.rows[0];
+        const user = result.rows[0];
         console.log(`User is ${user}`);
         done(null, user);
       }
-
       else {
         db.query(addText, values2, (err, result) => {
           if (err) {
@@ -83,15 +81,14 @@ module.exports = (passport) => {
     const text = 'SELECT * FROM users WHERE id=$1';
     const values = [parseInt(id, 10)];
     db.query(text, values, (err, result) => {
-      let user;
       if(err) {
         console.log(err.message);
         return done(err);
       }
-
-      user = result.rows[0];
-
-      done(null, user);
+      if(result.rows.length > 0) {
+        const user = result.rows[0];
+        done(null, user);
+      }
     });
   });
 };

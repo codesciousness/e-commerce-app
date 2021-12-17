@@ -6,12 +6,8 @@ const db = require('../../db/queries');
 
 cartRouter.get('/', db.getCart);
 
-// PUT /cart/update to update cart products
+// PUT /cart to update cart products
 
-cartRouter.put('/update', db.updateCart);
-
-// DELETE /cart/remove to delete a cart product by id
-
-cartRouter.delete('/remove', db.deleteCartItem);
+cartRouter.put('/', db.updateCart);
 
 module.exports = cartRouter;

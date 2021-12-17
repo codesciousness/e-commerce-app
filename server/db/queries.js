@@ -12,38 +12,53 @@ const getUsers = (req, res, next) => {
   
 const registerUser = (req, res, next) => {
     const { username, password, firstName, lastName, email } = req.body;
-    const saltRounds = 10
-    bcrypt.genSalt(saltRounds, function(err, salt) {
+    const saltRounds = 10;
+    const findText = 'SELECT * FROM users WHERE email=$1';
+    const values1 = [email];
+    const addText = `INSERT INTO users (username, password, first_name, last_name, email)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *`;
+    pg.query(findText, values1, (err, result) => {
         if (err) {
-            throw err;
+          console.log(err.message);
+          return done(err);
+        }
+  
+        if(result.rows.length > 0) {
+          const user = result.rows[0];
+          res.send(`Email address: ${user.email} is already registered. Please Login.`);
         }
         else {
-            bcrypt.hash(password, salt, function(err, hash) {
+            bcrypt.genSalt(saltRounds, function(err, salt) {
                 if (err) {
                     throw err;
                 }
                 else {
-                    const passwordHash = hash;
-                    const text = `INSERT INTO users (username, password, first_name, last_name, email)
-                    VALUES ($1, $2, $3, $4, $5)
-                    RETURNING *`;
-                    const values = [username, passwordHash, firstName, lastName, email];
-                    pg.query(text, values, (err, result) => {
-                        const newUser = result.rows[0];
+                    bcrypt.hash(password, salt, function(err, hash) {
                         if (err) {
-                            return next(err);
-                        }
-                        if (newUser) {
-                            res.status(201).send(newUser);
+                            throw err;
                         }
                         else {
-                            res.status(400).send('Bad Request');
+                            const passwordHash = hash;
+                            const values2 = [username, passwordHash, firstName, lastName, email];
+                            pg.query(addText, values2, (err, result) => {
+                                const newUser = result.rows[0];
+                                if (err) {
+                                    return next(err);
+                                }
+                                if (newUser) {
+                                    res.status(201).send(newUser);
+                                }
+                                else {
+                                    res.status(400).send('Bad Request');
+                                }
+                            });
                         }
                     });
-                }
+                };
             });
-        };
-    });
+        } 
+    }); 
 };
   
 const setUserId = (req, res, next, id) => {
@@ -95,13 +110,18 @@ const deleteUser = (req, res) => {
     const text = 'DELETE FROM users WHERE id = $1';
     const values = [req.userId];
     pg.query(text, values, (err, result) => {
-        const deletedUser = pg.query('SELECT * FROM users WHERE id = $1', (err, result) => result);
-        if (deletedUser === undefined) {
-            res.status(204).send();
-        }
-        else {
-            res.status(404).send('Not Found');
-        }
+        //check to make sure that the user has been deleted
+        pg.query('SELECT * FROM users WHERE id = $1', (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            if (result.rows.length === 0) {
+                res.status(204).send();
+            }
+            else {
+                res.status(500).send('Internal Server Error');
+            }
+        });
     });
 };
 
@@ -182,7 +202,7 @@ const getProductById = (req, res, next, id) => {
         if (err) {
             return next(err);
         }
-        if (result) {
+        if (result.rows.length > 0) {
             const product = result.rows[0];
             res.send(product);
         }
@@ -209,45 +229,78 @@ const getCart = (req, res, next) => {
 
 const updateCart = (req, res, next) => {
     const { cartId, productId, cartQuantity } = req.body;
-    if (cartQuantity <= 0) {
-        res.redirect(`/users/${req.userId}/cart/remove`);
+    if (cartQuantity === 0) {
+        const text1 = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
+        const values1 = [req.userId, productId];
+        pg.query(text1, values1, (err, result) => {
+            //check to make sure that item has been deleted
+            pg.query('SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2', (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                if (result.rows.length === 0) {
+                    res.status(204).send();
+                }
+                else {
+                    res.status(500).send('Internal Server Error');
+                }
+            });
+        });
     }
-    const text = `UPDATE cart_products
-    SET cart_quantity = $3
-    WHERE cart_id = $1 AND product_id = $2
-    RETURNING *`;
-    const values = [req.userId, productId, cartQuantity];
-    console.log(req.userId, productId, cartQuantity);
-    pg.query(text, values, (err, result) => {
-        if (err) {
-            return next(err);
-        }
-        const updatedCart = result.rows[0];
-        if (updatedCart) {
-            res.status(201).send(updatedCart);
-        }
-        else {
-            res.status(400).send('Bad Request');
-        }
-    });
-};
-
-const deleteCartItem = (req, res, next) => {
-    const { productId } = req.body;
-    const text = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
-    const values = [req.userId, productId];
-    pg.query(text, values, (err, result) => {
-        const deletedItem = pg.query('SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2', (err, result) => result);
-        if (err) {
-            return next(err);
-        }
-        if (deletedItem === undefined) {
-            res.status(204).send();
-        }
-        else {
-            res.status(404).send('Not Found');
-        }
-    });
+    else if (cartQuantity > 0) {
+        const text2 = `UPDATE cart_products
+        SET cart_quantity = $3
+        WHERE cart_id = $1 AND product_id = $2
+        RETURNING *`;
+        const values2 = [req.userId, productId, cartQuantity];
+        pg.query(text2, values2, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            
+            if (result.rows.length > 0) {
+                const updatedCart = result.rows[0];
+                res.status(201).send(updatedCart);
+            }
+            else {
+                //check to see if user exists
+                pg.query('SELECT * FROM users WHERE id = $1', [req.userId], (err, result) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    if (result.rows.length > 0) {
+                        //check to see if product exists
+                        pg.query('SELECT * FROM product WHERE id = $1', [productId], (err, result) => {
+                            if (err) {
+                                return next(err);
+                            }
+                            if (result.rows.length > 0) {
+                                //add the new cart item
+                                const text3 = `INSERT INTO cart_products (cart_id, product_id, cart_quantity)
+                                VALUES ($1, $2, $3)
+                                RETURNING *`;
+                                pg.query(text3, values2, (err, result) => {
+                                    if (err) {
+                                        return next(err);
+                                    }
+                                    if (result.rows.length > 0) {
+                                        const addedToCart = result.rows[0];
+                                        res.status(201).send(addedToCart);
+                                    }
+                                    else {
+                                        res.status(500).send('Internal Server Error');
+                                    }
+                                });
+                            }
+                            else res.status(400).send('Bad Request');
+                        });
+                    }
+                    else res.status(400).send('Bad Request');
+                });
+            }
+        });
+    }
+    else res.status(400).send('Bad Request');
 };
 
 module.exports = {
@@ -261,5 +314,4 @@ module.exports = {
     getProductById,
     getCart,
     updateCart,
-    deleteCartItem
 };

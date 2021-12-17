@@ -12,6 +12,9 @@ const keys = require('./config/keys');
 const { PORT = 4001, NODE_ENV = 'development' } = process.env;
 const IN_PROD = NODE_ENV === 'production';
 const oneDay = 1000 * 60 * 60 * 24;
+const corsOptions = {
+  origin: 'http://localhost:4001/',
+};
 
 //Config dotenv
 require('dotenv').config();
@@ -26,7 +29,7 @@ app.get('/', (req, res, next) => {
 });
 
 // Add middleware for handling CORS requests from index.html
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(flash());
 
