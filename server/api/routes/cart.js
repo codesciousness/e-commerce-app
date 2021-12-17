@@ -1,13 +1,21 @@
 const express = require('express');
-const cartRouter = express.Router({ mergeParams: true });
+const cartRouter = express.Router();
 const db = require('../../db/queries');
 
-// GET /cart to return cart products of a single user
+// POST /cart to create a new cart and save it to the database
 
-cartRouter.get('/', db.getCart);
+cartRouter.post('/', db.createCart);
 
-// PUT /cart to update cart products
+//cartId param
 
-cartRouter.put('/', db.updateCart);
+cartRouter.param('cartId', db.setCartId);
+
+// GET /cart/:cartId to return products of a cart
+
+cartRouter.get('/:cartId', db.getCartById);
+
+// PUT /cart/:cartId to update cart products
+
+cartRouter.put('/:cartId', db.updateCart);
 
 module.exports = cartRouter;

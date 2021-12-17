@@ -1,5 +1,6 @@
 const pg = require('./index');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 
 const getUsers = (req, res, next) => {
     pg.query('SELECT * FROM users', (err, result) => {
@@ -12,11 +13,12 @@ const getUsers = (req, res, next) => {
   
 const registerUser = (req, res, next) => {
     const { username, password, firstName, lastName, email } = req.body;
+    const userId = uuidv4();
     const saltRounds = 10;
     const findText = 'SELECT * FROM users WHERE email=$1';
     const values1 = [email];
-    const addText = `INSERT INTO users (username, password, first_name, last_name, email)
-    VALUES ($1, $2, $3, $4, $5)
+    const addText = `INSERT INTO users (id, username, password, first_name, last_name, email)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *`;
     pg.query(findText, values1, (err, result) => {
         if (err) {
@@ -40,7 +42,7 @@ const registerUser = (req, res, next) => {
                         }
                         else {
                             const passwordHash = hash;
-                            const values2 = [username, passwordHash, firstName, lastName, email];
+                            const values2 = [userId, username, passwordHash, firstName, lastName, email];
                             pg.query(addText, values2, (err, result) => {
                                 const newUser = result.rows[0];
                                 if (err) {
@@ -212,26 +214,65 @@ const getProductById = (req, res, next, id) => {
     });
 };
 
-const getCart = (req, res, next) => {
+const createCart = (req, res, next) => {
+    const cartId = uuidv4();
+    const userId = req.userId ? req.userId : req.body.userId ? req.body.userId : null;
+    console.log (userId);
+    const text = `INSERT INTO cart (id, users_id)
+    VALUES ($1, $2)
+    RETURNING *`;
+    pg.query(text, [cartId, userId], (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        if (result.rows.length > 0) {
+            res.send(result.rows);
+        }
+        else res.status(500).send('Internal Server Error');
+    });
+};
+
+const setCartId = (req, res, next, id) => {
+    const cartId = id;
+    const text = 'SELECT * FROM cart WHERE id = $1';
+    pg.query(text, [cartId], (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        if (result.rows.length > 0) {
+            req.cartId = cartId;
+            next();
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
+    });
+};
+
+const getCartById = (req, res, next) => {
     const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price
     FROM cart_products
     JOIN product
     ON cart_products.product_id = product.id
     WHERE cart_id = $1`;
-    const values = [req.userId];
-    pg.query(text, values, (err, result) => {
+    pg.query(text, [req.cartId], (err, result) => {
         if (err) {
             return next(err);
         }
-        res.send(result.rows);
+        if (result.rows.length > 0) {
+            res.send(result.rows);
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
     });
 };
 
 const updateCart = (req, res, next) => {
-    const { cartId, productId, cartQuantity } = req.body;
+    const { productId, cartQuantity } = req.body;
     if (cartQuantity === 0) {
         const text1 = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
-        const values1 = [req.userId, productId];
+        const values1 = [req.cartId, productId];
         pg.query(text1, values1, (err, result) => {
             //check to make sure that item has been deleted
             pg.query('SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2', (err, result) => {
@@ -252,7 +293,7 @@ const updateCart = (req, res, next) => {
         SET cart_quantity = $3
         WHERE cart_id = $1 AND product_id = $2
         RETURNING *`;
-        const values2 = [req.userId, productId, cartQuantity];
+        const values2 = [req.cartId, productId, cartQuantity];
         pg.query(text2, values2, (err, result) => {
             if (err) {
                 return next(err);
@@ -263,8 +304,8 @@ const updateCart = (req, res, next) => {
                 res.status(201).send(updatedCart);
             }
             else {
-                //check to see if user exists
-                pg.query('SELECT * FROM users WHERE id = $1', [req.userId], (err, result) => {
+                //check to see if cart exists
+                pg.query('SELECT * FROM cart WHERE id = $1', [req.cartId], (err, result) => {
                     if (err) {
                         return next(err);
                     }
@@ -295,7 +336,7 @@ const updateCart = (req, res, next) => {
                             else res.status(400).send('Bad Request');
                         });
                     }
-                    else res.status(400).send('Bad Request');
+                    else res.redirect('/cart');
                 });
             }
         });
@@ -312,6 +353,8 @@ module.exports = {
     deleteUser,
     getProducts,
     getProductById,
-    getCart,
+    createCart,
+    setCartId,
+    getCartById,
     updateCart,
 };

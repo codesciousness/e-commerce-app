@@ -1,6 +1,5 @@
 const express = require('express');
 const usersRouter = express.Router();
-const cartRouter = require('./cart');
 const ordersRouter = require('./orders');
 const db = require('../../db/queries');
 const { authenticateToken } = require('../../util/jwt');
@@ -40,7 +39,6 @@ usersRouter.put('/:userId', authenticateToken, db.updateUser);
 
 usersRouter.delete('/:userId', authenticateToken, db.deleteUser);
 
-usersRouter.use('/:userId/cart', cartRouter);
 usersRouter.use('/:userId/orders', ordersRouter);
 
 module.exports = usersRouter;
