@@ -113,7 +113,7 @@ const deleteUser = (req, res) => {
     const values = [req.userId];
     pg.query(text, values, (err, result) => {
         //check to make sure that the user has been deleted
-        pg.query('SELECT * FROM users WHERE id = $1', (err, result) => {
+        pg.query('SELECT * FROM users WHERE id = $1', [values], (err, result) => {
             if (err) {
                 return next(err);
             }
@@ -250,7 +250,7 @@ const setCartId = (req, res, next, id) => {
 };
 
 const getCartById = (req, res, next) => {
-    const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price
+    const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
     FROM cart_products
     JOIN product
     ON cart_products.product_id = product.id
@@ -260,7 +260,12 @@ const getCartById = (req, res, next) => {
             return next(err);
         }
         if (result.rows.length > 0) {
-            res.send(result.rows);
+            const subtotal = result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0);
+            const cart = {
+                items: result.rows,
+                subtotal,
+            };
+            res.send(cart);
         }
         else {
             res.status(404).send('Not Found');
@@ -344,6 +349,120 @@ const updateCart = (req, res, next) => {
     else res.status(400).send('Bad Request');
 };
 
+const checkout = (req, res, next) => {
+    //verify cart is not empty
+    const text = `SELECT cart_id, product_id, cart_quantity
+    FROM cart_products
+    WHERE cart_id = $1`;
+    pg.query(text, [req.cartId], (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        if (result.rows.length > 0) {
+            //obtain shipping address & payment method from req.body
+            const { shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email } = req.body.address;
+            const { paySuccess, payMethod, cardNum, cardExp, cardCVV } = req.body.payment;
+            //verify that shipping address, email and payment method have values
+            if (shipToName && shipToStreet && shipToCity && shipToState && shipToZip && email && paySuccess) {
+                //query items from cart products
+                const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
+                FROM cart_products
+                JOIN product
+                ON cart_products.product_id = product.id
+                WHERE cart_id = $1`;
+                pg.query(text, [req.cartId], (err, result) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    if (result.rows.length > 0) {
+                        const date = new Date(),
+                        items = result.rows,
+                        subtotal = result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0),
+                        tax = subtotal * 0.0825,
+                        shipping = 9.99,
+                        //calculate order total
+                        total = subtotal + tax + shipping;
+                        let orderId;
+                        const order = {
+                            date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+                            items,
+                            subtotal: Number(subtotal.toFixed(2)),
+                            tax: Number(tax.toFixed(2)),
+                            shipping,
+                            total: Number(total.toFixed(2)),
+                            address: {
+                                shipToName,
+                                shipToStreet,
+                                shipToCity,
+                                shipToState,
+                                shipToZip,
+                                email
+                            },
+                            payment: {
+                                payMethod,
+                                cardNum: cardNum.slice(cardNum.length - 4),
+                            }
+                        };
+                        //process order by adding rows into the order & order_details tables
+                        const ordersText = `INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                        RETURNING *`,
+                        ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, req.userId];
+                        pg.query(ordersText, ordersValues, (err, result) => {
+                            if (err) {
+                                return next(err);
+                            }
+                            if (result.rows.length > 0) {
+                                const processedOrder = result.rows[0];
+                                orderId = processedOrder.id;
+                                const orderDetailsText = `INSERT INTO order_details (order_id, product_id, order_quantity, item_price)
+                                VALUES ($1, $2, $3, $4)
+                                RETURNING *`;
+                                let itemsAdded = 0;
+                                order.items.forEach(item => {
+                                    let orderDetailsValues = [orderId, item.product_id, item.cart_quantity, item.sell_price];
+                                    pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
+                                        if (err) {
+                                            console.log(err.message);
+                                            return next(err);
+                                        }
+                                        if (result.rows.length === 0) {
+                                            res.status(500).send('Internal Server Error');
+                                        }
+                                        itemsAdded++;
+                                        if (itemsAdded === order.items.length) {
+                                            const clearCartText = 'DELETE FROM cart_products WHERE cart_id = $1';
+                                            pg.query(clearCartText, [req.cartId], (err, result) => {
+                                                //check to make sure that the cart items have been deleted
+                                                pg.query('SELECT * FROM cart_products WHERE cart_id = $1', [req.cartId], (err, result) => {
+                                                    if (err) {
+                                                        return next(err);
+                                                    }
+                                                    if (result.rows.length !== 0) {
+                                                        res.status(500).send('Internal Server Error');
+                                                    }
+                                                    res.send(order);
+                                                });
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        res.status(404).send('Not Found');
+                    }
+                });
+            }
+            else res.status(400).send('Bad Request');
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
+    });
+};
+
 module.exports = {
     getUsers,
     registerUser,
@@ -357,4 +476,5 @@ module.exports = {
     setCartId,
     getCartById,
     updateCart,
+    checkout
 };

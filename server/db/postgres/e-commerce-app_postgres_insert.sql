@@ -44,28 +44,28 @@ VALUES
 ('5c710659-838f-44bb-8491-69c76014b161', '899d585b-4f94-4fb8-83e5-0c45551dc23a'),
 ('68772740-80f0-457f-824b-9ef0f075d84a', '43cbd1df-fa13-440f-ace5-103121c61b6f');
 
-INSERT INTO orders (date, status, ship_date, total, users_id)
+INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
 VALUES
-('2015-11-05', 'returned', '2015-11-09', 215.58, '774f8d1f-2aca-4d6c-97e1-d8cd70b684ce'),
-('2010-04-05', 'shipped', '2010-04-09', 1740.09, '899d585b-4f94-4fb8-83e5-0c45551dc23a'),
-('2018-12-23', 'processing', NULL, 61.26, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
-('2011-10-20', 'shipped', '2011-10-24', 717.82, '5772e5b0-c800-4f13-8988-853376fe1cb6'),
-('2021-06-17', 'processing', NULL, 1291.48, '6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba'),
-('2012-05-15', 'returned', '2012-05-19', 571.69, '0ec0096f-e56b-4318-ac13-02385a9d4afe'),
-('2021-03-29', 'processing', NULL, 1082.62, '493603f6-98f0-4f56-8998-214ac11c63f2'),
-('2021-05-04', 'shipped', '2021-05-08', 1944.10, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
-('2016-03-31', 'processing', NULL, 900.49, 'aac2de3e-1762-4ddd-b405-af418541a753'),
-('2013-04-27', 'shipped', '2013-05-01', 550.95, 'b22105bf-7413-4160-9061-f2c750cfe082'),
-('2015-04-26', 'completed', '2015-04-30', 1184.41, '273bfea7-2b81-440a-a725-5a82598f645e'),
-('2018-01-19', 'shipped', '2018-01-23', 881.61, 'aac2de3e-1762-4ddd-b405-af418541a753'),
-('2011-11-10', 'shipped', '2011-11-14', 1480.43, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
-('2014-02-15', 'completed', '2014-02-19', 1263.41, 'f6fdc984-440e-4c78-be98-1455cdd3ff42'),
-('2020-02-23', 'shipped', '2020-02-27', 1978.80, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
-('2014-01-12', 'shipped', '2014-01-16', 353.58, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
-('2019-11-14', 'completed', '2019-11-18', 1375.13, 'a9b490ba-1829-4c35-bd4e-70fbf4849d61'),
-('2019-11-10', 'processing', NULL, 1462.39, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
-('2016-05-20', 'returned', '2016-05-24', 1505.87, '43cbd1df-fa13-440f-ace5-103121c61b6f'),
-('2015-02-01', 'shipped', '2015-02-05', 1754.55, '6f207c1c-d770-46af-a7aa-b0003e952c39');
+('2015-11-05', 'returned', 215.58, '2015-11-09', 'Dalston Floodgate', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', 'mastercard', 9945, '774f8d1f-2aca-4d6c-97e1-d8cd70b684ce'),
+('2010-04-05', 'shipped', 1740.09, '2010-04-09', 'Elvis Maunsell', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', 'visa', 3841, '899d585b-4f94-4fb8-83e5-0c45551dc23a'),
+('2018-12-23', 'processing', 61.26, NULL, 'Sophronia Rennard', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', 'american express', 8667, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
+('2011-10-20', 'shipped', 717.82, '2011-10-24', 'Arvin Willan', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', 'visa', 6350, '5772e5b0-c800-4f13-8988-853376fe1cb6'),
+('2021-06-17', 'processing', 1291.48, NULL, 'Gard Boog', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', 'mastercard', 2808, '6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba'),
+('2012-05-15', 'returned', 571.69, '2012-05-19', 'Berry Goodinge', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', 'visa', 5873, '0ec0096f-e56b-4318-ac13-02385a9d4afe'),
+('2021-03-29', 'processing', 1082.62, NULL, 'Whitney Koop', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', 'visa', 9872, '493603f6-98f0-4f56-8998-214ac11c63f2'),
+('2021-05-04', 'shipped', 1944.10, '2021-05-08', 'Earle Giacomello', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', 'mastercard', 2740, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
+('2016-03-31', 'processing', 900.49, NULL, 'Olivero Weatherby', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', 'american express', 3081, 'aac2de3e-1762-4ddd-b405-af418541a753'),
+('2013-04-27', 'shipped', 550.95, '2013-05-01', 'Edmund Lantuffe', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', 'visa', 1555, 'b22105bf-7413-4160-9061-f2c750cfe082'),
+('2015-04-26', 'delivered', 1184.41, '2015-04-30', 'Madlin Doore', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', 'visa', 5948, '273bfea7-2b81-440a-a725-5a82598f645e'),
+('2018-01-19', 'shipped', 881.61, '2018-01-23', 'Olivero Weatherby', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', 'mastercard', 3202, 'aac2de3e-1762-4ddd-b405-af418541a753'),
+('2011-11-10', 'shipped', 1480.43, '2011-11-14', 'Earle Giacomello', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', 'mastercard', 8703, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
+('2014-02-15', 'delivered', 1263.41, '2014-02-19', 'Onfre Meriton', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', 'visa', 9301, 'f6fdc984-440e-4c78-be98-1455cdd3ff42'),
+('2020-02-23', 'shipped', 1978.80, '2020-02-27', 'Pate Saltsberg', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', 'american express', 7286, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
+('2014-01-12', 'shipped', 353.58, '2014-01-16', 'Sophronia Rennard', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', 'visa', 8127, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
+('2019-11-14', 'delivered', 1375.13, '2019-11-18', 'Launce Harrie', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', 'mastercard', 6504, 'a9b490ba-1829-4c35-bd4e-70fbf4849d61'),
+('2019-11-10', 'processing', 1462.39, NULL, 'Pate Saltsberg', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', 'mastercard', 1100, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
+('2016-05-20', 'returned', 1505.87, '2016-05-24', 'Reggy Andrick', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', 'visa', 6314, '43cbd1df-fa13-440f-ace5-103121c61b6f'),
+('2015-02-01', 'shipped', 1754.55, '2015-02-05', 'Hana Diamant', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', 'american express', 8356, '6f207c1c-d770-46af-a7aa-b0003e952c39');
 
 INSERT INTO product (name, manufacturer, category, sell_price, stock_quantity)
 VALUES

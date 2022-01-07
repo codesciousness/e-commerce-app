@@ -79,7 +79,7 @@ module.exports = (passport) => {
     
   passport.deserializeUser((id, done) => {
     const text = 'SELECT * FROM users WHERE id=$1';
-    const values = [parseInt(id, 10)];
+    const values = [id];
     db.query(text, values, (err, result) => {
       if(err) {
         console.log(err.message);

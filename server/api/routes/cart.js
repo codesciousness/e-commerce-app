@@ -18,4 +18,8 @@ cartRouter.get('/:cartId', db.getCartById);
 
 cartRouter.put('/:cartId', db.updateCart);
 
+// POST /cart/:cartId/checkout to create a new order and clear the cart
+
+cartRouter.post('/:cartId/checkout', db.checkout);
+
 module.exports = cartRouter;
