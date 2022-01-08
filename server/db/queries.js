@@ -16,11 +16,11 @@ const registerUser = (req, res, next) => {
     const userId = uuidv4();
     const saltRounds = 10;
     const findText = 'SELECT * FROM users WHERE email=$1';
-    const values1 = [email];
+    const findValues = [email];
     const addText = `INSERT INTO users (id, username, password, first_name, last_name, email)
     VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *`;
-    pg.query(findText, values1, (err, result) => {
+    pg.query(findText, findValues, (err, result) => {
         if (err) {
           console.log(err.message);
           return done(err);
@@ -42,8 +42,8 @@ const registerUser = (req, res, next) => {
                         }
                         else {
                             const passwordHash = hash;
-                            const values2 = [userId, username, passwordHash, firstName, lastName, email];
-                            pg.query(addText, values2, (err, result) => {
+                            const addValues = [userId, username, passwordHash, firstName, lastName, email];
+                            pg.query(addText, addValues, (err, result) => {
                                 const newUser = result.rows[0];
                                 if (err) {
                                     return next(err);
@@ -71,7 +71,7 @@ const setUserId = (req, res, next, id) => {
         if (err) {
             return next(err);
         }
-        if (result) {
+        if (result.rows.length > 0) {
             req.userId = userId;
             next();
         }
@@ -85,6 +85,9 @@ const getUserById = (req, res) => {
     const text = 'SELECT * FROM users WHERE id = $1';
     const values = [req.userId];
     pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
         const user = result.rows[0];
         res.send(user);
     });
@@ -98,6 +101,9 @@ const updateUser = (req, res) => {
     RETURNING *`;
     const values = [req.userId, username, password, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone];
     pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
         const updatedUser = result.rows[0];
         if (updatedUser) {
             res.status(201).send(updatedUser);
@@ -112,8 +118,11 @@ const deleteUser = (req, res) => {
     const text = 'DELETE FROM users WHERE id = $1';
     const values = [req.userId];
     pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
         //check to make sure that the user has been deleted
-        pg.query('SELECT * FROM users WHERE id = $1', [values], (err, result) => {
+        pg.query('SELECT * FROM users WHERE id = $1', values, (err, result) => {
             if (err) {
                 return next(err);
             }
@@ -276,9 +285,9 @@ const getCartById = (req, res, next) => {
 const updateCart = (req, res, next) => {
     const { productId, cartQuantity } = req.body;
     if (cartQuantity === 0) {
-        const text1 = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
-        const values1 = [req.cartId, productId];
-        pg.query(text1, values1, (err, result) => {
+        const deleteText = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
+        const deleteValues = [req.cartId, productId];
+        pg.query(deleteText, deleteValues, (err, result) => {
             //check to make sure that item has been deleted
             pg.query('SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2', (err, result) => {
                 if (err) {
@@ -294,12 +303,12 @@ const updateCart = (req, res, next) => {
         });
     }
     else if (cartQuantity > 0) {
-        const text2 = `UPDATE cart_products
+        const updateText = `UPDATE cart_products
         SET cart_quantity = $3
         WHERE cart_id = $1 AND product_id = $2
         RETURNING *`;
-        const values2 = [req.cartId, productId, cartQuantity];
-        pg.query(text2, values2, (err, result) => {
+        const updateValues = [req.cartId, productId, cartQuantity];
+        pg.query(updateText, updateValues, (err, result) => {
             if (err) {
                 return next(err);
             }
@@ -322,10 +331,10 @@ const updateCart = (req, res, next) => {
                             }
                             if (result.rows.length > 0) {
                                 //add the new cart item
-                                const text3 = `INSERT INTO cart_products (cart_id, product_id, cart_quantity)
+                                const insertText = `INSERT INTO cart_products (cart_id, product_id, cart_quantity)
                                 VALUES ($1, $2, $3)
                                 RETURNING *`;
-                                pg.query(text3, values2, (err, result) => {
+                                pg.query(insertText, updateValues, (err, result) => {
                                     if (err) {
                                         return next(err);
                                     }
@@ -351,10 +360,10 @@ const updateCart = (req, res, next) => {
 
 const checkout = (req, res, next) => {
     //verify cart is not empty
-    const text = `SELECT cart_id, product_id, cart_quantity
+    const findText = `SELECT cart_id, product_id, cart_quantity
     FROM cart_products
     WHERE cart_id = $1`;
-    pg.query(text, [req.cartId], (err, result) => {
+    pg.query(findText, [req.cartId], (err, result) => {
         if (err) {
             return next(err);
         }
@@ -365,12 +374,12 @@ const checkout = (req, res, next) => {
             //verify that shipping address, email and payment method have values
             if (shipToName && shipToStreet && shipToCity && shipToState && shipToZip && email && paySuccess) {
                 //query items from cart products
-                const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
+                const joinText = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
                 FROM cart_products
                 JOIN product
                 ON cart_products.product_id = product.id
                 WHERE cart_id = $1`;
-                pg.query(text, [req.cartId], (err, result) => {
+                pg.query(joinText, [req.cartId], (err, result) => {
                     if (err) {
                         return next(err);
                     }
@@ -463,6 +472,122 @@ const checkout = (req, res, next) => {
     });
 };
 
+const getOrders = (req, res, next) => {
+    const values = [req.userId];
+    const sortOption = req.query.sort;
+    if (!sortOption) {
+        pg.query('SELECT * FROM orders WHERE users_id = $1', values, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            res.send(result.rows);
+        });
+    }
+    else if (sortOption === 'oldest') {
+        pg.query('SELECT * FROM orders WHERE users_id = $1 ORDER BY date', values, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            res.send(result.rows);
+        });
+    }
+    else if (sortOption === 'newest') {
+        pg.query('SELECT * FROM orders WHERE users_id = $1 ORDER BY date DESC', values, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            res.send(result.rows);
+        });
+    }
+    else {
+        res.status(400).send('Bad Request');
+    }
+};
+
+const setOrderId = (req, res, next, id) => {
+    const orderId = id;
+    const text = 'SELECT * FROM orders WHERE id = $1 AND users_id = $2';
+    const values = [orderId, req.userId];
+    pg.query(text, values, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        if (result.rows.length > 0) {
+            req.orderId = orderId;
+            next();
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
+    });
+};
+
+const getOrderById = (req, res) => {
+    const ordersText = 'SELECT * FROM orders WHERE id = $1 AND users_id = $2';
+    const ordersValues = [req.orderId, req.userId];
+    pg.query(ordersText, ordersValues, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        if (result.rows.length > 0) {
+            const summary = result.rows[0];
+            const orderDetailsText = 'SELECT * FROM order_details WHERE order_id = $1';
+            const orderDetailsValues = [req.orderId];
+            pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                const items = result.rows;
+                const order = {
+                    summary,
+                    items
+                };
+                res.send(order);
+            });
+        }
+    });
+};
+
+const deleteOrder = (req, res) => {
+    const orderDetailsText = 'DELETE FROM order_details WHERE order_id = $1';
+    const orderDetailsValues = [req.orderId];
+    pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        //check to make sure that the order_detail rows have been deleted
+        pg.query('SELECT * FROM order_details WHERE order_id = $1', orderDetailsValues, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            if (result.rows.length === 0) {
+                const ordersText = 'DELETE FROM orders WHERE id = $1 AND users_id = $2';
+                const ordersValues = [req.orderId, req.userId];
+                pg.query(ordersText, ordersValues, (err, result) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    //check to make sure that the order has been deleted
+                    pg.query('SELECT * FROM orders WHERE id = $1 AND users_id = $2', ordersValues, (err, result) => {
+                        if (err) {
+                            return next(err);
+                        }
+                        if (result.rows.length === 0) {
+                            res.status(204).send();
+                        }
+                        else {
+                            res.status(500).send('Internal Server Error');
+                        }
+                    });
+                });
+            }
+            else {
+                res.status(500).send('Internal Server Error');
+            }
+        });
+    });
+};
+
 module.exports = {
     getUsers,
     registerUser,
@@ -476,5 +601,9 @@ module.exports = {
     setCartId,
     getCartById,
     updateCart,
-    checkout
+    checkout,
+    getOrders,
+    setOrderId,
+    getOrderById,
+    deleteOrder,
 };

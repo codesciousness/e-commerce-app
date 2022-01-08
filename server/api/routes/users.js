@@ -4,6 +4,13 @@ const ordersRouter = require('./orders');
 const db = require('../../db/queries');
 const { authenticateToken } = require('../../util/jwt');
 
+const authenticate = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        next();
+    }
+    else res.redirect('/auth/login');
+};
+
 // GET /users to get an array of all users
 
 usersRouter.get('/', db.getUsers);
@@ -16,11 +23,8 @@ usersRouter.get('/register', (req, res) => {
 
 usersRouter.post('/register', db.registerUser);
 
-usersRouter.get('/profile', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send('You are logged in ' + req.user.first_name);
-    }
-    else res.redirect('/auth/login');
+usersRouter.get('/profile', authenticate, (req, res) => {
+    res.send('You are logged in ' + req.user.first_name);
 });
 
 //userId param
