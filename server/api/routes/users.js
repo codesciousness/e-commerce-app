@@ -39,10 +39,6 @@ usersRouter.get('/:userId', db.getUserById);
 
 usersRouter.put('/:userId', authenticateToken, db.updateUser);
 
-// DELETE /users/:userId to delete a single user by id
-
-usersRouter.delete('/:userId', authenticateToken, db.deleteUser);
-
 usersRouter.use('/:userId/orders', ordersRouter);
 
 module.exports = usersRouter;

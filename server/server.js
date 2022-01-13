@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const flash = require('connect-flash');
 const keys = require('./config/keys');
 const { PORT = 4001, NODE_ENV = 'development' } = process.env;
@@ -59,6 +61,8 @@ app.use(passport.session());
 
 // Mount your existing apiRouter below.
 app.use(apiRouter);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Add your code to start the server listening at PORT below:
 app.listen(PORT, () => {

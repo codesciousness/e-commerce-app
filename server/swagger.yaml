@@ -1,0 +1,746 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: E-commerce Store App
+  description: This is a fully-functioning e-commerce application REST API that allows users to perform various CRUD operations such as registering an account, browsing products for sale, etc.
+host: localhost:4001
+basePath: /
+tags:
+- name: auth
+  description: Authentication for logging in and out
+- name: cart
+  description: Operations on user carts
+- name: products
+  description: Operations on products
+- name: users
+  description: Operations on user accounts
+- name: orders
+  description: Operations on orders
+schemes:
+- https
+- http
+paths:
+  /auth/login:
+    get:
+      tags:
+      - auth
+      summary: Gets user login page
+      description: Retrieves user login page
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Login page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+    post:
+      tags:
+      - auth
+      summary: Initiates local login
+      description: Submits username and password through login page
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: credentials
+          in: body
+          description: An object containing the user's username and password
+          required: true
+          schema:
+            type: object
+            required:
+              - username
+              - password
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: Success redirects to user's profile page, and failure back to login page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /auth/logout:
+    get:
+      tags:
+      - auth
+      summary: User logout
+      description: Logs out user and retrieves login page
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Login page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /auth/google:
+    get:
+      tags:
+      - auth
+      summary: Gets Google login page
+      description: Redirects to Google login page
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Google login page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /auth/google/redirect:
+    get:
+      tags:
+      - auth
+      summary: Initiates Google login
+      description: Utilizes Google profile info to register/login
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Google login redirects to user's profile page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /cart:
+    post:
+      tags:
+      - cart
+      summary: Creates a new cart
+      description: Creates a new cart and associates it with userId, if provided
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: user
+          in: body
+          description: An object containing the user's id
+          required: false
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+      responses:
+        201:
+          description: New cart created
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /cart/{cartId}:
+    get:
+      tags:
+      - cart
+      summary: Gets cart by id
+      description: Retrieves a cart by it's id
+      produces:
+      - application/json
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: The cart's id
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: A cart
+          schema:
+            $ref: "#/definitions/Cart"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+    put:
+      tags:
+      - cart
+      summary: Updates the cart items by cart id
+      description: Modifies, adds or deletes products from the cart by cart id
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: The cart's id
+          type: string
+          format: uuid
+        - name: cartProduct
+          in: body
+          description: An object containing a product's id and cart quantity
+          schema:
+            type: object
+            required:
+              - productId
+              - cartQuantity
+            properties:
+              productId:
+                type: integer
+              cartQuantity:
+                type: integer
+      responses:
+        200:
+          description: The cart products
+          schema:
+            $ref: "#/definitions/CartProducts"
+        204:
+          description: Cart item successfully deleted
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /cart/{cartId}/checkout:
+    post:
+      tags:
+      - cart
+      summary: Creates an order
+      description: Creates an order for the cart items with the supplied address and payment information
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: The cart's id
+          type: string
+          format: uuid
+        - name: addressAndPayment
+          in: body
+          description: An object containing address and payment information
+          schema:
+            type: object
+            required:
+              - address
+              - payment
+            properties:
+              address:
+                $ref: "#/definitions/ShippingAddress"
+              payment:
+                $ref: "#/definitions/PaymentInfo"
+      responses:
+        200:
+          description: An order summary with order details
+          schema:
+            $ref: "#/definitions/Order"
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /products:
+    get:
+      tags:
+      - products
+      summary: Gets a list of products
+      description: Retrieves all products or products by category either sorted or unsorted by price
+      produces:
+      - application/json
+      parameters:
+        - name: category
+          in: query
+          required: false
+          type: string
+          description: Returns a single category of products
+          enum:
+          - automotive
+          - beauty
+          - books
+          - computers
+          - electronics
+          - games
+          - grocery
+          - health
+          - home
+          - kids
+          - sports
+          - tools
+          - toys
+        - name: sort
+          in: query
+          required: false
+          type: string
+          description: Sorts returned product list by price
+          enum:
+          - lowest
+          - highest
+      responses:
+        200:
+          description: An array of products
+          schema:
+            $ref: "#/definitions/Products"
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /products/{productId}:
+    get:
+      tags:
+      - products
+      summary: Gets a product by id
+      description: Retrieves a product by it's id
+      produces:
+      - application/json
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: The product's id
+          type: integer
+      responses:
+        200:
+          description: A product
+          schema:
+            $ref: "#/definitions/Product"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /users/register:
+    get:
+      tags:
+      - users
+      summary: Gets user registration page
+      description: Retrieves user registration page
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Registration page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+    post:
+      tags:
+      - users
+      summary: Initiates user registration
+      description: Submits new user information through registration page
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: newUser
+          in: body
+          description: An object containing the user's registration information
+          required: true
+          schema:
+            type: object
+            required:
+              - username
+              - password
+              - firstName
+              - lastName
+              - email
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+              firstName:
+                type: string
+              lastName:
+                type: string
+              email:
+                type: string
+                format: email
+      responses:
+        201:
+          description: New user successfully created
+          schema:
+            $ref: "#/definitions/User"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /users/profile:
+    get:
+      tags:
+      - users
+      summary: Gets the user's profile page
+      description: Retrieves an authenticated user's profile page
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: User's profile page
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /users/{userId}:
+    get:
+      tags:
+      - users
+      summary: Gets user by id
+      description: Retrieves a single user by id
+      produces:
+      - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The user's id
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: A user
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+    put:
+      tags:
+      - users
+      summary: Updates a user by id
+      description: Modifies an authenticated user's account information by userId
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The user's id
+          type: string
+          format: uuid
+        - name: user
+          in: body
+          description: An object containing a user's account information
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        200:
+          description: A user
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /users/{userId}/orders:
+    get:
+      tags:
+      - orders
+      summary: Gets past orders by user id
+      description: Retrieves order history of a single authenticated user by id
+      produces:
+      - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The user's id
+          type: string
+          format: uuid
+        - name: sort
+          in: query
+          required: false
+          type: string
+          description: Sorts returned order history by date
+          enum:
+          - oldest
+          - newest
+      responses:
+        200:
+          description: An array of previous orders
+          schema:
+            $ref: "#/definitions/Orders"
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+  /users/{userId}/orders/{orderId}:
+    get:
+      tags:
+      - orders
+      summary: Gets an order by id
+      description: Retrieves a single order of an authenticated user by userId and orderId
+      produces:
+      - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The user's id
+          type: string
+          format: uuid
+        - name: orderId
+          in: path
+          required: true
+          description: The order's id
+          type: number
+      responses:
+        200:
+          description: An order summary with order details
+          schema:
+            $ref: "#/definitions/Order"
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+    delete:
+      tags:
+      - orders
+      summary: Deletes an order by id
+      description: Deletes a single order of an authenticated user by userId and orderId
+      produces:
+      - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The user's id
+          type: string
+          format: uuid
+        - name: orderId
+          in: path
+          required: true
+          description: The order's id
+          type: number
+      responses:
+        204:
+          description: Order successfully deleted
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+
+definitions:
+  Cart:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/CartItem"
+      subtotal:
+        type: number
+        format: decimal
+  CartItem:
+    type: object
+    properties:
+      cart_id:
+        type: string
+        format: uuid
+      product_id:
+        type: integer
+      name:
+        type: string
+        description: Name of the product
+      cart_quantity:
+        type: integer
+      sell_price:
+        type: number
+        format: decimal
+      item_total:
+        type: number
+        format: decimal
+  CartProducts:
+    type: object
+    properties:
+      cart_id:
+        type: string
+        format: uuid
+      product_id:
+        type: integer
+      cart_quantity:
+        type: integer
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  Order:
+    type: object
+    properties:
+      processedOrder:
+        $ref: "#/definitions/ProcessedOrder"
+      orderDetails:
+        $ref: "#/definitions/OrderDetails"
+  OrderDetails:
+    type: object
+    properties:
+      order_id:
+        type: string
+        format: uuid
+      product_id:
+        type: integer
+      name:
+        type: string
+        description: Name of the product
+      order_quantity:
+        type: integer
+      item_price:
+        type: number
+        format: decimal
+      item_total:
+        type: number
+        format: decimal
+  Orders:
+    type: array
+    items:
+      $ref: "#/definitions/ProcessedOrder"
+  PaymentInfo:
+    type: object
+    properties:
+      paySuccess:
+        type: boolean
+      payMethod:
+        type: string
+        description: Type of card such as visa, mastercard, etc.
+      cardNum:
+        type: number
+        description: Sixteen digit card number
+      cardExp:
+        type: string
+        format: date
+      cardCVV:
+        type: integer
+        description: Three digit card security code
+  ProcessedOrder:
+    type: object
+    properties:
+      id:
+        type: integer
+      date:
+        type: string
+        format: date-time
+      status:
+        type: string
+        description: Order status
+        enum:
+        - processing
+        - shipped
+        - delivered
+        - returned
+      total:
+        type: number
+        format: decimal
+      ship_date:
+        type: string
+        format: date-time
+      shipto_name:
+        type: string
+      shipto_street:
+        type: string
+      shipto_city:
+        type: string
+      shipto_state:
+        type: string
+      shipto_zip:
+        type: string
+      email:
+        type: string
+      pay_method:
+        type: string
+        description: Type of card such as visa, mastercard, etc.
+      card_num:
+        type: number
+        description: Last four digits of the card number
+      users_id:
+        type: string
+        format: uuid
+  Product:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+        description: Name of the product
+      manufacturer:
+        type: string
+        description: Name of the product's manufacturer
+      category:
+        type: string
+        description: Name of the product's category
+      sell_price:
+        type: number
+        format: decimal
+      stock_quantity:
+        type: integer
+  Products:
+    type: array
+    items:
+      $ref: "#/definitions/Product"
+  ShippingAddress:
+    type: object
+    properties:
+      shipToName:
+        type: string
+      shipToStreet:
+        type: string
+      shipToCity:
+        type: string
+      shipToState:
+        type: string
+      shipToZip:
+        type: string
+      email:
+        type: string
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      google_id:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      gender:
+        type: string
+      date_of_birth:
+        type: string
+        format: date-time
+      street_address:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      zip_code:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+
+responses:
+  Standard400ErrorResponse:
+    description: Bad request.
+    schema:
+      $ref: "#/definitions/Error"
+  Standard404ErrorResponse:
+    description: Not found.
+    schema:
+      $ref: "#/definitions/Error"
+  Standard500ErrorResponse:
+    description: An unexpected error occured.
+    schema:
+      $ref: "#/definitions/Error"

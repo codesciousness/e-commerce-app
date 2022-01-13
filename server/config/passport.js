@@ -36,19 +36,18 @@ module.exports = (passport) => {
     clientSecret: keys.google.clientSecret,
     callbackURL: '/auth/google/redirect'
   }, (accessToken, refreshToken, profile, done) => {
-    console.log(profile);
     const googleId = profile.id;
     const username = profile.displayName;
     const email = profile.emails[0].value;
     const firstName = profile.name.givenName;
     const lastName = profile.name.familyName;
     const findText = 'SELECT * FROM users WHERE email=$1';
+    const findValues = [email];
     const addText = `INSERT INTO users (google_id, username, first_name, last_name, email)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *`;
-    const values1 = [email];
-    const values2 = [googleId, username, firstName, lastName, email];
-    db.query(findText, values1, (err, result) => {
+    const addValues = [googleId, username, firstName, lastName, email];
+    db.query(findText, findValues, (err, result) => {
       if (err) {
         console.log(err.message);
         return done(err);
@@ -60,7 +59,7 @@ module.exports = (passport) => {
         done(null, user);
       }
       else {
-        db.query(addText, values2, (err, result) => {
+        db.query(addText, addValues, (err, result) => {
           if (err) {
             console.log(err.message);
             return done(err);
