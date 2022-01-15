@@ -1,0 +1,43 @@
+.Register {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-color: whitesmoke;
+    padding: 2rem;
+}
+.Register__form {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    max-width: 400px;
+    margin: 0.25rem auto;
+    padding: 2rem;
+}
+
+.Register__label {
+    margin: 0.5rem;
+}
+
+.Register__input, .Register__button {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 0.5rem;
+}
+
+.Register__button {
+    background-color: black;
+    opacity: 0.9;
+    color: white;
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Register__button:hover {
+    background-color: red;
+}
