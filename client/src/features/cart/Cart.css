@@ -1,0 +1,40 @@
+.Cart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
+}
+
+.Cart__info {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 60%;
+    padding: 1.5rem;
+}
+
+.Cart__subtotal {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.Cart__checkout__button {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 0.5rem;
+    background-color: black;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Cart__checkout__button:hover {
+    background-color: lightgreen;
+    color: black;
+}

@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
-    padding: 2rem 1rem;
+    padding: 1rem;
     margin: 2rem;
     width: 20%;
     max-width: 400px;
@@ -28,4 +28,118 @@
 
 .Product__price {
     font-size: 1.25rem;
+}
+
+.Product__button {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 0.5rem;
+    background-color: black;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Product__button:hover {
+    background-color: lightgreen;
+    color: black;
+}
+
+.Product__inCart {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
+    padding: 2rem;
+    margin: 1rem;
+    width: 60%;
+}
+
+.Product__inCart__info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+}
+
+.Product__inCart__name {
+    font-weight: lighter;
+}
+
+.Product__inCart__price {
+    font-size: 1.25rem;
+}
+
+.Product__inCart__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Product__inCart__minus {
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Product__inCart__minus:hover {
+    background-color: black;
+    color: white;
+}
+
+.Product__inCart__quantity {
+    border: 1px solid black;
+    padding: 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    margin: 0;
+}
+
+.Product__inCart__plus {
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Product__inCart__plus:hover {
+    background-color: black;
+    color: white;
+}
+
+.Product__inCart__button {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 0.5rem;
+    background-color: black;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Product__inCart__button:hover {
+    background-color: lightgreen;
+    color: black;
 }
