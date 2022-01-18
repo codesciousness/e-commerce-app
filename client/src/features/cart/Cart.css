@@ -8,6 +8,10 @@
     padding: 2rem;
 }
 
+.Cart__heading {
+    margin-bottom: 2rem;
+}
+
 .Cart__info {
     display: flex;
     justify-content: space-evenly;

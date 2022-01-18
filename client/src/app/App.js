@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Register from '../components/register/Register';
-import Cart from '../features/cart/Cart';
+import Checkout from '../components/checkout/Checkout';
 import './App.css';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
       </header>
       <body>
         <main>
-          <Cart />
+          <Checkout />
         </main>
       </body>
     </div>
