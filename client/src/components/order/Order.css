@@ -1,0 +1,16 @@
+.Order {
+    width: 50%;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+.Order__info {
+    border-bottom: 1px solid black;
+}
+
+.Order__info, .Order__container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 2rem 1rem;
+}

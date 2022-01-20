@@ -7,13 +7,26 @@ const Product = ({ inCart }) => {
             <section className="Product__inCart">
                 <img className="Product__inCart__image" src='https://source.unsplash.com/200x200/?product' alt="" />
                 <div className="Product__inCart__info">
-                    <h2 className="Product__inCart__name">Product Name</h2>
                     <div className="Product__inCart__container">
-                        <button className="Product__inCart__minus">-</button>
-                        <input className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100" />
-                        <button className="Product__inCart__plus">+</button>
+                        <p className="Product__inCart__label">PRODUCT NAME</p>
+                        <h2 className="Product__inCart__name">Product Name</h2>
                     </div>
-                    <p className="Product__inCart__price">$56</p>
+                    <div className="Product__inCart__container">
+                        <p className="Product__inCart__label">QUANTITY</p>
+                        <div className="Product__inCart__quantity__container">
+                            <button className="Product__inCart__button">-</button>
+                            <input className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100" />
+                            <button className="Product__inCart__button">+</button>
+                        </div>
+                    </div>
+                    <div className="Product__inCart__container">
+                        <p className="Product__inCart__label">PRICE</p>
+                        <p className="Product__inCart__price">$56</p>
+                    </div>
+                    <div className="Product__inCart__container">
+                        <p className="Product__inCart__label">ITEM TOTAL</p>
+                        <p className="Product__inCart__itemTotal">$112</p>
+                    </div>
                 </div>
             </section>
         );

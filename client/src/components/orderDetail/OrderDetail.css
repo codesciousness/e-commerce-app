@@ -1,0 +1,11 @@
+.OrderDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.OrderDeatil__heading {
+    text-align: center;
+}

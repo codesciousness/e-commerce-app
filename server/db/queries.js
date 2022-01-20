@@ -529,7 +529,11 @@ const getOrderById = (req, res, next) => {
         }
         if (result.rows.length > 0) {
             const summary = result.rows[0];
-            const orderDetailsText = 'SELECT * FROM order_details WHERE order_id = $1';
+            const orderDetailsText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
+            FROM order_details
+            JOIN product
+            ON order_details.product_id = product.id
+            WHERE order_id = $1`;
             const orderDetailsValues = [req.orderId];
             pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
                 if (err) {
