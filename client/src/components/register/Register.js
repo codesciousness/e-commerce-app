@@ -17,7 +17,9 @@ const Register = () => {
                 <label className="Register__label" for="password">PASSWORD</label>
                 <input className="Register__input" id="password" name="password" placeholder="Enter a valid password" type="password" required />
                 <input className="Register__button" type="submit" value="REGISTER" />
+                <button className="Register__google__button">GOOGLE SIGNUP</button>
             </form>
+            <p className="Register__loginLink">Already registered? Please Login.</p>
         </section>
     );
 }

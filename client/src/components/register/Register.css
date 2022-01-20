@@ -21,14 +21,14 @@
     margin: 0.5rem;
 }
 
-.Register__input, .Register__button {
+.Register__input, .Register__button, .Register__google__button {
     border: 1px solid black;
     padding: 1rem;
     border-radius: 5px;
     margin: 0.5rem;
 }
 
-.Register__button {
+.Register__button, .Register__google__button {
     background-color: black;
     color: white;
     font-size: 1.25rem;
@@ -41,5 +41,14 @@
 
 .Register__button:hover {
     background-color: lightgreen;
+    color: black;
+}
+
+.Register__google__button {
+    margin: 0.5rem;
+}
+
+.Register__google__button:hover {
+    background-color: lightsteelblue;
     color: black;
 }

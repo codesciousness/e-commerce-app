@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Cart from '../features/cart/Cart';
-import OrderDetail from '../components/orderDetail/OrderDetail';
+import Login from '../features/auth/Login';
+import Register from '../components/register/Register';
 import './App.css';
 
 function App() {
@@ -15,12 +15,13 @@ function App() {
             <li className="App__navbar__li">Checkout</li>
             <li className="App__navbar__li">Profile</li>
             <li className="App__navbar__li">Register/Signup</li>
+            <li className="App__navbar__li"><button className="App__logout__button">Logout</button></li>
           </ul>
         </nav>
       </header>
       <body>
         <main>
-          <OrderDetail />
+          <Register />
         </main>
       </body>
     </div>

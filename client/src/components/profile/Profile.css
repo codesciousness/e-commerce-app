@@ -1,0 +1,57 @@
+.Profile {
+    width: 100%;
+    min-height: 100vh;
+    background-color: whitesmoke;
+    padding: 2rem;
+}
+
+.Profile__title {
+    text-align: center;
+}
+
+.Profile__form {
+    display: grid;
+    place-items: center;
+    margin: 1rem auto;
+    padding: 0 2rem;
+}
+
+.Profile__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 50%;
+    margin: 1.5rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2rem 2.5rem;
+    background-color: rgb(210, 225, 250);
+}
+
+.Profile__label {
+    margin: 0.5rem;
+}
+
+.Profile__input, .Profile__button {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 0.5rem;
+}
+
+.Profile__button {
+    width: 25%;
+    background-color: black;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 1.5rem auto;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.Profile__button:hover {
+    background-color: lightgreen;
+    color: black;
+}
