@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Login from '../features/auth/Login';
+import Products from '../features/products/Products';
 import Register from '../components/register/Register';
 import './App.css';
 
@@ -19,11 +19,9 @@ function App() {
           </ul>
         </nav>
       </header>
-      <body>
-        <main>
-          <Register />
-        </main>
-      </body>
+      <main>
+        <Products />
+      </main>
     </div>
   );
 }

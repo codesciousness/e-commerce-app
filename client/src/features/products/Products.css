@@ -1,9 +1,30 @@
 .Products {
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.Products__label {
+    font-size: 1.25rem;
+}
+
+.Products__category, .Products__sort {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 2rem 3rem 2rem 1rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.Products__list {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    width: 100%;
-    margin: auto;
-    padding: 2rem;
+}
+
+.Products li {
+    list-style: none;
 }

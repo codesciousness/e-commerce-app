@@ -241,7 +241,7 @@ const setCartId = (req, res, next, id) => {
 };
 
 const getCartById = (req, res, next) => {
-    const text = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
+    const text = `SELECT cart_id, product_id, name, category, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
     FROM cart_products
     JOIN product
     ON cart_products.product_id = product.id

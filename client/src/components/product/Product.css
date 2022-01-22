@@ -15,6 +15,12 @@
     padding: 0.5rem;
 }
 
+.Product__image {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+}
+
 .Product__info {
     display: flex;
     flex-direction: column;
@@ -56,6 +62,12 @@
     padding: 2rem;
     margin: 1rem;
     width: 60%;
+}
+
+.Product__inCart__image {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
 }
 
 .Product__inCart__info {
