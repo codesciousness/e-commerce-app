@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './Products.css';
 import Product from '../../components/product/Product';
+import SearchTerm from '../searchTerm/SearchTerm';
 import Loader from '../../components/loader/Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProducts, selectLoadingProducts, selectLoadProductsError, loadProducts } from './productsSlice';
+import { selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, loadProducts } from './productsSlice';
+import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 
 const Products = () => {
-    const categories = [];
-    const sortOptions = ['lowest', 'highest'];
+    const categories = ['', 'Automotive', 'Beauty', 'Books', 'Computers', 'Electronics', 'Games', 'Grocery', 'Health', 'Home', 'Kids', 'Sports', 'Tools', 'Toys'];
+    const sortOptions = ['', 'lowest', 'highest'];
     const [category, setCategory] = useState('');
     const [sort, setSort] = useState('');
     const dispatch = useDispatch();
-    const products = useSelector(selectProducts);
+    const searchTerm = useSelector(selectSearchTerm);
+    const products = useSelector(selectFilteredProducts);
     const loadingProducts = useSelector(selectLoadingProducts);
     const loadProductsError = useSelector(selectLoadProductsError);
-
-    products.forEach(product => {
-        if(!categories.includes(product.category)) {
-            categories.push(product.category);
-        }
-    });
-
-    const handleClick = ({ target, preventDefault }) => {
-        preventDefault();
-        setSort(target.id);
-    };
 
     const handleChange = ({ target }) => {
         if (target.name === "category") {
@@ -33,12 +25,11 @@ const Products = () => {
         if (target.name === "sort") {
             setSort(target.value);
         }
-        console.log(category, sort);
     };
 
     useEffect(() => {
         dispatch(loadProducts({ category, sort }));
-    }, [category, sort, dispatch]);
+    }, [category, sort, searchTerm, dispatch]);
 
     if (loadingProducts) {
         return (
@@ -57,13 +48,14 @@ const Products = () => {
     return (
         <section className="Products">
             <div className="Products__container">
+                <SearchTerm />
                 <span className="Products__label">Category:</span>
-                <select className="Products__category" name="category" onChange={handleChange}>
-                    {categories.map(category => <option key={category} value={category}>{category}</option>)}
+                <select className="Products__category" name="category" value={category} onChange={handleChange}>
+                    {categories.map((category, i) => <option key={`${category}__${i}`} value={category}>{category}</option>)}
                 </select>
                 <span className="Products__label">Sort:</span>
-                <select className="Products__sort" name="sort" onChange={handleChange}>
-                    {sortOptions.map(sortOpt => <option key={sortOpt} value={sortOpt}>{sortOpt}</option>)}
+                <select className="Products__sort" name="sort" value={sort} onChange={handleChange}>
+                    {sortOptions.map((sortOpt, i) => <option key={`${sortOpt}__${i}`} value={sortOpt}>{sortOpt}</option>)}
                 </select>
             </div>
             <ul className="Products__list">

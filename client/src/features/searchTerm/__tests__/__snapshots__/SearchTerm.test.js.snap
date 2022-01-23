@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SearchTerm /> matches the snapshot 1`] = `
+<form
+  className="SearchTerm"
+>
+  <i
+    className="fas fa-search fa-lg SearchTerm__icon"
+  />
+  <input
+    className="SearchTerm__input"
+    onChange={[Function]}
+    placeholder="Search..."
+    value=""
+  />
+  
+</form>
+`;

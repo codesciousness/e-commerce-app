@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 const axios = require('axios');
 
 export const loadProductById = createAsyncThunk('products/loadProductById',
@@ -84,3 +85,12 @@ export const selectLoadingProduct = state => state.products.loadingProduct;
 export const selectLoadProductError = state => state.products.loadProductError;
 export const selectLoadingProducts = state => state.products.loadingProducts;
 export const selectLoadProductsError = state => state.products.loadProductsError;
+
+export const selectFilteredProducts = state => {
+    const searchTerm = selectSearchTerm(state);
+    let products = selectProducts(state);
+    if (searchTerm) {
+        products = products.filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+    return products;
+};

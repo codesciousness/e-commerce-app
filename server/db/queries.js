@@ -122,9 +122,9 @@ const getProducts = (req, res, next) => {
     let category;
     const input = req.query.category;
     const sortOption = req.query.sort;
-    const categories = ['automotive', 'beauty', 'books', 'computers', 'electronics', 'games', 'grocery', 'health', 'home', 'kids', 'sports', 'tools', 'toys'];
+    const categories = ['Automotive', 'Beauty', 'Books', 'Computers', 'Electronics', 'Games', 'Grocery', 'Health', 'Home', 'Kids', 'Sports', 'Tools', 'Toys'];
     if (categories.includes(input)) {
-        category = input[0].toUpperCase() + input.slice(1);
+        category = input;
     }
     if (category) {
         if (!sortOption) {
@@ -155,7 +155,7 @@ const getProducts = (req, res, next) => {
             res.status(400).send('Bad Request');
         }
     }
-    if (!category) {
+    else {
         if (!sortOption) {
             pg.query('SELECT * FROM product', (err, result) => {
                 if (err) {
