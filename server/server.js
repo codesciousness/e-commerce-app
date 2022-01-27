@@ -30,7 +30,7 @@ app.get('/', (req, res, next) => {
   res.sendFile('index.html', { root: __dirname });
 });
 
-// Add middleware for handling CORS requests from index.html
+// Add middleware for handling CORS requests
 app.use(cors(corsOptions));
 
 app.use(flash());

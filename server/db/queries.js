@@ -208,7 +208,6 @@ const getProductById = (req, res, next) => {
 const createCart = (req, res, next) => {
     const cartId = uuidv4();
     const userId = req.userId ? req.userId : req.body.userId ? req.body.userId : null;
-    console.log (userId);
     const text = `INSERT INTO cart (id, users_id)
     VALUES ($1, $2)
     RETURNING *`;

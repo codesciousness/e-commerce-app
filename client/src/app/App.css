@@ -35,6 +35,20 @@ body {
   margin: auto 1rem;
 }
 
+.App__navbar__div {
+  text-align: center;
+  cursor: pointer;
+}
+
+.App__navbar__div > .fas {
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.App__navbar__div > .fas:hover {
+  color: lightgreen;
+}
+
 .App__logout__button {
   border: 1px solid black;
   padding: 0.5rem 0.75rem;

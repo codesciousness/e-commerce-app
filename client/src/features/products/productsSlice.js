@@ -5,8 +5,7 @@ const axios = require('axios');
 export const loadProductById = createAsyncThunk('products/loadProductById',
 async (productId) => {
     const response = await axios.get(`/products/${productId}`);
-    const json = await response.json();
-    return json;
+    return response.data;
 });
 
 export const loadProducts = createAsyncThunk('products/loadProducts',

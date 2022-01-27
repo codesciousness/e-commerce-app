@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './Products.css';
 import Product from '../../components/product/Product';
 import SearchTerm from '../searchTerm/SearchTerm';
 import Loader from '../../components/loader/Loader';
-import { useSelector, useDispatch } from 'react-redux';
 import { selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, loadProducts } from './productsSlice';
 import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 
@@ -13,8 +13,8 @@ const Products = () => {
     const [category, setCategory] = useState('');
     const [sort, setSort] = useState('');
     const dispatch = useDispatch();
-    const searchTerm = useSelector(selectSearchTerm);
     const products = useSelector(selectFilteredProducts);
+    const searchTerm = useSelector(selectSearchTerm);
     const loadingProducts = useSelector(selectLoadingProducts);
     const loadProductsError = useSelector(selectLoadProductsError);
 

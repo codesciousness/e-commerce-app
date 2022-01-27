@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import './App.css';
+import Cart from '../features/cart/Cart';
 import Products from '../features/products/Products';
 import Register from '../components/register/Register';
-import './App.css';
 
 function App() {
   return (
@@ -11,16 +12,16 @@ function App() {
         <h1 className="App__title">E-commerce Store</h1>
         <nav className="App__navbar">
           <ul className="App__navbar__list">
-            <li className="App__navbar__li">Cart</li>
-            <li className="App__navbar__li">Checkout</li>
-            <li className="App__navbar__li">Profile</li>
-            <li className="App__navbar__li">Register/Signup</li>
-            <li className="App__navbar__li"><button className="App__logout__button">Logout</button></li>
+            <li className="App__navbar__li"><div className="App__navbar__div"><i className="fas fa-shopping-bag fa-lg"></i><p>Cart</p></div></li>
+            <li className="App__navbar__li"><div className="App__navbar__div"><i className="fas fa-shopping-cart fa-lg"></i><p>Checkout</p></div></li>
+            <li className="App__navbar__li"><div className="App__navbar__div"><i className="fas fa-sign-in-alt fa-lg"></i><p>Signup</p></div></li>
+            <li className="App__navbar__li"><button className="App__logout__button"><i className="fas fa-sign-out-alt fa-lg"></i> Logout</button></li>
           </ul>
         </nav>
       </header>
       <main>
         <Products />
+        <Cart />
       </main>
     </div>
   );
