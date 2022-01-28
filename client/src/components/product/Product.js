@@ -1,37 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Product.css';
 import { setProduct } from '../../features/products/productsSlice';
-import { updateCart, selectCartId } from '../../features/cart/cartSlice';
+import { loadCart, updateCart, selectCartId } from '../../features/cart/cartSlice';
 
 const Product = ({ product, inCart }) => {
-    let [quantity, setQuantity] = useState(1);
+    let [cartQuantity, setCartQuantity] = useState(product.cart_quantity);
     const dispatch = useDispatch();
     const cartId = useSelector(selectCartId);
+    const productId = product.id ? product.id : product.product_id;
 
     const handleProductClick = ({ target }) => {
         dispatch(setProduct(target.id));
     };
 
     const handleQuantityChange = ({ target }) => {
-        if (target.id === "subButton") {
-            setQuantity(prev => {
-                if (prev > 0) {
-                    return prev - 1;
-                }
-                else return;
-            });
+        if (target.id === "quantity") {
+            setCartQuantity(target.value);
         }
-        if (target.id === "addButton") {
-            setQuantity(prev => prev + 1);
+        else if (target.id === "addButton") {
+            setCartQuantity(prev => prev + 1);
+        }
+        else if (target.id === "subButton") {
+            if (cartQuantity > 0) {
+                setCartQuantity(prev => prev - 1);
+            }
         }
     };
 
     const handleCartClick = () => {
-        const productId = product.id;
-        setQuantity(prev => prev + 1);
-        dispatch(updateCart({ cartId, productId, cartQuantity: quantity }));
+        if (cartQuantity) {
+            setCartQuantity(prev => prev + 1);
+        }
+        else {
+            setCartQuantity(1);
+        }
     };
+
+    useEffect(() => {
+        if (cartQuantity !== undefined) {
+            dispatch(updateCart({ cartId, productId, cartQuantity }));
+            dispatch(loadCart(cartId));
+        }
+    }, [cartId, productId, cartQuantity, dispatch]);
     
     if (inCart) {
         return (
@@ -40,13 +51,14 @@ const Product = ({ product, inCart }) => {
                 <div className="Product__inCart__info">
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">PRODUCT NAME</p>
-                        <h2 id={product.id} className="Product__inCart__name" onClick={handleProductClick}>{product.name}</h2>
+                        <h2 id={product.product_id} className="Product__inCart__name" onClick={handleProductClick}>{product.name}</h2>
                     </div>
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">QUANTITY</p>
                         <div className="Product__inCart__quantity__container">
                             <button id="subButton" className="Product__inCart__button" onClick={handleQuantityChange}>-</button>
-                            <input className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100" value={quantity} />
+                            <input id="quantity" className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100"
+                            value={cartQuantity} onChange={handleQuantityChange}/>
                             <button id="addButton" className="Product__inCart__button" onClick={handleQuantityChange}>+</button>
                         </div>
                     </div>
@@ -56,7 +68,7 @@ const Product = ({ product, inCart }) => {
                     </div>
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">ITEM TOTAL</p>
-                        <p className="Product__inCart__itemTotal">{product.item_total}</p>
+                        <p className="Product__inCart__itemTotal">${product.item_total}</p>
                     </div>
                 </div>
             </section>
@@ -70,7 +82,7 @@ const Product = ({ product, inCart }) => {
                 <div className="Product__info">
                     <h2 id={product.id} className="Product__name" onClick={handleProductClick}>{product.name}</h2>
                     <p className="Product__price">{product.sell_price}</p>
-                    <button className="Product__button" onClick={handleCartClick}><i className="fas fa-cart-plus fa-lg"></i> Add to Cart</button>
+                    <button className="Product__button" onClick={handleCartClick}>Add to Cart <i className="fas fa-cart-plus fa-lg"></i></button>
                 </div> 
             </section>
         );

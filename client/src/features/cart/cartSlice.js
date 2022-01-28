@@ -4,13 +4,16 @@ const axios = require('axios');
 export const createCart = createAsyncThunk('cart/createCart',
 async ({ userId = null }) => {
     const response = await axios.post('/cart', { userId });
-    return response.data;
+    const cartId = response.data.id;
+    localStorage.cartId = cartId;
+    return cartId;
 });
 
 export const loadCart = createAsyncThunk('cart/loadCart',
 async (cartId) => {
     const response = await axios.get(`/cart/${cartId}`);
-    return response.data;
+    const cart = response.data;
+    return cart;
 });
 
 export const updateCart = createAsyncThunk('cart/updateCart',
@@ -30,8 +33,8 @@ async (cartId) => {
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        cartId: null,
-        cart: [],
+        cartId: localStorage.cartId,
+        cart: {},
         creatingCart: false,
         createCartError: false,
         loadingCart: false,
@@ -50,7 +53,7 @@ const cartSlice = createSlice({
         [createCart.fulfilled]: (state, action) => {
             state.creatingCart = false;
             state.createCartError = false;
-            state.cartId = action.payload[0].id;
+            state.cartId = action.payload;
         },
         [createCart.rejected]: (state, action) => {
             state.creatingCart = false;

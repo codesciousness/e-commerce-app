@@ -216,7 +216,7 @@ const createCart = (req, res, next) => {
             return next(err);
         }
         if (result.rows.length > 0) {
-            res.status(201).send(result.rows);
+            res.status(201).send(result.rows[0]);
         }
         else res.status(500).send('Internal Server Error');
     });
@@ -250,7 +250,7 @@ const getCartById = (req, res, next) => {
             return next(err);
         }
         if (result.rows.length > 0) {
-            const subtotal = result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0);
+            const subtotal = Number(result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0).toFixed(2));
             const cart = {
                 items: result.rows,
                 subtotal,
