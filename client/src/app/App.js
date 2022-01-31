@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import Cart from '../features/cart/Cart';
 import Products from '../features/products/Products';
-import Register from '../components/register/Register';
+import Checkout from '../components/checkout/Checkout';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
       </header>
       <main>
         <Products />
-        <Cart />
+        <Checkout />
       </main>
     </div>
   );

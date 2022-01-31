@@ -3,17 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Cart.css';
 import Product from '../../components/product/Product';
 import Loader from '../../components/loader/Loader';
-import { createCart, loadCart, selectCartId, selectCart, selectLoadingCart, selectLoadCartError,
-        selectCreatingCart, selectCreateCartError, selectUpdatingCart, selectUpdateCartError,
-        selectCheckingout, selectCheckoutError } from './cartSlice';
+import { createCart, loadCart, checkout, selectCartId, selectCart, selectCreatingCart, selectCreateCartError,
+        selectLoadingCart, selectLoadCartError, selectCheckingout, selectCheckoutError } from './cartSlice';
 
-const Cart = ({ inCheckout }) => {
+const Cart = ({ inCheckout, address, payment }) => {
     const cart = useSelector(selectCart);
     const cartId = useSelector(selectCartId);
     const dispatch = useDispatch();
 
-    const handleClick = ({ target }) => {
-        
+    const handleClick = () => {
+        if (inCheckout && cart.items.length !== 0) {
+            dispatch(checkout({ cartId, address, payment }));
+        }
     };
 
     useEffect(() => {
@@ -32,7 +33,7 @@ const Cart = ({ inCheckout }) => {
                 {cart.items.map((cartItem, i) => <Product product={cartItem} inCart={true} key={cart.items[i].product_id}/>)}
                 <div className="Cart__info">
                     <p className="Cart__subtotal">{`Subtotal: $${cart.subtotal}`}</p>
-                    <button className="Cart__checkout__button">{inCheckout ? 'Place Order' : 'Go to Checkout'}</button>
+                    <button className="Cart__checkout__button" onClick={handleClick}>{inCheckout ? 'Place Order' : 'Go to Checkout'}</button>
                 </div>
             </section>
         );
