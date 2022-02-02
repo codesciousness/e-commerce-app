@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Login.css';
 import Loader from '../../components/loader/Loader';
-import { login, googleLogin, selectLoggingIn, selectLoginError, selectGoogleLoggingIn, selectGoogleLoginError } from './authSlice';
+import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, selectGoogleLoggingIn, 
+        selectGoogleLoginSuccess, selectGoogleLoginError } from './authSlice';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const loggingIn = useSelector(selectLoggingIn);
+    const loginSuccess = useSelector(selectLoginSuccess);
     const loginError = useSelector(selectLoginError);
     const googleLoggingIn = useSelector(selectGoogleLoggingIn);
+    const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const googleLoginError = useSelector(selectGoogleLoginError);
 
     const handleChange = ({ target }) => {
@@ -32,6 +35,13 @@ const Login = () => {
         }
     };
 
+    useEffect(() => {
+        if (loginSuccess || googleLoginSuccess) {
+            setUsername('');
+            setPassword('');
+        }
+    }, [loginSuccess, googleLoginSuccess]);
+
     if (loggingIn || googleLoggingIn) {
         return (
             <section className="Login">
@@ -46,6 +56,7 @@ const Login = () => {
             </section>
         );
     }
+
     return (
         <section className="Login">
             <h2 className="Login__title">User Login</h2>

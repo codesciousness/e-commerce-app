@@ -10,6 +10,12 @@ const Cart = ({ inCheckout, address, payment }) => {
     const cart = useSelector(selectCart);
     const cartId = useSelector(selectCartId);
     const dispatch = useDispatch();
+    const creatingCart = useSelector(selectCreatingCart);
+    const createCartError = useSelector(selectCreateCartError);
+    const loadingCart = useSelector(selectLoadingCart);
+    const loadCartError = useSelector(selectLoadCartError);
+    const checkingout = useSelector(selectCheckingout);
+    const checkoutError = useSelector(selectCheckoutError);
 
     const handleClick = () => {
         if (inCheckout && cart.items.length !== 0) {
@@ -26,6 +32,20 @@ const Cart = ({ inCheckout, address, payment }) => {
         }
     }, [cartId, dispatch]);
 
+    if (creatingCart || loadingCart || checkingout) {
+        return (
+            <section className="Cart">
+                <Loader />
+            </section>
+        );
+    }
+    if (createCartError || loadCartError || checkoutError) {
+        return (
+            <section className="Cart">
+                <p className="Cart__error">An unexpected error has occurred.</p>
+            </section>
+        );
+    }
     if (cart.items) {
         return (
             <section className="Cart">

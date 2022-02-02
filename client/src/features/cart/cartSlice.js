@@ -42,6 +42,7 @@ const cartSlice = createSlice({
         updatingCart: false,
         updateCartError: false,
         checkingout: false,
+        checkoutSuccess: false,
         checkoutError: false
     },
     reducers: {},
@@ -90,7 +91,9 @@ const cartSlice = createSlice({
         },
         [checkout.fulfilled]: (state, action) => {
             state.checkingout = false;
+            state.checkoutSuccess = true;
             state.checkoutError = false;
+            setTimeout(() => {state.checkoutSuccess = false}, 2.0*1000);
         },
         [checkout.rejected]: (state, action) => {
             state.checkingout = false;
@@ -110,4 +113,5 @@ export const selectLoadCartError = state => state.cart.loadCartError;
 export const selectUpdatingCart = state => state.cart.updatingCart;
 export const selectUpdateCartError = state => state.cart.updateCartError;
 export const selectCheckingout = state => state.cart.checkout;
+export const selectCheckoutSuccess = state => state.cart.checkoutSuccess;
 export const selectCheckoutError = state => state.cart.checkoutError;

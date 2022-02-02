@@ -32,7 +32,6 @@ function App() {
       </header>
       <main>
         <Register />
-        <Users />
       </main>
     </div>
   );

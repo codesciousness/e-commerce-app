@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { login } from '../auth/authSlice';
 const axios = require('axios');
 
 export const loadUserById = createAsyncThunk('users/loadUserById',
@@ -8,8 +9,9 @@ async (userId) => {
 });
 
 export const registerUser = createAsyncThunk('users/registerUser',
-async (newUser) => {
-    const response = await axios.post('/users/register', newUser);
+async ({ firstName, lastName, email, username, password }) => {
+    const response = await axios.post('/users/register', { firstName, lastName, email, username, password });
+    login({ username, password });
     return response.data;
 });
 
@@ -27,8 +29,10 @@ const usersSlice = createSlice({
         loadingUser: false,
         loadUserError: false,
         registeringUser: false,
+        registerUserSuccess: false,
         registerUserError: false,
         updatingUser: false,
+        updateUserSuccess: false,
         updateUserError: false
     },
     reducers: {
@@ -62,7 +66,10 @@ const usersSlice = createSlice({
         },
         [registerUser.fulfilled]: (state, action) => {
             state.registeringUser = false;
+            state.registerUserSuccess = true;
             state.registerUserError = false;
+            state.userId = action.payload.id;
+            setTimeout(() => {state.registerUserSuccess = false}, 2.0*1000);
         },
         [registerUser.rejected]: (state, action) => {
             state.registeringUser = false;
@@ -74,7 +81,10 @@ const usersSlice = createSlice({
         },
         [updateUser.fulfilled]: (state, action) => {
             state.updatingUser = false;
+            state.updateUserSuccess = true;
             state.updateUserError = false;
+            state.user = action.payload;
+            setTimeout(() => {state.updateUserSuccess = false}, 2.0*1000);
         },
         [updateUser.rejected]: (state, action) => {
             state.updatingUser = false;
@@ -91,6 +101,8 @@ export const selectUserId = state => state.users.userId;
 export const selectLoadingUser = state => state.users.loadingUser;
 export const selectLoadUserError = state => state.users.loadUserError;
 export const selectRegisteringUser = state => state.users.registeringUser;
+export const selectRegisterUserSuccess = state => state.cart.registerUserSuccess;
 export const selectRegisterUserError = state => state.users.registerUserError;
 export const selectUpdatingUser = state => state.users.updatingUser;
+export const selectUpdateUserSuccess = state => state.cart.updateUserSuccess;
 export const selectUpdateUserError = state => state.users.updateUserError;
