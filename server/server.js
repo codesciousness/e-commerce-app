@@ -14,8 +14,15 @@ const keys = require('./config/keys');
 const { PORT = 4001, NODE_ENV = 'development' } = process.env;
 const IN_PROD = NODE_ENV === 'production';
 const oneDay = 1000 * 60 * 60 * 24;
+const allowList = ['http://localhost:4001/', 'http://localhost:3000/', 'https://www.googleapis.com/', 'https://accounts.google.com'];
 const corsOptions = {
-  origin: 'http://localhost:4001/',
+  origin: function (origin, callback) {
+    if (allowList.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
 };
 
 //Config dotenv

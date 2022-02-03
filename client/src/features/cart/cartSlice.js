@@ -45,7 +45,16 @@ const cartSlice = createSlice({
         checkoutSuccess: false,
         checkoutError: false
     },
-    reducers: {},
+    reducers: {
+        clearCartStatusUpdates: (state) => {
+            state.createCartError = false;
+            state.loadCartError = false;
+            state.updateCartError = false;
+            state.checkoutSuccess = false;
+            state.checkoutError = false;
+            return state;
+        }
+    },
     extraReducers: {
         [createCart.pending]: (state, action) => {
             state.creatingCart = true;
@@ -93,7 +102,6 @@ const cartSlice = createSlice({
             state.checkingout = false;
             state.checkoutSuccess = true;
             state.checkoutError = false;
-            setTimeout(() => {state.checkoutSuccess = false}, 2.0*1000);
         },
         [checkout.rejected]: (state, action) => {
             state.checkingout = false;
@@ -102,6 +110,7 @@ const cartSlice = createSlice({
     }
 });
 
+export const { clearCartStatusUpdates } = cartSlice.actions;
 export default cartSlice.reducer;
 
 export const selectCartId = state => state.cart.cartId;

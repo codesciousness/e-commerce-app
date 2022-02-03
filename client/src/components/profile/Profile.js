@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Profile.css';
 import Loader from '../../components/loader/Loader';
 import { loadUserById, updateUser, selectUser, selectUserId, selectLoadingUser, selectLoadUserError,
-        selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError } from '../../features/users/usersSlice';
+        selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Profile = () => {
     const user = useSelector(selectUser);
@@ -92,7 +92,10 @@ const Profile = () => {
         if (!user || updateUserSuccess) {
             dispatch(loadUserById(userId));
         }
-    }, [user, userId, updateUserSuccess, dispatch]);
+        if (loadUserError || updateUserSuccess || updateUserError) {
+            dispatch(clearUsersStatusUpdates());
+        }
+    }, [user, userId, updateUserSuccess, loadUserError, updateUserError, dispatch]);
 
     if (loadingUser || updatingUser) {
         return (

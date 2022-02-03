@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Login.css';
 import Loader from '../../components/loader/Loader';
 import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, selectGoogleLoggingIn, 
-        selectGoogleLoginSuccess, selectGoogleLoginError } from './authSlice';
+        selectGoogleLoginSuccess, selectGoogleLoginError, clearAuthStatusUpdates } from './authSlice';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -40,7 +40,10 @@ const Login = () => {
             setUsername('');
             setPassword('');
         }
-    }, [loginSuccess, googleLoginSuccess]);
+        if (loginSuccess || loginError || googleLoginSuccess || googleLoginError) {
+            dispatch(clearAuthStatusUpdates());
+        }
+    }, [loginSuccess, loginError, googleLoginSuccess, googleLoginError, dispatch]);
 
     if (loggingIn || googleLoggingIn) {
         return (

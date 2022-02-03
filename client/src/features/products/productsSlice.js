@@ -43,6 +43,11 @@ const productsSlice = createSlice({
             let productId = action.payload;
             state.product = productId;
             return state;
+        },
+        clearProdsStatusUpdates: (state) => {
+            state.loadProductError = false;
+            state.loadProductsError = false;
+            return state;
         }
     },
     extraReducers: {
@@ -75,7 +80,7 @@ const productsSlice = createSlice({
     }
 });
 
-export const { setProduct } = productsSlice.actions;
+export const { setProduct, clearProdsStatusUpdates } = productsSlice.actions;
 export default productsSlice.reducer;
 
 export const selectProduct = state => state.products.product;

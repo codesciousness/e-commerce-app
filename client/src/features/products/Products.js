@@ -4,7 +4,8 @@ import './Products.css';
 import Product from '../../components/product/Product';
 import SearchTerm from '../searchTerm/SearchTerm';
 import Loader from '../../components/loader/Loader';
-import { selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, loadProducts } from './productsSlice';
+import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, 
+        clearProdsStatusUpdates } from './productsSlice';
 import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 
 const Products = () => {
@@ -29,7 +30,10 @@ const Products = () => {
 
     useEffect(() => {
         dispatch(loadProducts({ category, sort }));
-    }, [category, sort, searchTerm, dispatch]);
+        if (loadProductsError) {
+            dispatch(clearProdsStatusUpdates());
+        }
+    }, [category, sort, searchTerm, loadProductsError, dispatch]);
 
     if (loadingProducts) {
         return (

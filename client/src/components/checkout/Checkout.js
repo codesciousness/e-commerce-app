@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './Checkout.css';
 import Cart from '../../features/cart/Cart';
-import { selectCheckoutSuccess } from '../../features/cart/cartSlice';
+import { selectCheckoutSuccess, clearCartStatusUpdates } from '../../features/cart/cartSlice';
 
 const Checkout = () => {
     const [shipToName, setShipToName] = useState('');
@@ -15,6 +15,7 @@ const Checkout = () => {
     const [payMethod, setPayMethod] = useState('');
     const [cardExp, setCardExp] = useState('');
     const [cardCVV, setCardCVV] = useState('');
+    const dispatch = useDispatch();
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
 
     const address = {
@@ -79,8 +80,9 @@ const Checkout = () => {
             setPayMethod('');
             setCardExp('');
             setCardCVV('');
+            dispatch(clearCartStatusUpdates());
         }
-    }, [checkoutSuccess]);
+    }, [checkoutSuccess, dispatch]);
 
     return (
         <section className="Checkout">

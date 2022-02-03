@@ -2,6 +2,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20');
 const db = require('../db');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 const keys = require('./keys');
 
 module.exports = (passport) => {
@@ -36,6 +37,7 @@ module.exports = (passport) => {
     clientSecret: keys.google.clientSecret,
     callbackURL: '/auth/google/redirect'
   }, (accessToken, refreshToken, profile, done) => {
+    const userId = uuidv4();
     const googleId = profile.id;
     const username = profile.displayName;
     const email = profile.emails[0].value;
@@ -43,10 +45,10 @@ module.exports = (passport) => {
     const lastName = profile.name.familyName;
     const findText = 'SELECT * FROM users WHERE email=$1';
     const findValues = [email];
-    const addText = `INSERT INTO users (google_id, username, first_name, last_name, email)
-    VALUES ($1, $2, $3, $4, $5)
+    const addText = `INSERT INTO users (id, google_id, username, first_name, last_name, email)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *`;
-    const addValues = [googleId, username, firstName, lastName, email];
+    const addValues = [userId, googleId, username, firstName, lastName, email];
     db.query(findText, findValues, (err, result) => {
       if (err) {
         console.log(err.message);

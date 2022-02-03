@@ -4,7 +4,8 @@ import './Cart.css';
 import Product from '../../components/product/Product';
 import Loader from '../../components/loader/Loader';
 import { createCart, loadCart, checkout, selectCartId, selectCart, selectCreatingCart, selectCreateCartError,
-        selectLoadingCart, selectLoadCartError, selectCheckingout, selectCheckoutError } from './cartSlice';
+        selectLoadingCart, selectLoadCartError, selectCheckingout, selectCheckoutError, clearCartStatusUpdates } from './cartSlice';
+import { selectUserId } from '../users/usersSlice';
 
 const Cart = ({ inCheckout, address, payment }) => {
     const cart = useSelector(selectCart);
@@ -16,6 +17,7 @@ const Cart = ({ inCheckout, address, payment }) => {
     const loadCartError = useSelector(selectLoadCartError);
     const checkingout = useSelector(selectCheckingout);
     const checkoutError = useSelector(selectCheckoutError);
+    const userId = useSelector(selectUserId);
 
     const handleClick = () => {
         if (inCheckout && cart.items.length !== 0) {
@@ -25,12 +27,15 @@ const Cart = ({ inCheckout, address, payment }) => {
 
     useEffect(() => {
         if (!cartId) {
-            dispatch(createCart({}));
+            dispatch(createCart({ userId }));
         }
         else {
             dispatch(loadCart(cartId));
         }
-    }, [cartId, dispatch]);
+        if (createCartError || loadCartError || checkoutError) {
+            dispatch(clearCartStatusUpdates());
+        }
+    }, [cartId, userId, createCartError, loadCartError, checkoutError, dispatch]);
 
     if (creatingCart || loadingCart || checkingout) {
         return (

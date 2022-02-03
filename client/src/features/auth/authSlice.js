@@ -31,7 +31,16 @@ const authSlice = createSlice({
         googleLoginSuccess: false,
         googleLoginError: false
     },
-    reducers: {},
+    reducers: {
+        clearAuthStatusUpdates: (state) => {
+            state.loginSuccess = false;
+            state.loginError = false;
+            state.logoutError = false;
+            state.googleLoginSuccess = false;
+            state.googleLoginError = false;
+            return state;
+        }
+    },
     extraReducers: {
         [login.pending]: (state, action) => {
             state.loggingIn = true;
@@ -41,7 +50,6 @@ const authSlice = createSlice({
             state.loggingIn = false;
             state.loginSuccess = true;
             state.loginError = false;
-            setTimeout(() => {state.loginSuccess = false}, 2.0*1000);
         },
         [login.rejected]: (state, action) => {
             state.loggingIn = false;
@@ -67,7 +75,6 @@ const authSlice = createSlice({
             state.googleLoggingIn = false;
             state.googleLoginSuccess = true;
             state.googleLoginError = false;
-            setTimeout(() => {state.googleLoginSuccess = false}, 2.0*1000);
         },
         [googleLogin.rejected]: (state, action) => {
             state.googleLoggingIn = false;
@@ -76,6 +83,7 @@ const authSlice = createSlice({
     }
 });
 
+export const { clearAuthStatusUpdates } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectLoggingIn = state => state.auth.loggingIn;

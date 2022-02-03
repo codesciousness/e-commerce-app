@@ -42,7 +42,15 @@ const usersSlice = createSlice({
             return state;
         },
         clearUserId: (state) => {
-            state = null;
+            state.userId = null;
+            return state;
+        },
+        clearUsersStatusUpdates: (state) => {
+            state.loadUserError = false;
+            state.registerUserSuccess = false;
+            state.registerUserError = false;
+            state.updateUserSuccess = false;
+            state.updateUserError = false;
             return state;
         }
     },
@@ -69,7 +77,6 @@ const usersSlice = createSlice({
             state.registerUserSuccess = true;
             state.registerUserError = false;
             state.userId = action.payload.id;
-            setTimeout(() => {state.registerUserSuccess = false}, 2.0*1000);
         },
         [registerUser.rejected]: (state, action) => {
             state.registeringUser = false;
@@ -84,7 +91,6 @@ const usersSlice = createSlice({
             state.updateUserSuccess = true;
             state.updateUserError = false;
             state.user = action.payload;
-            setTimeout(() => {state.updateUserSuccess = false}, 2.0*1000);
         },
         [updateUser.rejected]: (state, action) => {
             state.updatingUser = false;
@@ -93,7 +99,7 @@ const usersSlice = createSlice({
     }
 });
 
-export const { setUserId, clearUserId } = usersSlice.actions;
+export const { setUserId, clearUserId, clearUsersStatusUpdates } = usersSlice.actions;
 export default usersSlice.reducer;
 
 export const selectUser = state => state.users.user;
