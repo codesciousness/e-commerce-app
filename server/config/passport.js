@@ -7,7 +7,7 @@ const keys = require('./keys');
 
 module.exports = (passport) => {
   passport.use(new LocalStrategy((username, password, done) => {
-    const text = 'SELECT id, username, password FROM users WHERE username=$1';
+    const text = 'SELECT * FROM users WHERE username=$1';
     const values = [username];
     db.query(text, values, (err, result) => {
       if(err) {
@@ -19,7 +19,7 @@ module.exports = (passport) => {
         const user = result.rows[0];
         bcrypt.compare(password, user.password, function(err, isMatch) {
           if(isMatch) {
-            done(null, { id: user.id, username: user.username});
+            done(null, user);
           }
           else {
             done(null, false, {message: 'Incorrect password'});
@@ -36,19 +36,20 @@ module.exports = (passport) => {
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret,
     callbackURL: '/auth/google/redirect'
-  }, (accessToken, refreshToken, profile, done) => {
+    }, (accessToken, refreshToken, profile, done) => {
     const userId = uuidv4();
     const googleId = profile.id;
-    const username = profile.displayName;
+    const username = profile.displayName.replace(' ', '').toLowerCase() + profile.id.slice(profile.id.length - 6);
+    const password = username;
     const email = profile.emails[0].value;
     const firstName = profile.name.givenName;
     const lastName = profile.name.familyName;
     const findText = 'SELECT * FROM users WHERE email=$1';
     const findValues = [email];
-    const addText = `INSERT INTO users (id, google_id, username, first_name, last_name, email)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    const addText = `INSERT INTO users (id, google_id, username, password, first_name, last_name, email)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *`;
-    const addValues = [userId, googleId, username, firstName, lastName, email];
+    const saltRounds = 10;
     db.query(findText, findValues, (err, result) => {
       if (err) {
         console.log(err.message);
@@ -57,20 +58,34 @@ module.exports = (passport) => {
 
       if(result.rows.length > 0) {
         const user = result.rows[0];
-        console.log(`User is ${user}`);
-        done(null, user);
+        done(null, user, {message: `Email address: ${user.email} is already registered. Please Login.`});
       }
       else {
-        db.query(addText, addValues, (err, result) => {
+        bcrypt.genSalt(saltRounds, function(err, salt) {
           if (err) {
-            console.log(err.message);
-            return done(err);
+            throw err;
           }
-          const newUser = result.rows[0];
-          console.log(`New user is ${newUser}`);
-          done(null, newUser);
+          else {
+            bcrypt.hash(password, salt, function(err, hash) {
+              if (err) {
+                throw err;
+              }
+              else {
+                const passwordHash = hash;
+                const addValues = [userId, googleId, username, passwordHash, firstName, lastName, email];
+                db.query(addText, addValues, (err, result) => {
+                  if (err) {
+                    console.log(err.message);
+                    return done(err);
+                  }
+                  const newUser = result.rows[0];
+                  done(null, newUser);
+                });
+              }
+            });
+          };
         });
-      } 
+      }
     });
   }));
 

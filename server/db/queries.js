@@ -26,9 +26,9 @@ const registerUser = (req, res, next) => {
             console.log(err.message);
             return done(err);
             }
-            if(result.rows.length > 0) {
-            const user = result.rows[0];
-            res.send(`Email address: ${user.email} is already registered. Please Login.`);
+            if (result.rows.length > 0) {
+                const user = result.rows[0];
+                done(null, user, {message: `Email address: ${user.email} is already registered. Please Login.`});
             }
             else {
                 bcrypt.genSalt(saltRounds, function(err, salt) {

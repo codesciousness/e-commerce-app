@@ -1,12 +1,13 @@
 const express = require('express');
 const ordersRouter = express.Router({ mergeParams: true });
 const db = require('../../db/queries');
+require('dotenv').config();
 
 const authenticate = (req, res, next) => {
   if (req.isAuthenticated()) {
       next();
   }
-  else res.redirect('/auth/login');
+  else res.redirect(process.env.AUTH_FAILURE_REDIRECT);
 };
 
 ordersRouter.use(authenticate);

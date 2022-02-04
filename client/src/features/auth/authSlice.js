@@ -15,8 +15,7 @@ async () => {
 
 export const googleLogin = createAsyncThunk('auth/googleLogin',
 async () => {
-    const response = await axios.get('/auth/google');
-    return response.data;
+    window.location = 'http://localhost:4001/auth/google';
 });
 
 const authSlice = createSlice({

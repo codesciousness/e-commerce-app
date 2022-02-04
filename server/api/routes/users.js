@@ -3,29 +3,22 @@ const usersRouter = express.Router();
 const ordersRouter = require('./orders');
 const db = require('../../db/queries');
 const { authenticateToken } = require('../../util/jwt');
+require('dotenv').config();
 
 const authenticate = (req, res, next) => {
     if (req.isAuthenticated()) {
         next();
     }
-    else res.redirect('/auth/login');
+    else res.redirect(process.env.AUTH_FAILURE_REDIRECT);
 };
 
 // GET /users to get an array of all users
 
-usersRouter.get('/', db.getUsers);
-
-usersRouter.get('/register', (req, res) => {
-    res.send('Register');
-});
+// usersRouter.get('/', db.getUsers);
 
 // POST /users to create a new user and save it to the database
 
 usersRouter.post('/register', db.registerUser);
-
-usersRouter.get('/profile', authenticate, (req, res) => {
-    res.send('You are logged in ' + req.user.first_name);
-});
 
 //userId param
 
