@@ -44,6 +44,10 @@ const productsSlice = createSlice({
             state.product = productId;
             return state;
         },
+        clearProduct: (state) => {
+            state.product = null;
+            return state;
+        },
         clearProdsStatusUpdates: (state) => {
             state.loadProductError = false;
             state.loadProductsError = false;
@@ -80,7 +84,7 @@ const productsSlice = createSlice({
     }
 });
 
-export const { setProduct, clearProdsStatusUpdates } = productsSlice.actions;
+export const { setProduct, clearProduct, clearProdsStatusUpdates } = productsSlice.actions;
 export default productsSlice.reducer;
 
 export const selectProduct = state => state.products.product;

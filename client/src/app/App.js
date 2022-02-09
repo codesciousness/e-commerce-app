@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
-import Users from '../features/users/Users';
-import Register from '../components/register/Register';
+import Products from '../features/products/Products';
+import Checkout from '../components/checkout/Checkout';
 import { logout } from '../features/auth/authSlice';
 
 function App() {
@@ -31,7 +31,8 @@ function App() {
         </nav>
       </header>
       <main>
-        <Register />
+        <Products />
+        <Checkout />
       </main>
     </div>
   );

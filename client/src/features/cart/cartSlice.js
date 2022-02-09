@@ -18,10 +18,8 @@ async (cartId) => {
 
 export const updateCart = createAsyncThunk('cart/updateCart',
 async ({ cartId, productId, cartQuantity }) => {
-    if (cartId && productId && cartQuantity) {
-        const response = await axios.put(`/cart/${cartId}`, { productId, cartQuantity });
-        return response.data;
-    }
+    const response = await axios.put(`/cart/${cartId}`, { productId, cartQuantity });
+    return response.data;
 });
 
 export const checkout = createAsyncThunk('cart/checkout',
@@ -81,6 +79,7 @@ const cartSlice = createSlice({
         [loadCart.rejected]: (state, action) => {
             state.loadingCart = false;
             state.loadCartError = true;
+            state.cart = {};
         },
         [updateCart.pending]: (state, action) => {
             state.updatingCart = true;

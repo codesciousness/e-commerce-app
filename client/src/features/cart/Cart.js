@@ -26,11 +26,12 @@ const Cart = ({ inCheckout, address, payment }) => {
     };
 
     useEffect(() => {
+        dispatch(loadCart(cartId));
+    }, []);
+
+    useEffect(() => {
         if (!cartId) {
             dispatch(createCart({ userId }));
-        }
-        else {
-            dispatch(loadCart(cartId));
         }
         if (createCartError || loadCartError || checkoutError) {
             dispatch(clearCartStatusUpdates());

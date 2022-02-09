@@ -67,6 +67,7 @@ const usersSlice = createSlice({
         [loadUserById.rejected]: (state, action) => {
             state.loadingUser = false;
             state.loadUserError = true;
+            state.user = {};
         },
         [registerUser.pending]: (state, action) => {
             state.registeringUser = true;
@@ -77,6 +78,7 @@ const usersSlice = createSlice({
             state.registerUserSuccess = true;
             state.registerUserError = false;
             state.userId = action.payload.id;
+            state.user = action.payload;
         },
         [registerUser.rejected]: (state, action) => {
             state.registeringUser = false;
@@ -107,8 +109,8 @@ export const selectUserId = state => state.users.userId;
 export const selectLoadingUser = state => state.users.loadingUser;
 export const selectLoadUserError = state => state.users.loadUserError;
 export const selectRegisteringUser = state => state.users.registeringUser;
-export const selectRegisterUserSuccess = state => state.cart.registerUserSuccess;
+export const selectRegisterUserSuccess = state => state.users.registerUserSuccess;
 export const selectRegisterUserError = state => state.users.registerUserError;
 export const selectUpdatingUser = state => state.users.updatingUser;
-export const selectUpdateUserSuccess = state => state.cart.updateUserSuccess;
+export const selectUpdateUserSuccess = state => state.users.updateUserSuccess;
 export const selectUpdateUserError = state => state.users.updateUserError;

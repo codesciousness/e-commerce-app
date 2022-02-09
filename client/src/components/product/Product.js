@@ -5,7 +5,8 @@ import { setProduct } from '../../features/products/productsSlice';
 import { loadCart, updateCart, selectCartId } from '../../features/cart/cartSlice';
 
 const Product = ({ product, inCart }) => {
-    let [cartQuantity, setCartQuantity] = useState(product.cart_quantity);
+    const [cartQuantity, setCartQuantity] = useState(product.cart_quantity);
+    const [quantity, setQuantity] = useState(product.cart_quantity);
     const dispatch = useDispatch();
     const cartId = useSelector(selectCartId);
     const productId = product.id ? product.id : product.product_id;
@@ -14,17 +15,15 @@ const Product = ({ product, inCart }) => {
         dispatch(setProduct(target.id));
     };
 
-    const handleQuantityChange = ({ target }) => {
-        if (target.id === "quantity") {
-            setCartQuantity(target.value);
-        }
-        else if (target.id === "addButton") {
+    const handleQuantityClick = ({ target }) => {
+        if (target.id === "addButton") {
             setCartQuantity(prev => prev + 1);
         }
         else if (target.id === "subButton") {
-            if (cartQuantity > 0) {
-                setCartQuantity(prev => prev - 1);
-            }
+            setCartQuantity(prev => {
+                if (!prev) return
+                else return prev - 1;
+            });
         }
     };
 
@@ -38,11 +37,12 @@ const Product = ({ product, inCart }) => {
     };
 
     useEffect(() => {
-        if (cartQuantity !== undefined) {
+        if (quantity !== cartQuantity) {
             dispatch(updateCart({ cartId, productId, cartQuantity }));
             dispatch(loadCart(cartId));
+            setQuantity(cartQuantity);
         }
-    }, [cartId, productId, cartQuantity, dispatch]);
+    }, [cartId, productId, cartQuantity, quantity, dispatch]);
     
     if (inCart) {
         return (
@@ -56,10 +56,10 @@ const Product = ({ product, inCart }) => {
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">QUANTITY</p>
                         <div className="Product__inCart__quantity__container">
-                            <button id="subButton" className="Product__inCart__button" onClick={handleQuantityChange}>-</button>
+                            <button id="subButton" className="Product__inCart__button" onClick={handleQuantityClick}>-</button>
                             <input id="quantity" className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100"
-                            value={cartQuantity} onChange={handleQuantityChange}/>
-                            <button id="addButton" className="Product__inCart__button" onClick={handleQuantityChange}>+</button>
+                            value={cartQuantity} readOnly/>
+                            <button id="addButton" className="Product__inCart__button" onClick={handleQuantityClick}>+</button>
                         </div>
                     </div>
                     <div className="Product__inCart__container">
