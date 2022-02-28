@@ -10,15 +10,15 @@ module.exports = (passport) => {
     const text = 'SELECT * FROM users WHERE username=$1';
     const values = [username];
     db.query(text, values, (err, result) => {
-      if(err) {
+      if (err) {
         console.log(err.message);
         return done(err);
       }
   
-      if(result.rows.length > 0) {
+      if (result.rows.length > 0) {
         const user = result.rows[0];
         bcrypt.compare(password, user.password, function(err, isMatch) {
-          if(isMatch) {
+          if (isMatch) {
             done(null, user);
           }
           else {
@@ -97,11 +97,11 @@ module.exports = (passport) => {
     const text = 'SELECT * FROM users WHERE id=$1';
     const values = [id];
     db.query(text, values, (err, result) => {
-      if(err) {
+      if (err) {
         console.log(err.message);
         return done(err);
       }
-      if(result.rows.length > 0) {
+      if (result.rows.length > 0) {
         const user = result.rows[0];
         done(null, user);
       }

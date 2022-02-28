@@ -25,6 +25,7 @@ const authSlice = createSlice({
         loginSuccess: false,
         loginError: false,
         loggingOut: false,
+        logoutSuccess: false,
         logoutError: false,
         googleLoggingIn: false,
         googleLoginSuccess: false,
@@ -34,6 +35,7 @@ const authSlice = createSlice({
         clearAuthStatusUpdates: (state) => {
             state.loginSuccess = false;
             state.loginError = false;
+            state.logoutSuccess = false;
             state.logoutError = false;
             state.googleLoginSuccess = false;
             state.googleLoginError = false;
@@ -60,6 +62,7 @@ const authSlice = createSlice({
         },
         [logout.fulfilled]: (state, action) => {
             state.loggingOut = false;
+            state.logoutSuccess = true;
             state.logoutError = false;
         },
         [logout.rejected]: (state, action) => {
@@ -89,6 +92,7 @@ export const selectLoggingIn = state => state.auth.loggingIn;
 export const selectLoginSuccess = state => state.auth.loginSuccess;
 export const selectLoginError = state => state.auth.loginError;
 export const selectLoggingOut = state => state.auth.loggingOut;
+export const selectLogoutSuccess = state => state.auth.logoutSuccess;
 export const selectLogoutError = state => state.auth.logoutError;
 export const selectGoogleLoggingIn = state => state.auth.googleLoggingIn;
 export const selectGoogleLoginSuccess = state => state.auth.googleLoginSuccess;

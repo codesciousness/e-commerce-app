@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Profile.css';
 import Loader from '../../components/loader/Loader';
-import { loadUserById, updateUser, selectUser, selectUserId, selectLoadingUser, selectLoadUserError,
+import { loadUserById, updateUser, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
         selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { selectLoginSuccess, selectGoogleLoginSuccess } from '../../features/auth/authSlice';
 
 const Profile = () => {
     const user = useSelector(selectUser);
@@ -23,9 +24,12 @@ const Profile = () => {
     const dispatch = useDispatch();
     const loadingUser = useSelector(selectLoadingUser);
     const loadUserError = useSelector(selectLoadUserError);
+    const registerUserSuccess = useSelector(selectRegisterUserSuccess);
     const updatingUser = useSelector(selectUpdatingUser);
     const updateUserSuccess = useSelector(selectUpdateUserSuccess);
     const updateUserError = useSelector(selectUpdateUserError);
+    const loginSuccess = useSelector(selectLoginSuccess);
+    const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
 
     const userProfile = {
         firstName,
@@ -89,13 +93,20 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        if (!user || updateUserSuccess) {
+        if (userId) {
+            dispatch(loadUserById(userId));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (registerUserSuccess || updateUserSuccess || loginSuccess || googleLoginSuccess) {
+            console.log(1, userId);
             dispatch(loadUserById(userId));
         }
         if (loadUserError || updateUserSuccess || updateUserError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [user, userId, updateUserSuccess, loadUserError, updateUserError, dispatch]);
+    }, [user, userId, loadUserError, registerUserSuccess, updateUserSuccess, updateUserError, loginSuccess, googleLoginSuccess, dispatch]);
 
     if (loadingUser || updatingUser) {
         return (

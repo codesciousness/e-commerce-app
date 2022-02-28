@@ -2,8 +2,9 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
-import Products from '../features/products/Products';
-import Checkout from '../components/checkout/Checkout';
+import Login from '../features/auth/Login';
+import Register from '../components/register/Register';
+import Profile from '../components/profile/Profile';
 import { logout } from '../features/auth/authSlice';
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
   const handleClick = (e) => {
     e.preventDefault();
     if (e.target.id === 'logoutButton') {
-        dispatch(logout());
+      dispatch(logout());
     }
   };
 
@@ -31,8 +32,9 @@ function App() {
         </nav>
       </header>
       <main>
-        <Products />
-        <Checkout />
+        <Login />
+        <Register />
+        <Profile />
       </main>
     </div>
   );

@@ -11,7 +11,7 @@ async (userId) => {
 export const registerUser = createAsyncThunk('users/registerUser',
 async ({ firstName, lastName, email, username, password }) => {
     const response = await axios.post('/users/register', { firstName, lastName, email, username, password });
-    login({ username, password });
+    //login({ username, password });
     return response.data;
 });
 
@@ -36,13 +36,18 @@ const usersSlice = createSlice({
         updateUserError: false
     },
     reducers: {
-        setUserId: (state, action) => {
-            let userId = action.payload;
+        setUser: (state, action) => {
+            console.log(action.payload);
+            let user = action.payload;
+            let userId = user.id;
+            state.user = user;
             state.userId = userId;
             return state;
         },
-        clearUserId: (state) => {
+        clearUser: (state) => {
+            state.user = {};
             state.userId = null;
+            console.log(state.user);
             return state;
         },
         clearUsersStatusUpdates: (state) => {
@@ -77,8 +82,8 @@ const usersSlice = createSlice({
             state.registeringUser = false;
             state.registerUserSuccess = true;
             state.registerUserError = false;
-            state.userId = action.payload.id;
             state.user = action.payload;
+            state.userId = action.payload.id;
         },
         [registerUser.rejected]: (state, action) => {
             state.registeringUser = false;
@@ -101,7 +106,7 @@ const usersSlice = createSlice({
     }
 });
 
-export const { setUserId, clearUserId, clearUsersStatusUpdates } = usersSlice.actions;
+export const { setUser, clearUser, clearUsersStatusUpdates } = usersSlice.actions;
 export default usersSlice.reducer;
 
 export const selectUser = state => state.users.user;
