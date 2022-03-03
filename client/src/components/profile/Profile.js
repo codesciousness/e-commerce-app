@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Profile.css';
 import Loader from '../../components/loader/Loader';
 import { loadUserById, updateUser, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
-        selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
-import { selectLoginSuccess, selectGoogleLoginSuccess } from '../../features/auth/authSlice';
+        selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError, clearUsersStatusUpdates, selectLoginSuccess, 
+        selectGoogleLoginSuccess } from '../../features/users/usersSlice';
 
 const Profile = () => {
     const user = useSelector(selectUser);
@@ -122,7 +122,6 @@ const Profile = () => {
             </section>
         );
     }
-
     return (
         <section className="Profile">
             <h2 className="Profile__title">User Profile</h2>

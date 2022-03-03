@@ -9,3 +9,24 @@
 .Orders__heading {
     text-align: center;
 }
+
+.Orders__content {
+    margin: 2rem 0;
+}
+
+.Orders__label {
+    font-size: 1.25rem;
+}
+
+.Orders__sort {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 1rem 3rem 1rem 1rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.Orders li {
+    list-style: none;
+}

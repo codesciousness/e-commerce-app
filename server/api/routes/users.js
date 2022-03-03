@@ -30,7 +30,7 @@ usersRouter.get('/:userId', db.getUserById);
 
 // PUT /users/:userId to update a single user by id
 
-usersRouter.put('/:userId', authenticateToken, db.updateUser);
+usersRouter.put('/:userId', authenticate /*authenticateToken*/, db.updateUser);
 
 usersRouter.use('/:userId/orders', ordersRouter);
 

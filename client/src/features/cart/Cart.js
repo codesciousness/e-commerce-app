@@ -76,7 +76,7 @@ const Cart = ({ inCheckout, address, payment }) => {
                 Your cart is empty.
             </section>
         );
-    } 
+    }
 }
 
 export default Cart;

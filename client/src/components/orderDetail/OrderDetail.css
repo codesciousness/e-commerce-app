@@ -9,3 +9,7 @@
 .OrderDeatil__heading {
     text-align: center;
 }
+
+.OrderDetail li {
+    list-style: none;
+}

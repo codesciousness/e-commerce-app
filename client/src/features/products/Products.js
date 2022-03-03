@@ -4,8 +4,7 @@ import './Products.css';
 import Product from '../../components/product/Product';
 import SearchTerm from '../searchTerm/SearchTerm';
 import Loader from '../../components/loader/Loader';
-import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, 
-        clearProdsStatusUpdates } from './productsSlice';
+import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, clearProdsStatusUpdates } from './productsSlice';
 import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 
 const Products = () => {

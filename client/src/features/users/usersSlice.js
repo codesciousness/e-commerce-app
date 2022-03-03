@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { login } from '../auth/authSlice';
 const axios = require('axios');
 
 export const loadUserById = createAsyncThunk('users/loadUserById',
@@ -21,6 +20,23 @@ async ({ userId, user }) => {
     return response.data;
 });
 
+export const login = createAsyncThunk('users/login',
+async ({ username, password }) => {
+    const response = await axios.post('/auth/login', { username, password });
+    return response.data;
+});
+
+export const logout = createAsyncThunk('users/logout',
+async () => {
+    const response = await axios.get('/auth/logout');
+    return response.data;
+});
+
+export const googleLogin = createAsyncThunk('users/googleLogin',
+async () => {
+    window.location = 'http://localhost:4001/auth/google';
+});
+
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
@@ -33,29 +49,30 @@ const usersSlice = createSlice({
         registerUserError: false,
         updatingUser: false,
         updateUserSuccess: false,
-        updateUserError: false
+        updateUserError: false,
+        loggingIn: false,
+        loginSuccess: false,
+        loginError: false,
+        loggingOut: false,
+        logoutSuccess: false,
+        logoutError: false,
+        googleLoggingIn: false,
+        googleLoginSuccess: false,
+        googleLoginError: false
     },
     reducers: {
-        setUser: (state, action) => {
-            console.log(action.payload);
-            let user = action.payload;
-            let userId = user.id;
-            state.user = user;
-            state.userId = userId;
-            return state;
-        },
-        clearUser: (state) => {
-            state.user = {};
-            state.userId = null;
-            console.log(state.user);
-            return state;
-        },
         clearUsersStatusUpdates: (state) => {
             state.loadUserError = false;
             state.registerUserSuccess = false;
             state.registerUserError = false;
             state.updateUserSuccess = false;
             state.updateUserError = false;
+            state.loginSuccess = false;
+            state.loginError = false;
+            state.logoutSuccess = false;
+            state.logoutError = false;
+            state.googleLoginSuccess = false;
+            state.googleLoginError = false;
             return state;
         }
     },
@@ -102,11 +119,54 @@ const usersSlice = createSlice({
         [updateUser.rejected]: (state, action) => {
             state.updatingUser = false;
             state.updateUserError = true;
+        },
+        [login.pending]: (state, action) => {
+            state.loggingIn = true;
+            state.loginError = false;
+        },
+        [login.fulfilled]: (state, action) => {
+            state.loggingIn = false;
+            state.loginSuccess = true;
+            state.loginError = false;
+            state.user = action.payload;
+            state.userId = action.payload.id;
+        },
+        [login.rejected]: (state, action) => {
+            state.loggingIn = false;
+            state.loginError = true;
+        },
+        [logout.pending]: (state, action) => {
+            state.loggingOut = true;
+            state.logoutError = false;
+        },
+        [logout.fulfilled]: (state, action) => {
+            state.loggingOut = false;
+            state.logoutSuccess = true;
+            state.logoutError = false;
+            state.user = {};
+            state.userId = null;
+        },
+        [logout.rejected]: (state, action) => {
+            state.loggingOut = false;
+            state.logoutError = true;
+        },
+        [googleLogin.pending]: (state, action) => {
+            state.googleLoggingIn = true;
+            state.googleLoginError = false;
+        },
+        [googleLogin.fulfilled]: (state, action) => {
+            state.googleLoggingIn = false;
+            state.googleLoginSuccess = true;
+            state.googleLoginError = false;
+        },
+        [googleLogin.rejected]: (state, action) => {
+            state.googleLoggingIn = false;
+            state.googleLoginError = true;
         }
     }
 });
 
-export const { setUser, clearUser, clearUsersStatusUpdates } = usersSlice.actions;
+export const { clearUsersStatusUpdates } = usersSlice.actions;
 export default usersSlice.reducer;
 
 export const selectUser = state => state.users.user;
@@ -119,3 +179,12 @@ export const selectRegisterUserError = state => state.users.registerUserError;
 export const selectUpdatingUser = state => state.users.updatingUser;
 export const selectUpdateUserSuccess = state => state.users.updateUserSuccess;
 export const selectUpdateUserError = state => state.users.updateUserError;
+export const selectLoggingIn = state => state.users.loggingIn;
+export const selectLoginSuccess = state => state.users.loginSuccess;
+export const selectLoginError = state => state.users.loginError;
+export const selectLoggingOut = state => state.users.loggingOut;
+export const selectLogoutSuccess = state => state.users.logoutSuccess;
+export const selectLogoutError = state => state.users.logoutError;
+export const selectGoogleLoggingIn = state => state.users.googleLoggingIn;
+export const selectGoogleLoginSuccess = state => state.users.googleLoginSuccess;
+export const selectGoogleLoginError = state => state.users.googleLoginError;

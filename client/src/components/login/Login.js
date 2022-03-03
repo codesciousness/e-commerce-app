@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Login.css';
-import Loader from '../../components/loader/Loader';
+import Loader from '../loader/Loader';
 import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, selectGoogleLoggingIn, 
-        selectGoogleLoginSuccess, selectGoogleLoginError, clearAuthStatusUpdates } from './authSlice';
+        selectGoogleLoginSuccess, selectGoogleLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -41,7 +41,7 @@ const Login = () => {
             setPassword('');
         }
         if (loginSuccess || loginError || googleLoginSuccess || googleLoginError) {
-            dispatch(clearAuthStatusUpdates());
+            dispatch(clearUsersStatusUpdates());
         }
     }, [loginSuccess, loginError, googleLoginSuccess, googleLoginError, dispatch]);
 
@@ -59,7 +59,6 @@ const Login = () => {
             </section>
         );
     }
-
     return (
         <section className="Login">
             <h2 className="Login__title">User Login</h2>

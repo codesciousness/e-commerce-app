@@ -1,5 +1,4 @@
 .Order {
-    width: 50%;
     border: 1px solid black;
     border-radius: 10px;
     margin: 1rem 0;
@@ -8,11 +7,23 @@
     border-bottom: 1px solid black;
 }
 
+.Order__info > * {
+    margin: 0 1rem;
+}
+
 .Order__info, .Order__container {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     padding: 2rem 1rem;
+}
+
+.Order__id {
+    cursor: pointer;
+}
+
+.Order__id:hover {
+    color: lightseagreen;
 }
 
 .Order__button {
@@ -29,4 +40,8 @@
 .Order__button:hover {
     background-color: red;
     color: black;
+}
+
+.Order__image, .Order__address, .Order__payment {
+    margin: 0 1rem;
 }

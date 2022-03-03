@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const authenticate = (req, res, next) => {
   if (req.isAuthenticated()) {
-      next();
+    next();
   }
   else res.redirect(process.env.AUTH_FAILURE_REDIRECT);
 };

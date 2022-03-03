@@ -1,14 +1,18 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
-import Login from '../features/auth/Login';
-import Register from '../components/register/Register';
-import Profile from '../components/profile/Profile';
-import { logout } from '../features/auth/authSlice';
+import Login from '../components/login/Login';
+//import Register from '../components/register/Register';
+//import Profile from '../components/profile/Profile';
+import Orders from '../features/orders/Orders';
+import OrderDetail from '../components/orderDetail/OrderDetail';
+import { logout, selectLogoutSuccess, selectLogoutError, clearUsersStatusUpdates } from '../features/users/usersSlice';
 
 function App() {
   const dispatch = useDispatch();
+  const logoutSuccess = useSelector(selectLogoutSuccess);
+  const logoutError = useSelector(selectLogoutError);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -16,6 +20,12 @@ function App() {
       dispatch(logout());
     }
   };
+
+  useEffect(() => {
+    if (logoutSuccess || logoutError) {
+      dispatch(clearUsersStatusUpdates());
+    }
+  }, [logoutSuccess, logoutError, dispatch]);
 
   return (
     <div className="App">
@@ -33,8 +43,8 @@ function App() {
       </header>
       <main>
         <Login />
-        <Register />
-        <Profile />
+        <Orders />
+        <OrderDetail />
       </main>
     </div>
   );

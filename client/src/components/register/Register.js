@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Register.css';
 import Loader from '../../components/loader/Loader';
-import { googleLogin, selectGoogleLoggingIn, selectGoogleLoginSuccess, 
-        selectGoogleLoginError, clearAuthStatusUpdates } from '../../features/auth/authSlice';
-import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, 
-        selectRegisterUserError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, selectGoogleLoggingIn, 
+        selectGoogleLoginSuccess, selectGoogleLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Register = () => {
     const [firstName, setFirstName] = useState('');
@@ -58,7 +56,6 @@ const Register = () => {
             setPassword('');
         }
         if (registerUserSuccess || registerUserError || googleLoginSuccess || googleLoginError) {
-            dispatch(clearAuthStatusUpdates());
             dispatch(clearUsersStatusUpdates());
         }
     }, [registerUserSuccess, registerUserError, googleLoginSuccess, googleLoginError, dispatch]);
