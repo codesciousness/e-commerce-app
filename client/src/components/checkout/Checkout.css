@@ -4,6 +4,11 @@
     background-color: whitesmoke;
     padding: 2rem;
 }
+
+.Checkout__success {
+    font-size: 3rem;
+}
+
 .Checkout__form {
     margin: 0.25rem auto;
     padding: 2rem;

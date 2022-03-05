@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import './Checkout.css';
 import Cart from '../../features/cart/Cart';
 import { selectCheckoutSuccess, clearCartStatusUpdates } from '../../features/cart/cartSlice';
@@ -17,6 +18,7 @@ const Checkout = () => {
     const [cardCVV, setCardCVV] = useState('');
     const dispatch = useDispatch();
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
+    let navigate = useNavigate();
 
     const address = {
         shipToName,
@@ -80,10 +82,20 @@ const Checkout = () => {
             setPayMethod('');
             setCardExp('');
             setCardCVV('');
+            setTimeout(() => {
+                navigate("/orders");
+            }, 3000);
             dispatch(clearCartStatusUpdates());
         }
-    }, [checkoutSuccess, dispatch]);
+    }, [checkoutSuccess, dispatch, navigate]);
 
+    if (checkoutSuccess) {
+        return (
+            <section className="Checkout">
+                <p className="Checkout__success">Your order has been placed!</p>
+            </section>
+        );
+    }
     return (
         <section className="Checkout">
             <form className="Checkout__form" method="post" action="/cart/cartId/checkout">

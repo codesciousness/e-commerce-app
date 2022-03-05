@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import './Profile.css';
 import Loader from '../../components/loader/Loader';
 import { loadUserById, updateUser, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
@@ -12,7 +13,7 @@ const Profile = () => {
     const [firstName, setFirstName] = useState(user.first_name);
     const [lastName, setLastName] = useState(user.last_name);
     const [gender, setGender] = useState(user.gender);
-    const [dob, setDob] = useState(user.date_of_birth);
+    let [dob, setDob] = useState(user.date_of_birth);
     const [phone, setPhone] = useState(user.phone);
     const [email, setEmail] = useState(user.email);
     const [username, setUsername] = useState(user.username);
@@ -30,6 +31,8 @@ const Profile = () => {
     const updateUserError = useSelector(selectUpdateUserError);
     const loginSuccess = useSelector(selectLoginSuccess);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
+    dob = dob.slice(5,7) + '/' + dob.slice(8,10) +'/' + dob.slice(0,4);
+    let navigate = useNavigate();
 
     const userProfile = {
         firstName,
@@ -93,14 +96,16 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        if (userId) {
+        if (!userId) {
+            navigate('/login');
+        }
+        else {
             dispatch(loadUserById(userId));
         }
     }, []);
 
     useEffect(() => {
         if (registerUserSuccess || updateUserSuccess || loginSuccess || googleLoginSuccess) {
-            console.log(1, userId);
             dispatch(loadUserById(userId));
         }
         if (loadUserError || updateUserSuccess || updateUserError) {
@@ -149,10 +154,8 @@ const Profile = () => {
                     <input className="Profile__input" id="username" name="username" placeholder="Username" required
                     value={username} onChange={handleChange}/>
                     <label className="Profile__label" for="password">PASSWORD</label>
-                    <input className="Profile__input" id="password" name="password" placeholder="Enter a valid password" type="password" required
+                    <input className="Profile__input" id="password" name="password" placeholder="Enter and submit a new password to change password" type="password" required
                     value={password} onChange={handleChange}/>
-                </div>
-                <div className="Profile__container">
                     <label className="Profile__label" for="streetAddress">STREET ADDRESS</label>
                     <input className="Profile__input" id="streetAddress" name="streetAddress" placeholder="Street Address" required
                     value={streetAddress} onChange={handleChange}/>

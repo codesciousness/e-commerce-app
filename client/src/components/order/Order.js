@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './Order.css';
 import Loader from '../loader/Loader';
 import { cancelOrder, setOrder, selectCancelingOrder, selectCancelOrderError, clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
@@ -46,7 +47,7 @@ const Order = ({ order }) => {
     return (
         <section className="Order">
             <div className="Order__info">
-                <h3 className="Order__id" onClick={handleOrderClick}>Order Id: {order.id}</h3>
+                <Link to={`/orders/${orderId}`}><h3 className="Order__id" onClick={handleOrderClick}>Order Id: {order.id}</h3></Link>
                 <p className="Order__date">Date: {date}</p>
                 <p className="Order__status">Status: {order.status}</p>
                 {order.status === 'processing' && <button className="Order__button" onClick={handleButtonClick}>Cancel Order</button>}

@@ -3,25 +3,25 @@ const axios = require('axios');
 
 export const loadOrderById = createAsyncThunk('orders/loadOrderById',
 async ({ userId, orderId }) => {
-    const response = await axios.get(`users/${userId}/orders/${orderId}`);
+    const response = await axios.get(`/users/${userId}/orders/${orderId}`);
     return response.data;
 });
 
 export const loadOrders = createAsyncThunk('orders/loadOrders',
 async ({ userId, sort }) => {
     if (sort) {
-        const response = await axios.get(`users/${userId}/orders?sort=${sort}`);
+        const response = await axios.get(`/users/${userId}/orders?sort=${sort}`);
         return response.data;
     }
     else {
-        const response = await axios.get(`users/${userId}/orders?sort=newest`);
+        const response = await axios.get(`/users/${userId}/orders?sort=newest`);
         return response.data;
     }
 });
 
 export const cancelOrder = createAsyncThunk('orders/cancelOrder',
 async ({ userId, orderId }) => {
-    const response = await axios.delete(`users/${userId}/orders/${orderId}`);
+    const response = await axios.delete(`/users/${userId}/orders/${orderId}`);
     return response.data;
 });
 
@@ -74,6 +74,8 @@ const ordersSlice = createSlice({
         [loadOrderById.rejected]: (state, action) => {
             state.loadingOrder = false;
             state.loadOrderError = true;
+            state.orderId = null;
+            state.order = {};
         },
         [loadOrders.pending]: (state, action) => {
             state.loadingOrders = true;

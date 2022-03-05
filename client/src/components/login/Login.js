@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import Loader from '../loader/Loader';
 import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, selectGoogleLoggingIn, 
@@ -15,6 +16,7 @@ const Login = () => {
     const googleLoggingIn = useSelector(selectGoogleLoggingIn);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const googleLoginError = useSelector(selectGoogleLoginError);
+    let navigate = useNavigate();
 
     const handleChange = ({ target }) => {
         if (target.name === "username") {
@@ -39,6 +41,7 @@ const Login = () => {
         if (loginSuccess || googleLoginSuccess) {
             setUsername('');
             setPassword('');
+            navigate('/');
         }
         if (loginSuccess || loginError || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
@@ -72,7 +75,7 @@ const Login = () => {
                 <input id='loginButton' className="Login__button" type="submit" value="LOGIN" onClick={handleClick}/>
                 <button id='googleLoginButton' className="Login__google__button" onClick={handleClick}>GOOGLE LOGIN</button>
             </form>
-            <p className="Login__registerLink">New user? Please Register.</p>
+            <Link to='/register'><p className="Login__registerLink">New user? Please Register.</p></Link>
         </section>
     );
 }

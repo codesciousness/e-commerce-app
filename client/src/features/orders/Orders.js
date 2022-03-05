@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import './Orders.css';
 import Order from '../../components/order/Order';
 import Loader from '../../components/loader/Loader';
@@ -21,16 +22,20 @@ const Orders = () => {
     const logoutSuccess = useSelector(selectLogoutSuccess);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
+    let navigate = useNavigate();
 
     const handleChange = ({ target }) => {
         setSort(target.value);
     };
 
     useEffect(() => {
-        if (userId) {
+        if (!userId) {
+            navigate('/login');
+        }
+        else {
             dispatch(loadOrders({ userId, sort }));
         }
-    }, [sort, userId, dispatch]);
+    }, [sort, userId, dispatch, navigate]);
 
     useEffect(() => {
         if (cancelOrderSuccess || loginSuccess || googleLoginSuccess || checkoutSuccess) {

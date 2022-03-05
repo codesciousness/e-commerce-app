@@ -16,6 +16,16 @@ body {
   font-size: 1rem;
 }
 
+a {
+  color: inherit;
+  text-decoration: inherit;
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+  color: lightseagreen;
+}
+
 .App__header {
   display: flex;
   justify-content: space-between;
@@ -42,14 +52,9 @@ body {
 
 .App__navbar__div > .fas {
   margin-bottom: 0.5rem;
-  transition: all 0.3s ease-in-out;
 }
 
-.App__navbar__div > .fas:hover {
-  color: lightgreen;
-}
-
-.App__logout__button {
+.App__login__button, .App__logout__button {
   border: 1px solid black;
   padding: 0.5rem 0.75rem;
   border-radius: 5px;
@@ -58,6 +63,11 @@ body {
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+}
+
+.App__login__button:hover {
+  background-color: lightgreen;
+  color: black;
 }
 
 .App__logout__button:hover {

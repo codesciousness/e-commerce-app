@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './Cart.css';
 import Product from '../../components/product/Product';
 import Loader from '../../components/loader/Loader';
@@ -20,12 +21,20 @@ const Cart = ({ inCheckout, address, payment }) => {
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
     const checkoutError = useSelector(selectCheckoutError);
     const userId = useSelector(selectUserId);
+    let Button;
 
     const handleClick = () => {
         if (inCheckout && cart.items.length !== 0) {
             dispatch(checkout({ cartId, address, payment }));
         }
     };
+
+    if (inCheckout) {
+        Button = <button className="Cart__checkout__button" onClick={handleClick}>Place Order</button>  
+    }
+    else {
+        Button = <Link to="checkout"><button className="Cart__checkout__button">Go to Checkout</button></Link>
+    }
 
     useEffect(() => {
         dispatch(loadCart(cartId));
@@ -64,7 +73,7 @@ const Cart = ({ inCheckout, address, payment }) => {
                 {cart.items.map((cartItem, i) => <Product product={cartItem} inCart={true} key={cart.items[i].product_id}/>)}
                 <div className="Cart__info">
                     <p className="Cart__subtotal">{`Subtotal: $${cart.subtotal}`}</p>
-                    <button className="Cart__checkout__button" onClick={handleClick}>{inCheckout ? 'Place Order' : 'Go to Checkout'}</button>
+                    {Button}
                 </div>
             </section>
         );

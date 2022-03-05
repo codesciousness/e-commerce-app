@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './Register.css';
 import Loader from '../../components/loader/Loader';
 import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, selectGoogleLoggingIn, 
@@ -96,7 +97,7 @@ const Register = () => {
                 <input id="registerButton" className="Register__button" type="submit" value="REGISTER" onClick={handleClick}/>
                 <button id="googleRegisterButton" className="Register__google__button" onClick={handleClick}>GOOGLE SIGNUP</button>
             </form>
-            <p className="Register__loginLink">Already registered? Please Login.</p>
+            <Link to='/login'><p className="Register__loginLink">Already registered? Please Login.</p></Link>
         </section>
     );
 }
