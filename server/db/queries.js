@@ -97,40 +97,58 @@ const getUserById = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-    const { username, password, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone } = req.body;
+    const { username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone } = req.body;
     const text = `UPDATE users
-    SET username = $2, password = $3, first_name = $4, last_name = $5, gender = $6, date_of_birth = $7, street_address = $8, city = $9, state = $10, zip_code = $11, email = $12, phone = $13
+    SET username = $2, first_name = $3, last_name = $4, gender = $5, date_of_birth = $6, street_address = $7, city = $8, state = $9, zip_code = $10, email = $11, phone = $12
     WHERE id = $1
     RETURNING *`;
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function(err, salt) {
+    const values = [req.userId, username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone];
+    pg.query(text, values, (err, result) => {
         if (err) {
-            throw err;
+            return next(err);
+        }
+        if (result.rows.length > 0) {
+            const updatedUser = result.rows[0];
+            res.send(updatedUser);
         }
         else {
-            bcrypt.hash(password, salt, function(err, hash) {
-                if (err) {
-                    throw err;
-                }
-                else {
-                    const passwordHash = hash;
-                    const values = [req.userId, username, passwordHash, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone];
-                    pg.query(text, values, (err, result) => {
-                        if (err) {
-                            return next(err);
-                        }
-                        if (result.rows.length > 0) {
-                            const updatedUser = result.rows[0];
-                            res.send(updatedUser);
-                        }
-                        else {
-                            res.status(500).send('Internal Server Error');
-                        }
-                    });
-                }
-            });
-        };
+            res.status(500).send('Internal Server Error');
+        }
     });
+};
+
+const changePassword = (req, res, next) => {
+    const { password } = req.body;
+    if (password) {
+        const text = `UPDATE users
+        SET password = $2
+        WHERE id = $1
+        RETURNING *`;
+        const saltRounds = 10;
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            if (err) {
+                throw err;
+            }
+            else {
+                bcrypt.hash(password, salt, function(err, hash) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        const passwordHash = hash;
+                        const values = [req.userId, passwordHash];
+                        pg.query(text, values, (err, result) => {
+                            if (err) {
+                                return next(err);
+                            }
+                            res.send();
+                        });
+                    }
+                });
+            };
+        });
+    }
+    else res.status(400).send('Bad Request');
 };
 
 const getProducts = (req, res, next) => {
@@ -574,6 +592,7 @@ module.exports = {
     setUserId,
     getUserById,
     updateUser,
+    changePassword,
     getProducts,
     getProductById,
     createCart,

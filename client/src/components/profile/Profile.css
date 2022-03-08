@@ -41,7 +41,6 @@
     color: white;
     font-size: 1.25rem;
     font-weight: bold;
-    letter-spacing: 2px;
     margin: 1.5rem auto;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -50,4 +49,12 @@
 .Profile__button:hover {
     background-color: lightgreen;
     color: black;
+}
+
+.Profile__password__match {
+    border: 1px solid lightgreen;
+}
+
+.Profile__password__dontmatch {
+    border: 1px solid red;
 }

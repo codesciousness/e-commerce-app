@@ -46,7 +46,7 @@ const Login = () => {
         if (loginSuccess || loginError || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [loginSuccess, loginError, googleLoginSuccess, googleLoginError, dispatch]);
+    }, [loginSuccess, loginError, googleLoginSuccess, googleLoginError, dispatch, navigate]);
 
     if (loggingIn || googleLoggingIn) {
         return (

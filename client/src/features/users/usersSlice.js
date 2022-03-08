@@ -20,6 +20,12 @@ async ({ userId, user }) => {
     return response.data;
 });
 
+export const changePassword = createAsyncThunk('users/changePassword',
+async ({ userId, password }) => {
+    const response = await axios.put(`/users/${userId}/password`, { password });
+    return response.data;
+});
+
 export const login = createAsyncThunk('users/login',
 async ({ username, password }) => {
     const response = await axios.post('/auth/login', { username, password });
@@ -50,6 +56,9 @@ const usersSlice = createSlice({
         updatingUser: false,
         updateUserSuccess: false,
         updateUserError: false,
+        changingPassword: false,
+        changePasswordSuccess: false,
+        changePasswordError: false,
         loggingIn: false,
         loginSuccess: false,
         loginError: false,
@@ -67,6 +76,8 @@ const usersSlice = createSlice({
             state.registerUserError = false;
             state.updateUserSuccess = false;
             state.updateUserError = false;
+            state.changePasswordSuccess = false;
+            state.changePasswordError = false;
             state.loginSuccess = false;
             state.loginError = false;
             state.logoutSuccess = false;
@@ -119,6 +130,19 @@ const usersSlice = createSlice({
         [updateUser.rejected]: (state, action) => {
             state.updatingUser = false;
             state.updateUserError = true;
+        },
+        [changePassword.pending]: (state, action) => {
+            state.changingPassword = true;
+            state.changePasswordError = false;
+        },
+        [changePassword.fulfilled]: (state, action) => {
+            state.changingPassword = false;
+            state.changePasswordSuccess = true;
+            state.changePasswordError = false;
+        },
+        [changePassword.rejected]: (state, action) => {
+            state.changingPassword = false;
+            state.changePasswordError = true;
         },
         [login.pending]: (state, action) => {
             state.loggingIn = true;
@@ -179,6 +203,9 @@ export const selectRegisterUserError = state => state.users.registerUserError;
 export const selectUpdatingUser = state => state.users.updatingUser;
 export const selectUpdateUserSuccess = state => state.users.updateUserSuccess;
 export const selectUpdateUserError = state => state.users.updateUserError;
+export const selectChangingPassword = state => state.users.changingPassword;
+export const selectChangePasswordSuccess = state => state.users.changePasswordSuccess;
+export const selectChangePasswordError = state => state.users.changePasswordError;
 export const selectLoggingIn = state => state.users.loggingIn;
 export const selectLoginSuccess = state => state.users.loginSuccess;
 export const selectLoginError = state => state.users.loginError;
