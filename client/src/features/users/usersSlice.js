@@ -10,7 +10,7 @@ async (userId) => {
 export const registerUser = createAsyncThunk('users/registerUser',
 async ({ firstName, lastName, email, username, password }) => {
     const response = await axios.post('/users/register', { firstName, lastName, email, username, password });
-    //login({ username, password });
+    login({ username, password });
     return response.data;
 });
 

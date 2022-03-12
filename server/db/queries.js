@@ -15,11 +15,12 @@ const registerUser = (req, res, next) => {
     const { username, password, firstName, lastName, email } = req.body;
     if (username && password && firstName && lastName && email) {
         const userId = uuidv4();
+        const cartId = uuidv4();
         const saltRounds = 10;
         const findText = 'SELECT * FROM users WHERE email=$1';
         const findValues = [email];
-        const addText = `INSERT INTO users (id, username, password, first_name, last_name, email)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        const addText = `INSERT INTO users (id, cart_id, username, password, first_name, last_name, email)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *`;
         pg.query(findText, findValues, (err, result) => {
             if (err) {
@@ -41,7 +42,7 @@ const registerUser = (req, res, next) => {
                             }
                             else {
                                 const passwordHash = hash;
-                                const addValues = [userId, username, passwordHash, firstName, lastName, email];
+                                const addValues = [userId, cartId, username, passwordHash, firstName, lastName, email];
                                 pg.query(addText, addValues, (err, result) => {
                                     const newUser = result.rows[0];
                                     if (err) {
@@ -238,33 +239,23 @@ const getProductById = (req, res, next) => {
     });
 };
 
-const createCart = (req, res, next) => {
-    const cartId = uuidv4();
-    const userId = req.userId ? req.userId : req.body.userId ? req.body.userId : null;
-    const text = `INSERT INTO cart (id, users_id)
-    VALUES ($1, $2)
-    RETURNING *`;
-    pg.query(text, [cartId, userId], (err, result) => {
-        if (err) {
-            return next(err);
-        }
-        if (result.rows.length > 0) {
-            res.status(201).send(result.rows[0]);
-        }
-        else res.status(500).send('Internal Server Error');
-    });
-};
-
 const setCartId = (req, res, next, id) => {
     const cartId = id;
-    const text = 'SELECT * FROM cart WHERE id = $1';
-    pg.query(text, [cartId], (err, result) => {
+    const userId = req.userId
+    const text = 'SELECT * FROM users WHERE id = $1';
+    pg.query(text, [userId], (err, result) => {
         if (err) {
             return next(err);
         }
         if (result.rows.length > 0) {
-            req.cartId = cartId;
-            next();
+            const user = result.rows[0];
+            if (user.cart_id === cartId) {
+                req.cartId = cartId;
+                next();
+            }
+            else {
+                res.status(400).send('Bad Request');
+            }
         }
         else {
             res.status(404).send('Not Found');
@@ -274,9 +265,9 @@ const setCartId = (req, res, next, id) => {
 
 const getCartById = (req, res, next) => {
     const text = `SELECT cart_id, product_id, name, category, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
-    FROM cart_products
+    FROM cart
     JOIN product
-    ON cart_products.product_id = product.id
+    ON cart.product_id = product.id
     WHERE cart_id = $1`;
     pg.query(text, [req.cartId], (err, result) => {
         if (err) {
@@ -299,7 +290,7 @@ const getCartById = (req, res, next) => {
 const updateCart = (req, res, next) => {
     const { productId, cartQuantity } = req.body;
     if (cartQuantity === 0) {
-        const deleteText = 'DELETE FROM cart_products WHERE cart_id = $1 AND product_id = $2';
+        const deleteText = 'DELETE FROM cart WHERE cart_id = $1 AND product_id = $2';
         const deleteValues = [req.cartId, productId];
         pg.query(deleteText, deleteValues, (err, result) => {
             if (err) {
@@ -309,7 +300,7 @@ const updateCart = (req, res, next) => {
         });
     }
     else if (cartQuantity > 0) {
-        const updateText = `UPDATE cart_products
+        const updateText = `UPDATE cart
         SET cart_quantity = $3
         WHERE cart_id = $1 AND product_id = $2
         RETURNING *`;
@@ -318,45 +309,35 @@ const updateCart = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            
             if (result.rows.length > 0) {
                 const updatedCart = result.rows[0];
                 res.send(updatedCart);
             }
             else {
-                //check to see if cart exists
-                pg.query('SELECT * FROM cart WHERE id = $1', [req.cartId], (err, result) => {
+                //check to see if product exists
+                pg.query('SELECT * FROM product WHERE id = $1', [productId], (err, result) => {
                     if (err) {
                         return next(err);
                     }
                     if (result.rows.length > 0) {
-                        //check to see if product exists
-                        pg.query('SELECT * FROM product WHERE id = $1', [productId], (err, result) => {
+                        //add the new cart item
+                        const insertText = `INSERT INTO cart (cart_id, product_id, cart_quantity)
+                        VALUES ($1, $2, $3)
+                        RETURNING *`;
+                        pg.query(insertText, updateValues, (err, result) => {
                             if (err) {
                                 return next(err);
                             }
                             if (result.rows.length > 0) {
-                                //add the new cart item
-                                const insertText = `INSERT INTO cart_products (cart_id, product_id, cart_quantity)
-                                VALUES ($1, $2, $3)
-                                RETURNING *`;
-                                pg.query(insertText, updateValues, (err, result) => {
-                                    if (err) {
-                                        return next(err);
-                                    }
-                                    if (result.rows.length > 0) {
-                                        const addedToCart = result.rows[0];
-                                        res.send(addedToCart);
-                                    }
-                                    else {
-                                        res.status(500).send('Internal Server Error');
-                                    }
-                                });
+                                const addedToCart = result.rows[0];
+                                res.send(addedToCart);
                             }
-                            else res.status(400).send('Bad Request');
+                            else {
+                                res.status(500).send('Internal Server Error');
+                            }
                         });
                     }
-                    else res.redirect('/cart');
+                    else res.status(400).send('Bad Request');
                 });
             }
         });
@@ -367,23 +348,24 @@ const updateCart = (req, res, next) => {
 const checkout = (req, res, next) => {
     //verify cart is not empty
     const findText = `SELECT cart_id, product_id, cart_quantity
-    FROM cart_products
+    FROM cart
     WHERE cart_id = $1`;
     pg.query(findText, [req.cartId], (err, result) => {
         if (err) {
             return next(err);
         }
         if (result.rows.length > 0) {
-            //obtain shipping address & payment method from req.body
+            //obtain userId, shipping address & payment method from req
+            const userId = req.userId;
             const { shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email } = req.body.address;
             const { paySuccess, payMethod, cardNum, cardExp, cardCVV } = req.body.payment;
             //verify that shipping address, email and payment method have values
-            if (shipToName && shipToStreet && shipToCity && shipToState && shipToZip && email && paySuccess) {
-                //query items from cart products
+            if (userId, shipToName && shipToStreet && shipToCity && shipToState && shipToZip && email && paySuccess) {
+                //query items from cart
                 const joinText = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
-                FROM cart_products
+                FROM cart
                 JOIN product
-                ON cart_products.product_id = product.id
+                ON cart.product_id = product.id
                 WHERE cart_id = $1`;
                 pg.query(joinText, [req.cartId], (err, result) => {
                     if (err) {
@@ -422,7 +404,7 @@ const checkout = (req, res, next) => {
                         const ordersText = `INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
                         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
                         RETURNING *`,
-                        ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, req.userId];
+                        ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, userId];
                         pg.query(ordersText, ordersValues, (err, result) => {
                             if (err) {
                                 return next(err);
@@ -457,7 +439,7 @@ const checkout = (req, res, next) => {
                                                     return next(err);
                                                 }
                                                 const orderDetails = result.rows;
-                                                const clearCartText = 'DELETE FROM cart_products WHERE cart_id = $1';
+                                                const clearCartText = 'DELETE FROM cart WHERE cart_id = $1';
                                                 pg.query(clearCartText, [req.cartId], (err, result) => {
                                                     if (err) {
                                                         res.status(500).send('Internal Server Error');
@@ -595,7 +577,6 @@ module.exports = {
     changePassword,
     getProducts,
     getProductById,
-    createCart,
     setCartId,
     getCartById,
     updateCart,

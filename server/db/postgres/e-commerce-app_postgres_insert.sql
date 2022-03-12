@@ -1,71 +1,25 @@
-INSERT INTO users (id, google_id, username, password, first_name, last_name, gender, date_of_birth, street_address, city, state, zip_code, email, phone)
+INSERT INTO users (id, google_id, cart_id, username, password, first_name, last_name, gender, date_of_birth, street_address, city, state, zip_code, email, phone)
 VALUES
-('6f207c1c-d770-46af-a7aa-b0003e952c39', NULL, 'hdiamant0', '49a6b5d5538c181bbdc6981f4826ea69', 'Hana', 'Diamant', 'Genderqueer', '1989-10-14', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', '425-594-5673'),
-('0f394d8e-3c9e-4028-b72c-fd020159d4dd', NULL, 'klukash1', 'e3efb420cc622b3dfdf8dab2ba4c51f6', 'Karyn', 'Lukash', 'Genderqueer', '1977-10-14', '9 Artisan Way', 'Saint Paul', 'MN', 55115, 'klukash1@prnewswire.com', '651-709-5985'),
-('5772e5b0-c800-4f13-8988-853376fe1cb6', NULL, 'awillan2', '35a3e015fb70eeed8d403da5ffb905fa', 'Arvin', 'Willan', 'Male', '1943-06-13', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', '972-285-0610'),
-('a9b490ba-1829-4c35-bd4e-70fbf4849d61', NULL, 'lharrie3', 'd8f67f119fd2403f93da7946a90362df', 'Launce', 'Harrie', 'Genderqueer', '1965-11-16', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', '518-598-2111'),
-('273bfea7-2b81-440a-a725-5a82598f645e', NULL, 'mdoore4', 'dcd3ac36716a9fb884d7adf7c66e9cd6', 'Madlin', 'Doore', 'Polygender', '1959-12-16', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', '210-520-6667'),
-('9094d72f-4595-4ca6-8d49-5a1fcf0e9ccf', NULL, 'bdomney5', 'ff94810e621cd2e3c79aa509cdae3f2c', 'Bobbye', 'Domney', 'Bigender', '1934-11-04', '70032 Twin Pines Junction', 'Dayton', 'OH', 45426, 'bdomney5@woothemes.com', '937-826-8337'),
-('b22105bf-7413-4160-9061-f2c750cfe082', NULL, 'elantuffe6', '53bae03da1881b7f6ef25e1d33b3723d', 'Edmund', 'Lantuffe', 'Agender', '1946-02-01', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', '901-975-3121'),
-('6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba', NULL, 'gboog7', 'a082f59b23df7acb4a0b11bd5c32fa16', 'Gard', 'Boog', 'Male', '1939-12-29', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', '239-853-3089'),
-('4ed39887-fd38-4dec-b3b3-33d51993a049', NULL, 'srennard8', '5eb568265477b76f551041dd88dea5da', 'Sophronia', 'Rennard', 'Bigender', '1987-11-12', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', '260-174-8850'),
-('c24ea57b-1305-4fb4-b461-0df61a60c08f', NULL, 'aselbach9', '472b94c14ad928079d4b3e9867dbf88e', 'Adolphe', 'Selbach', 'Non-binary', '1934-07-21', '3155 Menomonie Plaza', 'Dallas', 'TX', 75287, 'aselbach9@vk.com', '214-106-9403'),
-('0ec0096f-e56b-4318-ac13-02385a9d4afe', NULL, 'bgoodingea', '198e454d58f82f4f25dae5e3dcd3db94', 'Berry', 'Goodinge', 'Agender', '1991-10-20', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', '936-537-5466'),
-('f6fdc984-440e-4c78-be98-1455cdd3ff42', NULL, 'omeritonb', '353a5e57e1bbc64692c6fdc057350c55', 'Onfre', 'Meriton', 'Genderfluid', '1949-04-12', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', '952-466-9105'),
-('0cfcb3b0-dd35-4f29-a8e7-f35b6dee983a', NULL, 'ahurrionc', 'f9ff1acf98de5d4e63ebdafbb8884fa9', 'Averil', 'Hurrion', 'Female', '1972-10-10', '7675 Butternut Circle', 'Migrate', 'KY', 41905, 'ahurrionc@omniture.com', '502-433-2149'),
-('493603f6-98f0-4f56-8998-214ac11c63f2', NULL, 'wkoopd', '80456f9c323f4ecd398cb7a78782c069', 'Whitney', 'Koop', 'Genderqueer', '1927-11-19', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', '239-760-8037'),
-('d326765b-d1dd-46b6-853f-9107358ca69e', NULL, 'psaltsberge', '4b22b8aa8dfdcca12f5c03470a87cc5e', 'Pate', 'Saltsberg', 'Bigender', '1921-07-06', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', '941-958-8929'),
-('8a3c3cb4-92f7-4d34-955a-c14334a04be4', NULL, 'egiacomellof', '06740a1303e66ee819c0241404fbe767', 'Earle', 'Giacomello', 'Genderfluid', '1923-09-26', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', '808-435-2323'),
-('aac2de3e-1762-4ddd-b405-af418541a753', NULL, 'oweatherbyg', '8f360c8dc84846aac19fbe2c24799f14', 'Olivero', 'Weatherby', 'Genderfluid', '1938-02-12', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', '405-945-0308'),
-('774f8d1f-2aca-4d6c-97e1-d8cd70b684ce', NULL, 'dfloodgateh', '7da6b70a3f6d02cc7633ad3cd28bb29a', 'Dalston', 'Floodgate', 'Genderfluid', '1936-11-25', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', '650-728-2060'),
-('899d585b-4f94-4fb8-83e5-0c45551dc23a', NULL, 'emaunselli', 'b55605c1d2b311a2bebd287231f305a0', 'Elvis', 'Maunsell', 'Female', '1941-06-10', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', '262-249-2608'),
-('43cbd1df-fa13-440f-ace5-103121c61b6f', NULL, 'randrickj', '8204e50c0931d07cde1c4e40a42e63dc', 'Reggy', 'Andrick', 'Female', '1939-03-19', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', '714-286-7887');
-
-INSERT INTO cart
-VALUES
-('cbc0fc92-71f2-422b-8a26-005ac36e10d7', '6f207c1c-d770-46af-a7aa-b0003e952c39'),
-('95d73010-a329-4d80-9309-311b0ae88f35', '0f394d8e-3c9e-4028-b72c-fd020159d4dd'),
-('b2738940-808b-4bfd-9b04-ca06ce6445fe', '5772e5b0-c800-4f13-8988-853376fe1cb6'),
-('d02a1269-44a8-4d56-a49f-5a800ab191cd', 'a9b490ba-1829-4c35-bd4e-70fbf4849d61'),
-('127297d0-4897-4419-acd2-7e4239c7efd3', '273bfea7-2b81-440a-a725-5a82598f645e'),
-('4d66e5d2-f91a-4a9c-9892-5f097ae8d412', '9094d72f-4595-4ca6-8d49-5a1fcf0e9ccf'),
-('7b9c7dc9-839a-43b0-aea1-7cff12adfd6c', 'b22105bf-7413-4160-9061-f2c750cfe082'),
-('11aec017-02a9-4b38-8344-d52eef0f4b2e', '6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba'),
-('becb9b8c-e6f3-46c6-9ba8-3ca28533d013', '4ed39887-fd38-4dec-b3b3-33d51993a049'),
-('0df8f38b-13da-41b2-9804-70a4c797ae6a', 'c24ea57b-1305-4fb4-b461-0df61a60c08f'),
-('ff2655ba-ffe2-47ab-a125-9521dd236fc5', '0ec0096f-e56b-4318-ac13-02385a9d4afe'),
-('c10be241-29cd-43ee-a762-984fe0ba5f80', 'f6fdc984-440e-4c78-be98-1455cdd3ff42'),
-('2bbb156d-4bd9-4858-9834-78fac5ee90cd', '0cfcb3b0-dd35-4f29-a8e7-f35b6dee983a'),
-('0203d81b-b18c-49df-97ae-c95e0a0ebfe7', '493603f6-98f0-4f56-8998-214ac11c63f2'),
-('4bdf93e5-f596-4215-bb69-032c227bd033', 'd326765b-d1dd-46b6-853f-9107358ca69e'),
-('c4444e53-84de-4963-bbb6-c3294f50c311', '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
-('55937ca5-3a07-47a4-9305-aeec6362a97f', 'aac2de3e-1762-4ddd-b405-af418541a753'),
-('25d54cbf-b7fd-4bbc-b60d-73fe31795b67', '774f8d1f-2aca-4d6c-97e1-d8cd70b684ce'),
-('5c710659-838f-44bb-8491-69c76014b161', '899d585b-4f94-4fb8-83e5-0c45551dc23a'),
-('68772740-80f0-457f-824b-9ef0f075d84a', '43cbd1df-fa13-440f-ace5-103121c61b6f');
-
-INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
-VALUES
-('2015-11-05', 'returned', 215.58, '2015-11-09', 'Dalston Floodgate', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', 'mastercard', 9945, '774f8d1f-2aca-4d6c-97e1-d8cd70b684ce'),
-('2010-04-05', 'shipped', 1740.09, '2010-04-09', 'Elvis Maunsell', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', 'visa', 3841, '899d585b-4f94-4fb8-83e5-0c45551dc23a'),
-('2018-12-23', 'processing', 61.26, NULL, 'Sophronia Rennard', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', 'american express', 8667, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
-('2011-10-20', 'shipped', 717.82, '2011-10-24', 'Arvin Willan', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', 'visa', 6350, '5772e5b0-c800-4f13-8988-853376fe1cb6'),
-('2021-06-17', 'processing', 1291.48, NULL, 'Gard Boog', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', 'mastercard', 2808, '6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba'),
-('2012-05-15', 'returned', 571.69, '2012-05-19', 'Berry Goodinge', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', 'visa', 5873, '0ec0096f-e56b-4318-ac13-02385a9d4afe'),
-('2021-03-29', 'processing', 1082.62, NULL, 'Whitney Koop', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', 'visa', 9872, '493603f6-98f0-4f56-8998-214ac11c63f2'),
-('2021-05-04', 'shipped', 1944.10, '2021-05-08', 'Earle Giacomello', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', 'mastercard', 2740, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
-('2016-03-31', 'processing', 900.49, NULL, 'Olivero Weatherby', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', 'american express', 3081, 'aac2de3e-1762-4ddd-b405-af418541a753'),
-('2013-04-27', 'shipped', 550.95, '2013-05-01', 'Edmund Lantuffe', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', 'visa', 1555, 'b22105bf-7413-4160-9061-f2c750cfe082'),
-('2015-04-26', 'delivered', 1184.41, '2015-04-30', 'Madlin Doore', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', 'visa', 5948, '273bfea7-2b81-440a-a725-5a82598f645e'),
-('2018-01-19', 'shipped', 881.61, '2018-01-23', 'Olivero Weatherby', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', 'mastercard', 3202, 'aac2de3e-1762-4ddd-b405-af418541a753'),
-('2011-11-10', 'shipped', 1480.43, '2011-11-14', 'Earle Giacomello', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', 'mastercard', 8703, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
-('2014-02-15', 'delivered', 1263.41, '2014-02-19', 'Onfre Meriton', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', 'visa', 9301, 'f6fdc984-440e-4c78-be98-1455cdd3ff42'),
-('2020-02-23', 'shipped', 1978.80, '2020-02-27', 'Pate Saltsberg', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', 'american express', 7286, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
-('2014-01-12', 'shipped', 353.58, '2014-01-16', 'Sophronia Rennard', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', 'visa', 8127, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
-('2019-11-14', 'delivered', 1375.13, '2019-11-18', 'Launce Harrie', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', 'mastercard', 6504, 'a9b490ba-1829-4c35-bd4e-70fbf4849d61'),
-('2019-11-10', 'processing', 1462.39, NULL, 'Pate Saltsberg', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', 'mastercard', 1100, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
-('2016-05-20', 'returned', 1505.87, '2016-05-24', 'Reggy Andrick', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', 'visa', 6314, '43cbd1df-fa13-440f-ace5-103121c61b6f'),
-('2015-02-01', 'shipped', 1754.55, '2015-02-05', 'Hana Diamant', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', 'american express', 8356, '6f207c1c-d770-46af-a7aa-b0003e952c39');
+('6f207c1c-d770-46af-a7aa-b0003e952c39', NULL, 'cbc0fc92-71f2-422b-8a26-005ac36e10d7', 'hdiamant0', '49a6b5d5538c181bbdc6981f4826ea69', 'Hana', 'Diamant', 'Genderqueer', '1989-10-14', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', '425-594-5673'),
+('0f394d8e-3c9e-4028-b72c-fd020159d4dd', NULL, '95d73010-a329-4d80-9309-311b0ae88f35', 'klukash1', 'e3efb420cc622b3dfdf8dab2ba4c51f6', 'Karyn', 'Lukash', 'Genderqueer', '1977-10-14', '9 Artisan Way', 'Saint Paul', 'MN', 55115, 'klukash1@prnewswire.com', '651-709-5985'),
+('5772e5b0-c800-4f13-8988-853376fe1cb6', NULL, 'b2738940-808b-4bfd-9b04-ca06ce6445fe', 'awillan2', '35a3e015fb70eeed8d403da5ffb905fa', 'Arvin', 'Willan', 'Male', '1943-06-13', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', '972-285-0610'),
+('a9b490ba-1829-4c35-bd4e-70fbf4849d61', NULL, 'd02a1269-44a8-4d56-a49f-5a800ab191cd', 'lharrie3', 'd8f67f119fd2403f93da7946a90362df', 'Launce', 'Harrie', 'Genderqueer', '1965-11-16', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', '518-598-2111'),
+('273bfea7-2b81-440a-a725-5a82598f645e', NULL, '127297d0-4897-4419-acd2-7e4239c7efd3', 'mdoore4', 'dcd3ac36716a9fb884d7adf7c66e9cd6', 'Madlin', 'Doore', 'Polygender', '1959-12-16', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', '210-520-6667'),
+('9094d72f-4595-4ca6-8d49-5a1fcf0e9ccf', NULL, '4d66e5d2-f91a-4a9c-9892-5f097ae8d412', 'bdomney5', 'ff94810e621cd2e3c79aa509cdae3f2c', 'Bobbye', 'Domney', 'Bigender', '1934-11-04', '70032 Twin Pines Junction', 'Dayton', 'OH', 45426, 'bdomney5@woothemes.com', '937-826-8337'),
+('b22105bf-7413-4160-9061-f2c750cfe082', NULL, '7b9c7dc9-839a-43b0-aea1-7cff12adfd6c', 'elantuffe6', '53bae03da1881b7f6ef25e1d33b3723d', 'Edmund', 'Lantuffe', 'Agender', '1946-02-01', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', '901-975-3121'),
+('6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba', NULL, '11aec017-02a9-4b38-8344-d52eef0f4b2e', 'gboog7', 'a082f59b23df7acb4a0b11bd5c32fa16', 'Gard', 'Boog', 'Male', '1939-12-29', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', '239-853-3089'),
+('4ed39887-fd38-4dec-b3b3-33d51993a049', NULL, 'becb9b8c-e6f3-46c6-9ba8-3ca28533d013', 'srennard8', '5eb568265477b76f551041dd88dea5da', 'Sophronia', 'Rennard', 'Bigender', '1987-11-12', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', '260-174-8850'),
+('c24ea57b-1305-4fb4-b461-0df61a60c08f', NULL, '0df8f38b-13da-41b2-9804-70a4c797ae6a', 'aselbach9', '472b94c14ad928079d4b3e9867dbf88e', 'Adolphe', 'Selbach', 'Non-binary', '1934-07-21', '3155 Menomonie Plaza', 'Dallas', 'TX', 75287, 'aselbach9@vk.com', '214-106-9403'),
+('0ec0096f-e56b-4318-ac13-02385a9d4afe', NULL, 'ff2655ba-ffe2-47ab-a125-9521dd236fc5', 'bgoodingea', '198e454d58f82f4f25dae5e3dcd3db94', 'Berry', 'Goodinge', 'Agender', '1991-10-20', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', '936-537-5466'),
+('f6fdc984-440e-4c78-be98-1455cdd3ff42', NULL, 'c10be241-29cd-43ee-a762-984fe0ba5f80', 'omeritonb', '353a5e57e1bbc64692c6fdc057350c55', 'Onfre', 'Meriton', 'Genderfluid', '1949-04-12', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', '952-466-9105'),
+('0cfcb3b0-dd35-4f29-a8e7-f35b6dee983a', NULL, '2bbb156d-4bd9-4858-9834-78fac5ee90cd', 'ahurrionc', 'f9ff1acf98de5d4e63ebdafbb8884fa9', 'Averil', 'Hurrion', 'Female', '1972-10-10', '7675 Butternut Circle', 'Migrate', 'KY', 41905, 'ahurrionc@omniture.com', '502-433-2149'),
+('493603f6-98f0-4f56-8998-214ac11c63f2', NULL, '0203d81b-b18c-49df-97ae-c95e0a0ebfe7', 'wkoopd', '80456f9c323f4ecd398cb7a78782c069', 'Whitney', 'Koop', 'Genderqueer', '1927-11-19', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', '239-760-8037'),
+('d326765b-d1dd-46b6-853f-9107358ca69e', NULL, '4bdf93e5-f596-4215-bb69-032c227bd033', 'psaltsberge', '4b22b8aa8dfdcca12f5c03470a87cc5e', 'Pate', 'Saltsberg', 'Bigender', '1921-07-06', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', '941-958-8929'),
+('8a3c3cb4-92f7-4d34-955a-c14334a04be4', NULL, 'c4444e53-84de-4963-bbb6-c3294f50c311', 'egiacomellof', '06740a1303e66ee819c0241404fbe767', 'Earle', 'Giacomello', 'Genderfluid', '1923-09-26', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', '808-435-2323'),
+('aac2de3e-1762-4ddd-b405-af418541a753', NULL, '55937ca5-3a07-47a4-9305-aeec6362a97f', 'oweatherbyg', '8f360c8dc84846aac19fbe2c24799f14', 'Olivero', 'Weatherby', 'Genderfluid', '1938-02-12', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', '405-945-0308'),
+('774f8d1f-2aca-4d6c-97e1-d8cd70b684ce', NULL, '25d54cbf-b7fd-4bbc-b60d-73fe31795b67', 'dfloodgateh', '7da6b70a3f6d02cc7633ad3cd28bb29a', 'Dalston', 'Floodgate', 'Genderfluid', '1936-11-25', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', '650-728-2060'),
+('899d585b-4f94-4fb8-83e5-0c45551dc23a', NULL, '5c710659-838f-44bb-8491-69c76014b161', 'emaunselli', 'b55605c1d2b311a2bebd287231f305a0', 'Elvis', 'Maunsell', 'Female', '1941-06-10', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', '262-249-2608'),
+('43cbd1df-fa13-440f-ace5-103121c61b6f', NULL, '68772740-80f0-457f-824b-9ef0f075d84a', 'randrickj', '8204e50c0931d07cde1c4e40a42e63dc', 'Reggy', 'Andrick', 'Female', '1939-03-19', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', '714-286-7887');
 
 INSERT INTO product (name, manufacturer, category, sell_price, stock_quantity)
 VALUES
@@ -90,7 +44,7 @@ VALUES
 ('Pede', 'Zoombox', 'Games', 173.20, 0),
 ('Facilisi cras', 'Devpulse', 'Sports', 186.98, 56);
 
-INSERT INTO cart_products
+INSERT INTO cart
 VALUES
 ('0203d81b-b18c-49df-97ae-c95e0a0ebfe7', 2, 3),
 ('4d66e5d2-f91a-4a9c-9892-5f097ae8d412', 3, 5),
@@ -112,6 +66,29 @@ VALUES
 ('b2738940-808b-4bfd-9b04-ca06ce6445fe', 20, 2),
 ('11aec017-02a9-4b38-8344-d52eef0f4b2e', 3, 4),
 ('0df8f38b-13da-41b2-9804-70a4c797ae6a', 1, 5);
+
+INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
+VALUES
+('2015-11-05', 'returned', 215.58, '2015-11-09', 'Dalston Floodgate', '40288 Dayton Lane', 'Sunnyvale', 'CA', 94089, 'dfloodgateh@histats.com', 'mastercard', 9945, '774f8d1f-2aca-4d6c-97e1-d8cd70b684ce'),
+('2010-04-05', 'shipped', 1740.09, '2010-04-09', 'Elvis Maunsell', '89 Novick Crossing', 'Milwaukee', 'WI', 53210, 'emaunselli@g.co', 'visa', 3841, '899d585b-4f94-4fb8-83e5-0c45551dc23a'),
+('2018-12-23', 'processing', 61.26, NULL, 'Sophronia Rennard', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', 'american express', 8667, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
+('2011-10-20', 'shipped', 717.82, '2011-10-24', 'Arvin Willan', '8 Northridge Court', 'Dallas', 'TX', 75251, 'awillan2@4shared.com', 'visa', 6350, '5772e5b0-c800-4f13-8988-853376fe1cb6'),
+('2021-06-17', 'processing', 1291.48, NULL, 'Gard Boog', '631 Ramsey Terrace', 'Fort Myers', 'FL', 33913, 'gboog7@admin.ch', 'mastercard', 2808, '6afc3e44-9c9c-4018-a0b6-7cbf864bc2ba'),
+('2012-05-15', 'returned', 571.69, '2012-05-19', 'Berry Goodinge', '8 Dixon Court', 'Huntsville', 'TX', 77343, 'bgoodingea@spiegel.de', 'visa', 5873, '0ec0096f-e56b-4318-ac13-02385a9d4afe'),
+('2021-03-29', 'processing', 1082.62, NULL, 'Whitney Koop', '07 Delaware Court', 'Naples', 'FL', 34108, 'wkoopd@deviantart.com', 'visa', 9872, '493603f6-98f0-4f56-8998-214ac11c63f2'),
+('2021-05-04', 'shipped', 1944.10, '2021-05-08', 'Earle Giacomello', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', 'mastercard', 2740, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
+('2016-03-31', 'processing', 900.49, NULL, 'Olivero Weatherby', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', 'american express', 3081, 'aac2de3e-1762-4ddd-b405-af418541a753'),
+('2013-04-27', 'shipped', 550.95, '2013-05-01', 'Edmund Lantuffe', '486 Iowa Junction', 'Memphis', 'TN', 38119, 'elantuffe6@msn.com', 'visa', 1555, 'b22105bf-7413-4160-9061-f2c750cfe082'),
+('2015-04-26', 'delivered', 1184.41, '2015-04-30', 'Madlin Doore', '3287 Corscot Trail', 'San Antonio', 'TX', 78205, 'mdoore4@google.it', 'visa', 5948, '273bfea7-2b81-440a-a725-5a82598f645e'),
+('2018-01-19', 'shipped', 881.61, '2018-01-23', 'Olivero Weatherby', '4 Old Shore Parkway', 'Edmond', 'OK', 73034, 'oweatherbyg@mail.ru', 'mastercard', 3202, 'aac2de3e-1762-4ddd-b405-af418541a753'),
+('2011-11-10', 'shipped', 1480.43, '2011-11-14', 'Earle Giacomello', '17814 Maple Wood Street', 'Honolulu', 'HI', 96825, 'egiacomellof@e-recht24.de', 'mastercard', 8703, '8a3c3cb4-92f7-4d34-955a-c14334a04be4'),
+('2014-02-15', 'delivered', 1263.41, '2014-02-19', 'Onfre Meriton', '2246 Leroy Drive', 'Young America', 'MN', 55557, 'omeritonb@altervista.org', 'visa', 9301, 'f6fdc984-440e-4c78-be98-1455cdd3ff42'),
+('2020-02-23', 'shipped', 1978.80, '2020-02-27', 'Pate Saltsberg', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', 'american express', 7286, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
+('2014-01-12', 'shipped', 353.58, '2014-01-16', 'Sophronia Rennard', '8 Vera Parkway', 'Fort Wayne', 'IN', 46857, 'srennard8@go.com', 'visa', 8127, '4ed39887-fd38-4dec-b3b3-33d51993a049'),
+('2019-11-14', 'delivered', 1375.13, '2019-11-18', 'Launce Harrie', '94 Cottonwood Street', 'Albany', 'NY', 12237, 'lharrie3@ning.com', 'mastercard', 6504, 'a9b490ba-1829-4c35-bd4e-70fbf4849d61'),
+('2019-11-10', 'processing', 1462.39, NULL, 'Pate Saltsberg', '44977 Killdeer Avenue', 'Naples', 'FL', 34108, 'psaltsberge@linkedin.com', 'mastercard', 1100, 'd326765b-d1dd-46b6-853f-9107358ca69e'),
+('2016-05-20', 'returned', 1505.87, '2016-05-24', 'Reggy Andrick', '417 2nd Hill', 'Santa Ana', 'CA', 92705, 'randrickj@123-reg.co.uk', 'visa', 6314, '43cbd1df-fa13-440f-ace5-103121c61b6f'),
+('2015-02-01', 'shipped', 1754.55, '2015-02-05', 'Hana Diamant', '8 Hoepker Court', 'Seattle', 'WA', 98140, 'hdiamant0@g.co', 'american express', 8356, '6f207c1c-d770-46af-a7aa-b0003e952c39');
 
 INSERT INTO order_details
 VALUES

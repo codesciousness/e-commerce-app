@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Checkout from '../components/checkout/Checkout';
 import Login from '../components/login/Login';
@@ -11,13 +11,17 @@ import Orders from '../features/orders/Orders';
 import Products from '../features/products/Products';
 import Users from '../features/users/Users';
 import { logout, selectUserId, selectLogoutSuccess, selectLogoutError, clearUsersStatusUpdates } from '../features/users/usersSlice';
+import { clearCart } from '../features/cart/cartSlice';
+import { clearOrder } from '../features/orders/ordersSlice';
+import { clearProduct } from '../features/products/productsSlice';
 
 function App() {
-  const dispatch = useDispatch();
   const userId = useSelector(selectUserId);
   const logoutSuccess = useSelector(selectLogoutSuccess);
   const logoutError = useSelector(selectLogoutError);
+  const dispatch = useDispatch();
   let location = useLocation();
+  let navigate = useNavigate();
   let home = location.pathname === '/';
   let Button;
 
@@ -25,6 +29,9 @@ function App() {
     e.preventDefault();
     if (e.target.id === 'logoutButton') {
       dispatch(logout());
+      dispatch(clearCart());
+      dispatch(clearOrder());
+      dispatch(clearProduct());
     }
   };
     
@@ -49,8 +56,9 @@ function App() {
   useEffect(() => {
     if (logoutSuccess || logoutError) {
       dispatch(clearUsersStatusUpdates());
+      navigate('/');
     }
-  }, [logoutSuccess, logoutError, dispatch]);
+  }, [logoutSuccess, logoutError, dispatch, navigate]);
 
   return (
     <div className="App">

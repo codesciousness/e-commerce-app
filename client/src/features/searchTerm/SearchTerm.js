@@ -6,12 +6,15 @@ import { setSearchTerm, clearSearchTerm, selectSearchTerm } from './searchTermSl
 const SearchTerm = () => {
     const searchTerm = useSelector(selectSearchTerm);
     const dispatch = useDispatch();
+
     const handleChange = ({ target }) => {
         dispatch(setSearchTerm(target.value));
-    }
+    };
+
     const handleClick = () => {
         dispatch(clearSearchTerm());
-    }
+    };
+
     return (
         <form className="SearchTerm">
             <i className="fas fa-search fa-lg SearchTerm__icon"></i>

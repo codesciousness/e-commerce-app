@@ -1,5 +1,6 @@
 const express = require('express');
 const usersRouter = express.Router();
+const cartRouter = require('./cart');
 const ordersRouter = require('./orders');
 const db = require('../../db/queries');
 const { authenticateToken } = require('../../util/jwt');
@@ -35,6 +36,10 @@ usersRouter.put('/:userId', authenticate /*authenticateToken*/, db.updateUser);
 // PUT /users/:userId/password to update a single user's password by id
 
 usersRouter.put('/:userId/password', authenticate /*authenticateToken*/, db.changePassword);
+
+// Create /users/:userId/cart route to add on cartRouter routes to handle a single user's cart items
+
+usersRouter.use('/:userId/cart', cartRouter);
 
 // Create /users/:userId/orders route to add on ordersRouter routes to handle a single user's orders
 

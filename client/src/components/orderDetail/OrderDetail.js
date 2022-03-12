@@ -4,19 +4,18 @@ import './OrderDetail.css';
 import Order from '../order/Order';
 import OrderItem from '../orderItem/OrderItem';
 import Loader from '../loader/Loader';
-import { loadOrderById, clearOrder, selectOrderId, selectOrder, selectOrders, selectLoadingOrder, selectLoadOrderError, 
+import { loadOrderById, selectOrderId, selectOrder, selectLoadingOrder, selectLoadOrderError, 
         clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
 import { selectUserId, selectLogoutSuccess } from '../../features/users/usersSlice';
 
 const OrderDetail = () => {
-    const dispatch = useDispatch();
     const orderId = useSelector(selectOrderId);
     const order = useSelector(selectOrder);
-    const orders = useSelector(selectOrders);
     const loadingOrder = useSelector(selectLoadingOrder);
     const loadOrderError = useSelector(selectLoadOrderError);
     const userId  = useSelector(selectUserId);
     const logoutSuccess  = useSelector(selectLogoutSuccess);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (userId && orderId) {
@@ -25,15 +24,6 @@ const OrderDetail = () => {
     }, [userId, orderId, dispatch]);
 
     useEffect(() => {
-        if (!orders.some(order => order.id === orderId)){
-            dispatch(clearOrder());
-        }
-    }, [orders, orderId, dispatch]);
-
-    useEffect(() => {
-        if (logoutSuccess) {
-            dispatch(clearOrder());
-        }
         if (loadOrderError) {
             dispatch(clearOrdersStatusUpdates());
         }

@@ -3,20 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Order.css';
 import Loader from '../loader/Loader';
-import { cancelOrder, setOrder, selectCancelingOrder, selectCancelOrderError, clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
+import { cancelOrder, setOrderId, clearOrder, selectOrders, selectCancelingOrder, selectCancelOrderError, clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
 import { selectUserId } from '../../features/users/usersSlice';
 
 const Order = ({ order }) => {
-    const dispatch = useDispatch();
     const cancelingOrder = useSelector(selectCancelingOrder);
     const cancelOrderError = useSelector(selectCancelOrderError);
+    const orders = useSelector(selectOrders);
     const userId = useSelector(selectUserId);
     const date = order.date.slice(5,7) + '/' + order.date.slice(8,10) +'/' + order.date.slice(0,4);
     const payMethod = order.pay_method[0].toUpperCase() + order.pay_method.slice(1);
     const orderId = order.id;
+    const dispatch = useDispatch();
 
     const handleOrderClick = () => {
-        dispatch(setOrder(orderId));
+        dispatch(setOrderId(orderId));
     };
 
     const handleButtonClick = () => {
@@ -24,10 +25,13 @@ const Order = ({ order }) => {
     };
 
     useEffect(() => {
+        if (!orders.some(order => order.id === orderId)){
+            dispatch(clearOrder());
+        }
         if (cancelOrderError) {
             dispatch(clearOrdersStatusUpdates());
         }
-    }, [cancelOrderError, dispatch]);
+    }, [orders, orderId, cancelOrderError, dispatch]);
 
     if (cancelingOrder) {
         return (

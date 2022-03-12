@@ -12,11 +12,11 @@ const Products = () => {
     const sortOptions = ['', 'lowest', 'highest'];
     const [category, setCategory] = useState('');
     const [sort, setSort] = useState('');
-    const dispatch = useDispatch();
     const products = useSelector(selectFilteredProducts);
     const searchTerm = useSelector(selectSearchTerm);
     const loadingProducts = useSelector(selectLoadingProducts);
     const loadProductsError = useSelector(selectLoadProductsError);
+    const dispatch = useDispatch();
 
     const handleChange = ({ target }) => {
         if (target.name === "category") {
@@ -29,10 +29,13 @@ const Products = () => {
 
     useEffect(() => {
         dispatch(loadProducts({ category, sort }));
+    }, [category, sort, searchTerm, dispatch]);
+
+    useEffect(() => {
         if (loadProductsError) {
             dispatch(clearProdsStatusUpdates());
         }
-    }, [category, sort, searchTerm, loadProductsError, dispatch]);
+    }, [loadProductsError, dispatch]);
 
     if (loadingProducts) {
         return (

@@ -1,31 +1,30 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Cart.css';
 import Product from '../../components/product/Product';
 import Loader from '../../components/loader/Loader';
-import { createCart, loadCart, checkout, selectCartId, selectCart, selectCreatingCart, selectCreateCartError,
-        selectLoadingCart, selectLoadCartError, selectCheckingout, selectCheckoutSuccess, selectCheckoutError,
-        clearCartStatusUpdates } from './cartSlice';
-import { selectUserId } from '../users/usersSlice';
+import { loadCart, checkout, setCartId, selectCartId, selectCart, selectLoadingCart, selectLoadCartError, selectCheckingout,
+        selectCheckoutSuccess, selectCheckoutError, clearCartStatusUpdates } from './cartSlice';
+import { selectUserId, selectUser } from '../users/usersSlice';
 
 const Cart = ({ inCheckout, address, payment }) => {
     const cart = useSelector(selectCart);
     const cartId = useSelector(selectCartId);
-    const dispatch = useDispatch();
-    const creatingCart = useSelector(selectCreatingCart);
-    const createCartError = useSelector(selectCreateCartError);
     const loadingCart = useSelector(selectLoadingCart);
     const loadCartError = useSelector(selectLoadCartError);
     const checkingout = useSelector(selectCheckingout);
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
     const checkoutError = useSelector(selectCheckoutError);
     const userId = useSelector(selectUserId);
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
+    let navigate = useNavigate();
     let Button;
 
     const handleClick = () => {
         if (inCheckout && cart.items.length !== 0) {
-            dispatch(checkout({ cartId, address, payment }));
+            dispatch(checkout({ cartId, userId, address, payment }));
         }
     };
 
@@ -37,29 +36,32 @@ const Cart = ({ inCheckout, address, payment }) => {
     }
 
     useEffect(() => {
-        dispatch(loadCart(cartId));
-    }, []);
+        if (!userId) {
+            navigate('/login');
+        }
+        else {
+            dispatch(setCartId(user.cart_id));
+            dispatch(loadCart({ cartId, userId }));
+        }
+    }, [cartId, userId, user, dispatch, navigate]);
 
     useEffect(() => {
-        if (!cartId) {
-            dispatch(createCart({ userId }));
-        }
         if (checkoutSuccess) {
-            dispatch(loadCart(cartId));
+            dispatch(loadCart({ cartId, userId }));
         }
-        if (createCartError || loadCartError || checkoutSuccess || checkoutError) {
+        if (loadCartError || checkoutSuccess || checkoutError) {
             dispatch(clearCartStatusUpdates());
         }
-    }, [cartId, userId, createCartError, loadCartError, checkoutSuccess, checkoutError, dispatch]);
+    }, [cartId, userId, loadCartError, checkoutSuccess, checkoutError, dispatch]);
 
-    if (creatingCart || loadingCart || checkingout) {
+    if (loadingCart || checkingout) {
         return (
             <section className="Cart">
                 <Loader />
             </section>
         );
     }
-    if (createCartError || loadCartError || checkoutError) {
+    if (loadCartError || checkoutError) {
         return (
             <section className="Cart">
                 <p className="Cart__error">An unexpected error has occurred.</p>

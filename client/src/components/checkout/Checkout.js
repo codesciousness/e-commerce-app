@@ -4,20 +4,22 @@ import { useNavigate } from "react-router-dom";
 import './Checkout.css';
 import Cart from '../../features/cart/Cart';
 import { selectCheckoutSuccess, clearCartStatusUpdates } from '../../features/cart/cartSlice';
+import { selectUser } from '../../features/users/usersSlice';
 
 const Checkout = () => {
-    const [shipToName, setShipToName] = useState('');
-    const [shipToStreet, setShipToStreet] = useState('');
-    const [shipToCity, setShipToCity] = useState('');
-    const [shipToState, setShipToState] = useState('');
-    const [shipToZip, setShipToZip] = useState('');
-    const [email, setEmail] = useState('');
+    const checkoutSuccess = useSelector(selectCheckoutSuccess);
+    const user = useSelector(selectUser);
+    const [shipToName, setShipToName] = useState(user.first_name + ' ' + user.last_name);
+    const [shipToStreet, setShipToStreet] = useState(user.street_address);
+    const [shipToCity, setShipToCity] = useState(user.city);
+    const [shipToState, setShipToState] = useState(user.state);
+    const [shipToZip, setShipToZip] = useState(user.zip_code);
+    const [email, setEmail] = useState(user.email);
     const [cardNum, setCardNum] = useState('');
     const [payMethod, setPayMethod] = useState('');
     const [cardExp, setCardExp] = useState('');
     const [cardCVV, setCardCVV] = useState('');
     const dispatch = useDispatch();
-    const checkoutSuccess = useSelector(selectCheckoutSuccess);
     let navigate = useNavigate();
 
     const address = {

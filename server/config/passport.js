@@ -11,10 +11,8 @@ module.exports = (passport) => {
     const values = [username];
     db.query(text, values, (err, result) => {
       if (err) {
-        console.log(err.message);
         return done(err);
       }
-  
       if (result.rows.length > 0) {
         const user = result.rows[0];
         bcrypt.compare(password, user.password, function(err, isMatch) {
@@ -38,6 +36,7 @@ module.exports = (passport) => {
     callbackURL: '/auth/google/redirect'
     }, (accessToken, refreshToken, profile, done) => {
     const userId = uuidv4();
+    const cartId = uuidv4();
     const googleId = profile.id;
     const username = profile.displayName.replace(' ', '').toLowerCase() + profile.id.slice(profile.id.length - 6);
     const password = username;
@@ -46,16 +45,14 @@ module.exports = (passport) => {
     const lastName = profile.name.familyName;
     const findText = 'SELECT * FROM users WHERE email=$1';
     const findValues = [email];
-    const addText = `INSERT INTO users (id, google_id, username, password, first_name, last_name, email)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    const addText = `INSERT INTO users (id, google_id, cart_id, username, password, first_name, last_name, email)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *`;
     const saltRounds = 10;
     db.query(findText, findValues, (err, result) => {
       if (err) {
-        console.log(err.message);
         return done(err);
       }
-
       if (result.rows.length > 0) {
         const user = result.rows[0];
         done(null, user, {message: `Email address: ${user.email} is already registered. Please Login.`});
@@ -72,10 +69,9 @@ module.exports = (passport) => {
               }
               else {
                 const passwordHash = hash;
-                const addValues = [userId, googleId, username, passwordHash, firstName, lastName, email];
+                const addValues = [userId, googleId, cartId, username, passwordHash, firstName, lastName, email];
                 db.query(addText, addValues, (err, result) => {
                   if (err) {
-                    console.log(err.message);
                     return done(err);
                   }
                   const newUser = result.rows[0];
@@ -98,7 +94,6 @@ module.exports = (passport) => {
     const values = [id];
     db.query(text, values, (err, result) => {
       if (err) {
-        console.log(err.message);
         return done(err);
       }
       if (result.rows.length > 0) {

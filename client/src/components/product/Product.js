@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Product.css';
 import { setProduct } from '../../features/products/productsSlice';
 import { loadCart, updateCart, selectCartId } from '../../features/cart/cartSlice';
+import { selectUserId } from '../../features/users/usersSlice';
 
 const Product = ({ product, inCart }) => {
     const [cartQuantity, setCartQuantity] = useState(product.cart_quantity);
     const [quantity, setQuantity] = useState(product.cart_quantity);
-    const dispatch = useDispatch();
     const cartId = useSelector(selectCartId);
+    const userId = useSelector(selectUserId);
+    const dispatch = useDispatch();
     const productId = product.id ? product.id : product.product_id;
 
     const handleProductClick = ({ target }) => {
@@ -38,11 +40,11 @@ const Product = ({ product, inCart }) => {
 
     useEffect(() => {
         if (quantity !== cartQuantity) {
-            dispatch(updateCart({ cartId, productId, cartQuantity }));
-            dispatch(loadCart(cartId));
+            dispatch(updateCart({ cartId, userId, productId, cartQuantity }));
+            dispatch(loadCart({ cartId, userId }));
             setQuantity(cartQuantity);
         }
-    }, [cartId, productId, cartQuantity, quantity, dispatch]);
+    }, [cartId, userId, productId, cartQuantity, quantity, dispatch]);
     
     if (inCart) {
         return (

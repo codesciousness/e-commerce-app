@@ -12,7 +12,6 @@ import { selectCheckoutSuccess } from '../cart/cartSlice';
 const Orders = () => {
     const sortOptions = ['', 'oldest', 'newest'];
     const [sort, setSort] = useState('');
-    const dispatch = useDispatch();
     const orders = useSelector(selectOrders);
     const loadingOrders = useSelector(selectLoadingOrders);
     const loadOrdersError = useSelector(selectLoadOrdersError);
@@ -22,6 +21,7 @@ const Orders = () => {
     const logoutSuccess = useSelector(selectLogoutSuccess);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
+    const dispatch = useDispatch();
     let navigate = useNavigate();
 
     const handleChange = ({ target }) => {

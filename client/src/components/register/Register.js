@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 import Loader from '../../components/loader/Loader';
 import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, selectGoogleLoggingIn, 
@@ -12,13 +12,14 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const dispatch = useDispatch();
     const registeringUser = useSelector(selectRegisteringUser);
     const registerUserSuccess = useSelector(selectRegisterUserSuccess);
     const registerUserError = useSelector(selectRegisterUserError);
     const googleLoggingIn = useSelector(selectGoogleLoggingIn);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const googleLoginError = useSelector(selectGoogleLoginError);
+    const dispatch = useDispatch();
+    let navigate = useNavigate();
 
     const handleChange = ({ target }) => {
         if (target.name === "firstName") {
@@ -55,11 +56,12 @@ const Register = () => {
             setEmail('');
             setUsername('');
             setPassword('');
+            navigate('/');
         }
         if (registerUserSuccess || registerUserError || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [registerUserSuccess, registerUserError, googleLoginSuccess, googleLoginError, dispatch]);
+    }, [registerUserSuccess, registerUserError, googleLoginSuccess, googleLoginError, dispatch, navigate]);
 
     if (registeringUser || googleLoggingIn) {
         return (

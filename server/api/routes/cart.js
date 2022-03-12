@@ -1,10 +1,16 @@
 const express = require('express');
-const cartRouter = express.Router();
+const cartRouter = express.Router({ mergeParams: true });
 const db = require('../../db/queries');
+require('dotenv').config();
 
-// POST /cart to create a new cart and save it to the database
-
-cartRouter.post('/', db.createCart);
+const authenticate = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      next();
+    }
+    else res.redirect(process.env.AUTH_FAILURE_REDIRECT);
+  };
+  
+  cartRouter.use(authenticate);
 
 //cartId param
 

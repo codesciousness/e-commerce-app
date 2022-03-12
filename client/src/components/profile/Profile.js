@@ -24,7 +24,6 @@ const Profile = () => {
     const [password, setPassword] = useState('');
     const [passCheck, setPassCheck] = useState('');
     const passwordMatch = password === passCheck;
-    const dispatch = useDispatch();
     const loadingUser = useSelector(selectLoadingUser);
     const loadUserError = useSelector(selectLoadUserError);
     const registerUserSuccess = useSelector(selectRegisterUserSuccess);
@@ -35,10 +34,11 @@ const Profile = () => {
     const changePasswordError = useSelector(selectChangePasswordError);
     const loginSuccess = useSelector(selectLoginSuccess);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
+    const dispatch = useDispatch();
     let navigate = useNavigate();
 
     const formatDate = () => {
-        if (userId) {
+        if (userId && dob) {
             dob = dob.slice(5,7) + '/' + dob.slice(8,10) +'/' + dob.slice(0,4);
         }
     };
@@ -144,7 +144,7 @@ const Profile = () => {
         if (loadUserError || updateUserSuccess || updateUserError || changePasswordSuccess || changePasswordError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [user, userId, loadUserError, registerUserSuccess, updateUserSuccess, updateUserError, changePasswordSuccess, changePasswordError, loginSuccess, googleLoginSuccess, dispatch])
+    }, [userId, loadUserError, registerUserSuccess, updateUserSuccess, updateUserError, changePasswordSuccess, changePasswordError, loginSuccess, googleLoginSuccess, dispatch])
 ;
     if (loadingUser || updatingUser) {
         return (

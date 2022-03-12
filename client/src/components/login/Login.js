@@ -9,13 +9,13 @@ import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginErr
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const dispatch = useDispatch();
     const loggingIn = useSelector(selectLoggingIn);
     const loginSuccess = useSelector(selectLoginSuccess);
     const loginError = useSelector(selectLoginError);
     const googleLoggingIn = useSelector(selectGoogleLoggingIn);
     const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const googleLoginError = useSelector(selectGoogleLoginError);
+    const dispatch = useDispatch();
     let navigate = useNavigate();
 
     const handleChange = ({ target }) => {
