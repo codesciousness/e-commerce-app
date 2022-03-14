@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 import Loader from '../../components/loader/Loader';
+import Error from '../error/Error';
 import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, selectGoogleLoggingIn, 
         selectGoogleLoginSuccess, selectGoogleLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
@@ -58,10 +59,10 @@ const Register = () => {
             setPassword('');
             navigate('/');
         }
-        if (registerUserSuccess || registerUserError || googleLoginSuccess || googleLoginError) {
+        if (registerUserSuccess || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [registerUserSuccess, registerUserError, googleLoginSuccess, googleLoginError, dispatch, navigate]);
+    }, [registerUserSuccess, googleLoginSuccess, googleLoginError, dispatch, navigate]);
 
     if (registeringUser || googleLoggingIn) {
         return (
@@ -70,17 +71,11 @@ const Register = () => {
             </section>
         );
     }
-    if (registerUserError || googleLoginError) {
-        return (
-            <section className="Register">
-                <p className="Register__error">An unexpected error has occurred.</p>
-            </section>
-        );
-    }
     return (
         <section className="Register">
             <h2 className="Register__title">New User Registration</h2>
             <form className="Register__form" method="post" action="">
+                {registerUserError && <Error msg={registerUserError}/>}
                 <label className="Register__label" for="firstName">FIRST NAME</label>
                 <input className="Register__input" id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]" required
                 value={firstName} onChange={handleChange}/>

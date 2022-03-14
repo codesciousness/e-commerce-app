@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import './Checkout.css';
 import Cart from '../../features/cart/Cart';
-import { selectCheckoutSuccess, clearCartStatusUpdates } from '../../features/cart/cartSlice';
+import Error from '../error/Error';
+import { selectCheckoutSuccess, selectCheckoutError, clearCartStatusUpdates } from '../../features/cart/cartSlice';
 import { selectUser } from '../../features/users/usersSlice';
 
 const Checkout = () => {
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
+    const checkoutError = useSelector( selectCheckoutError);
     const user = useSelector(selectUser);
     const [shipToName, setShipToName] = useState(user.first_name + ' ' + user.last_name);
     const [shipToStreet, setShipToStreet] = useState(user.street_address);
@@ -137,6 +139,7 @@ const Checkout = () => {
                     <input className="Checkout__input" id="cardCVV" name="cardCVV" required
                     value={cardCVV} onChange={handleChange}/>
                 </div>
+                {checkoutError && <Error msg={checkoutError}/>}
             </form>
             <Cart inCheckout={true} address={address} payment={payment}/>
         </section>

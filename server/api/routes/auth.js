@@ -1,23 +1,32 @@
 const express = require('express');
 const authRouter = express.Router();
-const db = require('../../db/queries');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken } = require('../../util/jwt');
 require('dotenv').config();
 
-authRouter.post('/login', passport.authenticate('local', { /*successRedirect: process.env.AUTH_SUCCESS_REDIRECT, failureRedirect: process.env.AUTH_FAILURE_REDIRECT,*/ failureFlash: true }), (req, res, next) => {
-    const user = req.user;
-    const token = generateAccessToken({ user: user });
-    res.send(user);
-    //res.json(token);
+authRouter.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        const { username, password } = req.body;
+        if (!username || !password) {
+            info.message = 'Please fill out all fields.';
+        }
+        if (!user) {
+            return res.status(401).send(info.message);
+        }
+        req.logIn(user, err => {
+            if (err) return next(err);
+        });
+        const token = generateAccessToken({ user: user });
+        res.send(user);
+        //res.json(token);
+    })(req, res, next);
 });
 
 authRouter.get('/logout', (req, res) => {
     req.session = null;
     req.logout();
     res.send();
-    //res.redirect(process.env.AUTH_FAILURE_REDIRECT);
 });
 
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

@@ -13,58 +13,55 @@ const getUsers = (req, res, next) => {
   
 const registerUser = (req, res, next) => {
     const { username, password, firstName, lastName, email } = req.body;
-    if (username && password && firstName && lastName && email) {
-        const userId = uuidv4();
-        const cartId = uuidv4();
-        const saltRounds = 10;
-        const findText = 'SELECT * FROM users WHERE email=$1';
-        const findValues = [email];
-        const addText = `INSERT INTO users (id, cart_id, username, password, first_name, last_name, email)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *`;
-        pg.query(findText, findValues, (err, result) => {
+    if (!username || !password || !firstName || !lastName || !email) {
+        return res.status(400).send('Please fill out all fields.');
+    }
+    if (password.length < 8) {
+        return res.status(400).send('Password is too short. Please enter a minimum of 8 characters.');
+    }
+    const userId = uuidv4();
+    const cartId = uuidv4();
+    const saltRounds = 10;
+    const findText = 'SELECT * FROM users WHERE email=$1';
+    const findValues = [email];
+    const addText = `INSERT INTO users (id, cart_id, username, password, first_name, last_name, email)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *`;
+    pg.query(findText, findValues, (err, result) => {
+        if (err) {
+        return next(err);
+        }
+        if (result.rows.length > 0) {
+            const user = result.rows[0];
+            return res.send(user);
+        }
+        bcrypt.genSalt(saltRounds, function(err, salt) {
             if (err) {
-            return next(err);
-            }
-            if (result.rows.length > 0) {
-                const user = result.rows[0];
-                res.send(user);
+                throw err;
             }
             else {
-                bcrypt.genSalt(saltRounds, function(err, salt) {
+                bcrypt.hash(password, salt, function(err, hash) {
                     if (err) {
                         throw err;
                     }
                     else {
-                        bcrypt.hash(password, salt, function(err, hash) {
+                        const passwordHash = hash;
+                        const addValues = [userId, cartId, username, passwordHash, firstName, lastName, email];
+                        pg.query(addText, addValues, (err, result) => {
+                            const newUser = result.rows[0];
                             if (err) {
-                                throw err;
+                                return next(err);
                             }
-                            else {
-                                const passwordHash = hash;
-                                const addValues = [userId, cartId, username, passwordHash, firstName, lastName, email];
-                                pg.query(addText, addValues, (err, result) => {
-                                    const newUser = result.rows[0];
-                                    if (err) {
-                                        return next(err);
-                                    }
-                                    if (newUser) {
-                                        res.status(201).send(newUser);
-                                    }
-                                    else {
-                                        res.status(500).send('Internal Server Error');
-                                    }
-                                });
+                            if (!newUser) {
+                                return res.status(500).send('Internal Server Error');
                             }
+                            res.status(201).send(newUser);
                         });
-                    };
+                    }
                 });
-            } 
+            };
         });
-    }
-    else {
-        res.status(400).send('Please fill out all required fields.');
-    };
+    });
 };
   
 const setUserId = (req, res, next, id) => {
@@ -75,13 +72,11 @@ const setUserId = (req, res, next, id) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            req.userId = userId;
-            next();
+        if (!result.rows.length) {
+            return res.status(404).send('User not found.');
         }
-        else {
-            res.status(404).send('Not Found');
-        }
+        req.userId = userId;
+        next();
     });
 };
   
@@ -98,7 +93,11 @@ const getUserById = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-    const { username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone } = req.body;
+    const { username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone } = req.body.userProfile;
+    console.log(req.body.userProfile);
+    if (!username || !firstName || !lastName || !email) {
+        return res.status(400).send('Please fill out all required fields.');
+    }
     const text = `UPDATE users
     SET username = $2, first_name = $3, last_name = $4, gender = $5, date_of_birth = $6, street_address = $7, city = $8, state = $9, zip_code = $10, email = $11, phone = $12
     WHERE id = $1
@@ -108,48 +107,49 @@ const updateUser = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            const updatedUser = result.rows[0];
-            res.send(updatedUser);
+        if (!result.rows.length) {
+            return res.status(500).send('Internal Server Error');
         }
-        else {
-            res.status(500).send('Internal Server Error');
-        }
+        const updatedUser = result.rows[0];
+        res.send(updatedUser);
     });
 };
 
 const changePassword = (req, res, next) => {
     const { password } = req.body;
-    if (password) {
-        const text = `UPDATE users
-        SET password = $2
-        WHERE id = $1
-        RETURNING *`;
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function(err, salt) {
-            if (err) {
-                throw err;
-            }
-            else {
-                bcrypt.hash(password, salt, function(err, hash) {
-                    if (err) {
-                        throw err;
-                    }
-                    else {
-                        const passwordHash = hash;
-                        const values = [req.userId, passwordHash];
-                        pg.query(text, values, (err, result) => {
-                            if (err) {
-                                return next(err);
-                            }
-                            res.send();
-                        });
-                    }
-                });
-            };
-        });
+    if (!password) {
+        return res.status(400).send('Please enter a password.');
     }
-    else res.status(400).send('Bad Request');
+    if (password.length < 8) {
+        return res.status(400).send('Password is too short. Please enter a minimum of 8 characters.');
+    }
+    const text = `UPDATE users
+    SET password = $2
+    WHERE id = $1
+    RETURNING *`;
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+        if (err) {
+            throw err;
+        }
+        else {
+            bcrypt.hash(password, salt, function(err, hash) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    const passwordHash = hash;
+                    const values = [req.userId, passwordHash];
+                    pg.query(text, values, (err, result) => {
+                        if (err) {
+                            return next(err);
+                        }
+                        res.send();
+                    });
+                }
+            });
+        };
+    });
 };
 
 const getProducts = (req, res, next) => {
@@ -229,13 +229,11 @@ const getProductById = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            const product = result.rows[0];
-            res.send(product);
+        if (!result.rows.length) {
+            return res.status(404).send('Product not found.');
         }
-        else {
-            res.status(404).send('Not Found');
-        }
+        const product = result.rows[0];
+        res.send(product);
     });
 };
 
@@ -247,19 +245,15 @@ const setCartId = (req, res, next, id) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            const user = result.rows[0];
-            if (user.cart_id === cartId) {
-                req.cartId = cartId;
-                next();
-            }
-            else {
-                res.status(400).send('Bad Request');
-            }
+        if (!result.rows.length) {
+            return res.status(404).send('User not found.');
         }
-        else {
-            res.status(404).send('Not Found');
+        const user = result.rows[0];
+        if (user.cart_id !== cartId) {
+            return res.status(400).send('Bad Request');
         }
+        req.cartId = cartId;
+        next();
     });
 };
 
@@ -273,28 +267,29 @@ const getCartById = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            const subtotal = Number(result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0).toFixed(2));
-            const cart = {
-                items: result.rows,
-                subtotal,
-            };
-            res.send(cart);
+        if (!result.rows.length) {
+            return res.status(404).send('Cart not found.');
         }
-        else {
-            res.status(404).send('Not Found');
-        }
+        const subtotal = Number(result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0).toFixed(2));
+        const cart = {
+            items: result.rows,
+            subtotal,
+        };
+        res.send(cart);
     });
 };
 
 const updateCart = (req, res, next) => {
     const { productId, cartQuantity } = req.body;
-    if (cartQuantity === 0) {
+    if (cartQuantity < 0) {
+        return res.status(400).send('Bad Request');
+    }
+    else if (cartQuantity === 0) {
         const deleteText = 'DELETE FROM cart WHERE cart_id = $1 AND product_id = $2';
         const deleteValues = [req.cartId, productId];
         pg.query(deleteText, deleteValues, (err, result) => {
             if (err) {
-                res.status(500).send('Internal Server Error');
+                return next(err);
             }
             res.status(204).send();
         });
@@ -311,162 +306,146 @@ const updateCart = (req, res, next) => {
             }
             if (result.rows.length > 0) {
                 const updatedCart = result.rows[0];
-                res.send(updatedCart);
+                return res.send(updatedCart);
             }
-            else {
-                //check to see if product exists
-                pg.query('SELECT * FROM product WHERE id = $1', [productId], (err, result) => {
+            //check to see if product exists
+            pg.query('SELECT * FROM product WHERE id = $1', [productId], (err, result) => {
+                if (err) {
+                    return next(err);
+                }
+                if (!result.rows.length) {
+                    return res.status(400).send('Bad Request');
+                }
+                //add the new cart item
+                const insertText = `INSERT INTO cart (cart_id, product_id, cart_quantity)
+                VALUES ($1, $2, $3)
+                RETURNING *`;
+                pg.query(insertText, updateValues, (err, result) => {
                     if (err) {
                         return next(err);
                     }
-                    if (result.rows.length > 0) {
-                        //add the new cart item
-                        const insertText = `INSERT INTO cart (cart_id, product_id, cart_quantity)
-                        VALUES ($1, $2, $3)
-                        RETURNING *`;
-                        pg.query(insertText, updateValues, (err, result) => {
-                            if (err) {
-                                return next(err);
-                            }
-                            if (result.rows.length > 0) {
-                                const addedToCart = result.rows[0];
-                                res.send(addedToCart);
-                            }
-                            else {
-                                res.status(500).send('Internal Server Error');
-                            }
-                        });
+                    if (!result.rows.length) {
+                        return res.status(500).send('Internal Server Error');
                     }
-                    else res.status(400).send('Bad Request');
+                    const addedToCart = result.rows[0];
+                    res.send(addedToCart);
                 });
-            }
+            });
         });
     }
-    else res.status(400).send('Bad Request');
 };
 
 const checkout = (req, res, next) => {
-    //verify cart is not empty
-    const findText = `SELECT cart_id, product_id, cart_quantity
+    const userId = req.userId;
+    const { paySuccess, payMethod, cardNum, cardExp, cardCVV } = req.body.payment;
+    const { shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email } = req.body.address;
+    if (!userId) {
+        return res.status(400).send('User not signed in.');
+    }
+    if (!shipToName || !shipToStreet || !shipToCity || !shipToState || !shipToZip || !email) {
+        return res.status(400).send('Please enter a valid shipping and email address.');
+    }
+    //verify that payment succeeded
+    if (!paySuccess) {
+        return res.status(400).send('Payment was not successful.');
+    }
+    //query items and verify cart is not empty
+    const findText = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
     FROM cart
+    JOIN product
+    ON cart.product_id = product.id
     WHERE cart_id = $1`;
     pg.query(findText, [req.cartId], (err, result) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            //obtain userId, shipping address & payment method from req
-            const userId = req.userId;
-            const { shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email } = req.body.address;
-            const { paySuccess, payMethod, cardNum, cardExp, cardCVV } = req.body.payment;
-            //verify that shipping address, email and payment method have values
-            if (userId, shipToName && shipToStreet && shipToCity && shipToState && shipToZip && email && paySuccess) {
-                //query items from cart
-                const joinText = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
-                FROM cart
-                JOIN product
-                ON cart.product_id = product.id
-                WHERE cart_id = $1`;
-                pg.query(joinText, [req.cartId], (err, result) => {
+        if (!result.rows.length) {
+            return res.status(404).send('Cart not found.');
+        }
+        const date = new Date(),
+        items = result.rows,
+        subtotal = result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0),
+        tax = subtotal * 0.0825,
+        shipping = 9.99,
+        //calculate order total
+        total = subtotal + tax + shipping;
+        let orderId;
+        const order = {
+            date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+            items,
+            subtotal: Number(subtotal.toFixed(2)),
+            tax: Number(tax.toFixed(2)),
+            shipping,
+            total: Number(total.toFixed(2)),
+            address: {
+                shipToName,
+                shipToStreet,
+                shipToCity,
+                shipToState,
+                shipToZip,
+                email
+            },
+            payment: {
+                payMethod,
+                cardNum: cardNum.slice(cardNum.length - 4),
+            }
+        };
+        //process order by adding rows into the order & order_details tables
+        const ordersText = `INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        RETURNING *`,
+        ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, userId];
+        pg.query(ordersText, ordersValues, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            if (!result.rows.length) {
+                return res.status(500).send('Internal Server Error');
+            }
+            const processedOrder = result.rows[0];
+            orderId = processedOrder.id;
+            const orderDetailsText = `INSERT INTO order_details (order_id, product_id, order_quantity, item_price)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *`;
+            let itemsAdded = 0;
+            order.items.forEach(item => {
+                let orderDetailsValues = [orderId, item.product_id, item.cart_quantity, item.sell_price];
+                pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
                     if (err) {
                         return next(err);
                     }
-                    if (result.rows.length > 0) {
-                        const date = new Date(),
-                        items = result.rows,
-                        subtotal = result.rows.reduce((prev, curr) => prev + Number(curr.item_total), 0),
-                        tax = subtotal * 0.0825,
-                        shipping = 9.99,
-                        //calculate order total
-                        total = subtotal + tax + shipping;
-                        let orderId;
-                        const order = {
-                            date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
-                            items,
-                            subtotal: Number(subtotal.toFixed(2)),
-                            tax: Number(tax.toFixed(2)),
-                            shipping,
-                            total: Number(total.toFixed(2)),
-                            address: {
-                                shipToName,
-                                shipToStreet,
-                                shipToCity,
-                                shipToState,
-                                shipToZip,
-                                email
-                            },
-                            payment: {
-                                payMethod,
-                                cardNum: cardNum.slice(cardNum.length - 4),
-                            }
-                        };
-                        //process order by adding rows into the order & order_details tables
-                        const ordersText = `INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
-                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-                        RETURNING *`,
-                        ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, userId];
-                        pg.query(ordersText, ordersValues, (err, result) => {
+                    if (!result.rows.length) {
+                        return res.status(500).send('Internal Server Error');
+                    }
+                    itemsAdded++;
+                    if (itemsAdded === order.items.length) {
+                        const orderDetText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
+                        FROM order_details
+                        JOIN product
+                        ON order_details.product_id = product.id
+                        WHERE order_id = $1`;
+                        const orderDetValues = [orderId];
+                        pg.query(orderDetText, orderDetValues, (err, result) => {
                             if (err) {
                                 return next(err);
                             }
-                            if (result.rows.length > 0) {
-                                const processedOrder = result.rows[0];
-                                orderId = processedOrder.id;
-                                const orderDetailsText = `INSERT INTO order_details (order_id, product_id, order_quantity, item_price)
-                                VALUES ($1, $2, $3, $4)
-                                RETURNING *`;
-                                let itemsAdded = 0;
-                                order.items.forEach(item => {
-                                    let orderDetailsValues = [orderId, item.product_id, item.cart_quantity, item.sell_price];
-                                    pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
-                                        if (err) {
-                                            console.log(err.message);
-                                            return next(err);
-                                        }
-                                        if (result.rows.length === 0) {
-                                            res.status(500).send('Internal Server Error');
-                                        }
-                                        itemsAdded++;
-                                        if (itemsAdded === order.items.length) {
-                                            const orderDetText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
-                                            FROM order_details
-                                            JOIN product
-                                            ON order_details.product_id = product.id
-                                            WHERE order_id = $1`;
-                                            const orderDetValues = [orderId];
-                                            pg.query(orderDetText, orderDetValues, (err, result) => {
-                                                if (err) {
-                                                    return next(err);
-                                                }
-                                                const orderDetails = result.rows;
-                                                const clearCartText = 'DELETE FROM cart WHERE cart_id = $1';
-                                                pg.query(clearCartText, [req.cartId], (err, result) => {
-                                                    if (err) {
-                                                        res.status(500).send('Internal Server Error');
-                                                    }
-                                                    const completedOrder = {
-                                                        processedOrder,
-                                                        orderDetails
-                                                    };
-                                                    res.send(completedOrder);
-                                                });
-                                            });
-                                        }
-                                    });
-                                });
-                            }
+                            const orderDetails = result.rows;
+                            const clearCartText = 'DELETE FROM cart WHERE cart_id = $1';
+                            pg.query(clearCartText, [req.cartId], (err, result) => {
+                                if (err) {
+                                    return next(err);
+                                }
+                                const completedOrder = {
+                                    processedOrder,
+                                    orderDetails
+                                };
+                                res.send(completedOrder);
+                            });
                         });
                     }
-                    else {
-                        res.status(404).send('Not Found');
-                    }
                 });
-            }
-            else res.status(400).send('Bad Request');
-        }
-        else {
-            res.status(404).send('Not Found');
-        }
+            });
+        });
     });
 };
 
@@ -510,13 +489,11 @@ const setOrderId = (req, res, next, id) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            req.orderId = orderId;
-            next();
+        if (!result.rows.length) {
+            return res.status(404).send('User not found.');
         }
-        else {
-            res.status(404).send('Not Found');
-        }
+        req.orderId = orderId;
+        next();
     });
 };
 
@@ -527,26 +504,27 @@ const getOrderById = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        if (result.rows.length > 0) {
-            const summary = result.rows[0];
-            const orderDetailsText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
-            FROM order_details
-            JOIN product
-            ON order_details.product_id = product.id
-            WHERE order_id = $1`;
-            const orderDetailsValues = [req.orderId];
-            pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
-                if (err) {
-                    return next(err);
-                }
-                const items = result.rows;
-                const order = {
-                    summary,
-                    items
-                };
-                res.send(order);
-            });
+        if (!result.rows.length) {
+            return res.status(404).send('Order not found.');
         }
+        const summary = result.rows[0];
+        const orderDetailsText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
+        FROM order_details
+        JOIN product
+        ON order_details.product_id = product.id
+        WHERE order_id = $1`;
+        const orderDetailsValues = [req.orderId];
+        pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            const items = result.rows;
+            const order = {
+                summary,
+                items
+            };
+            res.send(order);
+        });
     });
 };
 
@@ -555,13 +533,13 @@ const deleteOrder = (req, res, next) => {
     const orderDetailsValues = [req.orderId];
     pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
         if (err) {
-            res.status(500).send('Internal Server Error');
+            return next(err);
         }
         const ordersText = 'DELETE FROM orders WHERE id = $1 AND users_id = $2';
         const ordersValues = [req.orderId, req.userId];
         pg.query(ordersText, ordersValues, (err, result) => {
             if (err) {
-                res.status(500).send('Internal Server Error');
+                return next(err);
             }
             res.status(204).send();
         });

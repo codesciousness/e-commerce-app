@@ -1,0 +1,8 @@
+.Error {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid red;
+    border-radius: 5px;
+    background-color: palevioletred;
+    opacity: 0.9;
+}

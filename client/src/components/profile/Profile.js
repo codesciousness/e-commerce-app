@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import './Profile.css';
 import Loader from '../../components/loader/Loader';
+import Error from '../error/Error';
 import { loadUserById, updateUser, changePassword, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
         selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError,  selectChangePasswordSuccess, selectChangePasswordError,
         selectLoginSuccess, selectGoogleLoginSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
@@ -38,20 +39,20 @@ const Profile = () => {
     let navigate = useNavigate();
 
     const formatDate = () => {
-        if (userId && dob) {
+        if (userId && dob && dob.length === 24) {
             dob = dob.slice(5,7) + '/' + dob.slice(8,10) +'/' + dob.slice(0,4);
         }
     };
     formatDate();
 
     const userProfile = {
+        username,
         firstName,
         lastName,
+        email,
         gender,
         dob,
         phone,
-        email,
-        username,
         streetAddress,
         city,
         state,
@@ -71,11 +72,17 @@ const Profile = () => {
     }
 
     const handleChange = ({ target }) => {
-        if (target.name === "firstName") {
+        if (target.name === "username") {
+            setUsername(target.value);
+        }
+        else if (target.name === "firstName") {
             setFirstName(target.value);
         }
         else if (target.name === "lastName") {
             setLastName(target.value);
+        }
+        else if (target.name === "email") {
+            setEmail(target.value);
         }
         else if (target.name === "gender") {
             setGender(target.value);
@@ -85,18 +92,6 @@ const Profile = () => {
         }
         else if (target.name === "phone") {
             setPhone(target.value);
-        }
-        else if (target.name === "email") {
-            setEmail(target.value);
-        }
-        else if (target.name === "username") {
-            setUsername(target.value);
-        }
-        else if (target.name === "password") {
-            setPassword(target.value);
-        }
-        else if (target.name === "passCheck") {
-            setPassCheck(target.value);
         }
         else if (target.name === "streetAddress") {
             setStreetAddress(target.value);
@@ -109,6 +104,12 @@ const Profile = () => {
         }
         else if (target.name === "zip") {
             setZip(target.value);
+        }
+        else if (target.name === "password") {
+            setPassword(target.value);
+        }
+        else if (target.name === "passCheck") {
+            setPassCheck(target.value);
         }
     };
 
@@ -141,22 +142,15 @@ const Profile = () => {
             setPassword('');
             setPassCheck('');
         }
-        if (loadUserError || updateUserSuccess || updateUserError || changePasswordSuccess || changePasswordError) {
+        if (loadUserError || updateUserSuccess || changePasswordSuccess) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [userId, loadUserError, registerUserSuccess, updateUserSuccess, updateUserError, changePasswordSuccess, changePasswordError, loginSuccess, googleLoginSuccess, dispatch])
+    }, [userId, loadUserError, registerUserSuccess, updateUserSuccess, changePasswordSuccess, loginSuccess, googleLoginSuccess, dispatch])
 ;
     if (loadingUser || updatingUser) {
         return (
             <section className="Profile">
                 <Loader />
-            </section>
-        );
-    }
-    if (loadUserError || updateUserError) {
-        return (
-            <section className="Profile">
-                <p className="Profile__error">An unexpected error has occurred.</p>
             </section>
         );
     }
@@ -166,15 +160,20 @@ const Profile = () => {
             <h2 className="Profile__title">User Profile</h2>
             <form className="Profile__form" method="post" action="">
                 <div className="Profile__container">
+                    {loadUserError && <Error msg={loadUserError}/>}
+                    {updateUserError && <Error msg={updateUserError}/>}
                     <label className="Profile__label" for="username">USERNAME</label>
-                    <input className="Profile__input" id="username" name="username" placeholder="Username" required
+                    <input className={username ? "Profile__input" : "Profile__input__required"} id="username" name="username" placeholder="Username" required
                     value={username} onChange={handleChange}/>
                     <label className="Profile__label" for="firstName">FIRST NAME</label>
-                    <input className="Profile__input" id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]" required
+                    <input className={firstName ? "Profile__input" : "Profile__input__required"} id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]" required
                     value={firstName} onChange={handleChange}/>
                     <label className="Profile__label" for="lastName">LAST NAME</label>
-                    <input className="Profile__input" id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]" required
+                    <input className={lastName ? "Profile__input" : "Profile__input__required"} id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]" required
                     value={lastName} onChange={handleChange}/>
+                    <label className="Profile__label" for="email">EMAIL</label>
+                    <input className={email ? "Profile__input" : "Profile__input__required"} id="email" name="email" placeholder="Enter your email address" type="email" required
+                    value={email} onChange={handleChange}/>
                     <label className="Profile__label" for="gender">GENDER</label>
                     <input className="Profile__input" id="gender" name="gender" placeholder="Enter your gender" pattern="[A-Za-z]" 
                     value={gender} onChange={handleChange}/>
@@ -184,9 +183,6 @@ const Profile = () => {
                     <label className="Profile__label" for="phone">PHONE NUMBER</label>
                     <input className="Profile__input" id="phone" name="phone" placeholder="Enter your phone number" 
                     value={phone} onChange={handleChange}/>
-                    <label className="Profile__label" for="email">EMAIL</label>
-                    <input className="Profile__input" id="email" name="email" placeholder="Enter your email address" type="email" required
-                    value={email} onChange={handleChange}/>
                     <label className="Profile__label" for="streetAddress">STREET ADDRESS</label>
                     <input className="Profile__input" id="streetAddress" name="streetAddress" placeholder="Street Address" 
                     value={streetAddress} onChange={handleChange}/>
@@ -202,6 +198,7 @@ const Profile = () => {
                     <input id="profileButton" className="Profile__button" type="submit" value="UPDATE PROFILE" onClick={handleClick}/>
                 </div>
                 <div className="Profile__container">
+                    {changePasswordError && <Error msg={changePasswordError}/>}
                     <label className="Profile__label" for="password"> CHANGE PASSWORD</label>
                     <input className={styleInput()} id="password" name="password" placeholder="Enter a new password" type="password" required
                     value={password} onChange={handleChange}/>

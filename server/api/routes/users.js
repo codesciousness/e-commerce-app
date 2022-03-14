@@ -10,14 +10,14 @@ const authenticate = (req, res, next) => {
     if (req.isAuthenticated()) {
         next();
     }
-    else res.redirect(process.env.AUTH_FAILURE_REDIRECT);
+    else return res.status(401).send('Please log in to complete this action.');
 };
 
 // GET /users to get an array of all users
 
 // usersRouter.get('/', db.getUsers);
 
-// POST /users to create a new user and save it to the database
+// POST /users/register to create a new user and save user to the database
 
 usersRouter.post('/register', db.registerUser);
 

@@ -2,22 +2,36 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const axios = require('axios');
 
 export const loadCart = createAsyncThunk('cart/loadCart',
-async ({ cartId, userId }) => {
-    const response = await axios.get(`/users/${userId}/cart/${cartId}`);
-    const cart = response.data;
-    return cart;
+async ({ cartId, userId }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`/users/${userId}/cart/${cartId}`);
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const updateCart = createAsyncThunk('cart/updateCart',
-async ({ cartId, userId, productId, cartQuantity }) => {
-    const response = await axios.put(`/users/${userId}/cart/${cartId}`, { userId, productId, cartQuantity });
-    return response.data;
+async ({ cartId, userId, productId, cartQuantity }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/users/${userId}/cart/${cartId}`, { userId, productId, cartQuantity });
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const checkout = createAsyncThunk('cart/checkout',
-async ({ cartId, userId, address, payment }) => {
-    const response = await axios.post(`/users/${userId}/cart/${cartId}/checkout`, { userId, address, payment });
-    return response.data;
+async ({ cartId, userId, address, payment }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post(`/users/${userId}/cart/${cartId}/checkout`, { userId, address, payment });
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 const cartSlice = createSlice({
@@ -63,7 +77,7 @@ const cartSlice = createSlice({
         },
         [loadCart.rejected]: (state, action) => {
             state.loadingCart = false;
-            state.loadCartError = true;
+            state.loadCartError = action.payload;
             state.cart = {};
         },
         [updateCart.pending]: (state, action) => {
@@ -76,7 +90,7 @@ const cartSlice = createSlice({
         },
         [updateCart.rejected]: (state, action) => {
             state.updatingCart = false;
-            state.updateCartError = true;
+            state.updateCartError = action.payload;
         },
         [checkout.pending]: (state, action) => {
             state.checkingout = true;
@@ -89,7 +103,7 @@ const cartSlice = createSlice({
         },
         [checkout.rejected]: (state, action) => {
             state.checkingout = false;
-            state.checkoutError = true;
+            state.checkoutError = action.payload;
         }
     }
 });

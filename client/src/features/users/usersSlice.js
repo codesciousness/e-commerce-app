@@ -2,34 +2,61 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const axios = require('axios');
 
 export const loadUserById = createAsyncThunk('users/loadUserById',
-async (userId) => {
-    const response = await axios.get(`/users/${userId}`);
-    return response.data;
+async (userId, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`/users/${userId}`);
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const registerUser = createAsyncThunk('users/registerUser',
-async ({ firstName, lastName, email, username, password }) => {
-    const response = await axios.post('/users/register', { firstName, lastName, email, username, password });
-    login({ username, password });
-    return response.data;
+async ({ firstName, lastName, email, username, password }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post('/users/register', { firstName, lastName, email, username, password });
+        if (response.ok) {
+            login({ username, password });   
+        }
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const updateUser = createAsyncThunk('users/updateUser',
-async ({ userId, user }) => {
-    const response = await axios.put(`/users/${userId}`, user);
-    return response.data;
+async ({ userId, userProfile }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/users/${userId}`, { userProfile });
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const changePassword = createAsyncThunk('users/changePassword',
-async ({ userId, password }) => {
-    const response = await axios.put(`/users/${userId}/password`, { password });
-    return response.data;
+async ({ userId, password }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/users/${userId}/password`, { password });
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const login = createAsyncThunk('users/login',
-async ({ username, password }) => {
-    const response = await axios.post('/auth/login', { username, password });
-    return response.data;
+async ({ username, password }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post('/auth/login', { username, password });
+        return response.data;
+    }
+    catch (err) {
+        return rejectWithValue(err.response.data);
+    }
 });
 
 export const logout = createAsyncThunk('users/logout',
@@ -99,7 +126,7 @@ const usersSlice = createSlice({
         },
         [loadUserById.rejected]: (state, action) => {
             state.loadingUser = false;
-            state.loadUserError = true;
+            state.loadUserError = action.payload;
             state.user = {};
         },
         [registerUser.pending]: (state, action) => {
@@ -115,7 +142,7 @@ const usersSlice = createSlice({
         },
         [registerUser.rejected]: (state, action) => {
             state.registeringUser = false;
-            state.registerUserError = true;
+            state.registerUserError = action.payload;
         },
         [updateUser.pending]: (state, action) => {
             state.updatingUser = true;
@@ -129,7 +156,7 @@ const usersSlice = createSlice({
         },
         [updateUser.rejected]: (state, action) => {
             state.updatingUser = false;
-            state.updateUserError = true;
+            state.updateUserError = action.payload;
         },
         [changePassword.pending]: (state, action) => {
             state.changingPassword = true;
@@ -142,7 +169,7 @@ const usersSlice = createSlice({
         },
         [changePassword.rejected]: (state, action) => {
             state.changingPassword = false;
-            state.changePasswordError = true;
+            state.changePasswordError = action.payload;
         },
         [login.pending]: (state, action) => {
             state.loggingIn = true;
@@ -157,7 +184,7 @@ const usersSlice = createSlice({
         },
         [login.rejected]: (state, action) => {
             state.loggingIn = false;
-            state.loginError = true;
+            state.loginError = action.payload;
         },
         [logout.pending]: (state, action) => {
             state.loggingOut = true;

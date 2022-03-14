@@ -7,10 +7,10 @@ const authenticate = (req, res, next) => {
     if (req.isAuthenticated()) {
       next();
     }
-    else res.redirect(process.env.AUTH_FAILURE_REDIRECT);
+    else return res.status(401).send('Please log in to complete this action.');
   };
   
-  cartRouter.use(authenticate);
+cartRouter.use(authenticate);
 
 //cartId param
 

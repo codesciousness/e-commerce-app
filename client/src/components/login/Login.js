@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import Loader from '../loader/Loader';
+import Error from '../error/Error';
 import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, selectGoogleLoggingIn, 
         selectGoogleLoginSuccess, selectGoogleLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
@@ -43,10 +44,10 @@ const Login = () => {
             setPassword('');
             navigate('/');
         }
-        if (loginSuccess || loginError || googleLoginSuccess || googleLoginError) {
+        if (loginSuccess || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [loginSuccess, loginError, googleLoginSuccess, googleLoginError, dispatch, navigate]);
+    }, [loginSuccess, googleLoginSuccess, googleLoginError, dispatch, navigate]);
 
     if (loggingIn || googleLoggingIn) {
         return (
@@ -55,17 +56,11 @@ const Login = () => {
             </section>
         );
     }
-    if (loginError || googleLoginError) {
-        return (
-            <section className="Login">
-                <p className="Login__error">An unexpected error has occurred.</p>
-            </section>
-        );
-    }
     return (
         <section className="Login">
             <h2 className="Login__title">User Login</h2>
             <form className="Login__form" method="post" action="">
+                {loginError && <Error msg={loginError}/>}
                 <label className="Login__label" for="username">USERNAME</label>
                 <input className="Login__input" id="username" name="username" placeholder="Username" required
                 value={username} onChange={handleChange}/>

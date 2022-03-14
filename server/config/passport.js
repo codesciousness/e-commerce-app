@@ -20,12 +20,12 @@ module.exports = (passport) => {
             done(null, user);
           }
           else {
-            done(null, false, {message: 'Incorrect password'});
+            done(null, false, {message: 'Incorrect password.'});
           }
         });
       }
       else {
-        done(null, false, {message: 'Username does not exist'});
+        done(null, false, {message: 'Username does not exist.'});
       }
     });
   }));
@@ -55,7 +55,7 @@ module.exports = (passport) => {
       }
       if (result.rows.length > 0) {
         const user = result.rows[0];
-        done(null, user, {message: `Email address: ${user.email} is already registered. Please Login.`});
+        done(null, user, {message: `Email address: ${user.email} is already registered. Please login.`});
       }
       else {
         bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -96,10 +96,8 @@ module.exports = (passport) => {
       if (err) {
         return done(err);
       }
-      if (result.rows.length > 0) {
-        const user = result.rows[0];
-        done(null, user);
-      }
+      const user = result.rows[0];
+      done(null, user);
     });
   });
 };
