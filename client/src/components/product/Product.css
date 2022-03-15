@@ -64,13 +64,13 @@
     width: 60%;
 }
 
-.Product__inCart__image {
+.Product__inCart__image, .Product__details__image {
     width: 250px;
     height: 250px;
     overflow: hidden;
 }
 
-.Product__inCart__info {
+.Product__inCart__info, .Product__details__main__info {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -78,11 +78,11 @@
     padding: 1rem;
 }
 
-.Product__inCart__name {
+.Product__inCart__name, .Product__details__name {
     font-weight: lighter;
 }
 
-.Product__inCart__price, .Product__inCart__itemTotal {
+.Product__inCart__price, .Product__details__category, .Product__details__price {
     font-size: 1.25rem;
 }
 
@@ -90,12 +90,12 @@
     font-weight: bold;
 }
 
-.Product__inCart__container {
+.Product__inCart__container, .Product__details__main__container {
     display: grid;
     place-items: center;
 }
 
-.Product__inCart__label {
+.Product__inCart__label, .Product__details__label {
     background-color: whitesmoke;
     font-size: 0.8rem;
     padding: 0.25rem;
@@ -139,4 +139,29 @@ input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
     margin: 0;
+}
+
+.Product__details__main {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
+    padding: 2rem;
+    margin: 1rem;
+    width: 100%;
+}
+
+.Product__details__container {
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
+    padding: 2rem;
+    margin: 1rem;
+    width: 100%;
+}
+
+.Product__details__label {
+    display: inline;
+}
+
+.Product__details__stock, .Product__details__description, .Product__details__manufacturer {
+    margin: 1rem 0.25rem;
 }

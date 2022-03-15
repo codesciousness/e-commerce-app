@@ -5,6 +5,7 @@ import './App.css';
 import Checkout from '../components/checkout/Checkout';
 import Login from '../components/login/Login';
 import OrderDetail from '../components/orderDetail/OrderDetail';
+import ProductDetail from '../components/productDetail/ProductDetail';
 import Register from '../components/register/Register';
 import Cart from '../features/cart/Cart';
 import Orders from '../features/orders/Orders';
@@ -77,6 +78,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Products />}/>
+          <Route path="products/:productId" element={<ProductDetail />}/>
           <Route path="login" element={<Login />}/>
           <Route path="register" element={<Register />}/>
           <Route path="cart" element={<Cart />}/>

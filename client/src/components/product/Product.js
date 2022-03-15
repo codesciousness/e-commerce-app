@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './Product.css';
-import { setProduct } from '../../features/products/productsSlice';
+import { setProductId } from '../../features/products/productsSlice';
 import { loadCart, updateCart, selectCartId } from '../../features/cart/cartSlice';
 import { selectUserId } from '../../features/users/usersSlice';
 
-const Product = ({ product, inCart }) => {
+const Product = ({ product, display }) => {
     const [cartQuantity, setCartQuantity] = useState(product.cart_quantity);
     const [quantity, setQuantity] = useState(product.cart_quantity);
     const cartId = useSelector(selectCartId);
@@ -13,8 +14,8 @@ const Product = ({ product, inCart }) => {
     const dispatch = useDispatch();
     const productId = product.id ? product.id : product.product_id;
 
-    const handleProductClick = ({ target }) => {
-        dispatch(setProduct(target.id));
+    const handleProductClick = () => {
+        dispatch(setProductId(productId));
     };
 
     const handleQuantityClick = ({ target }) => {
@@ -46,14 +47,15 @@ const Product = ({ product, inCart }) => {
         }
     }, [cartId, userId, productId, cartQuantity, quantity, dispatch]);
     
-    if (inCart) {
+    if (display === 'inCart') {
         return (
             <section className="Product__inCart">
-                <img className="Product__inCart__image" src={`https://source.unsplash.com/200x200/?${product.category}`} alt="" />
+                <img className="Product__inCart__image" src={product.url} alt="" />
                 <div className="Product__inCart__info">
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">PRODUCT NAME</p>
-                        <h2 id={product.product_id} className="Product__inCart__name" onClick={handleProductClick}>{product.name}</h2>
+                        <Link to={`/products/${productId}`}><h2 id={product.product_id} className="Product__inCart__name" 
+                        onClick={handleProductClick}>{product.name}</h2></Link>
                     </div>
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">QUANTITY</p>
@@ -76,13 +78,53 @@ const Product = ({ product, inCart }) => {
             </section>
         );
     }
+    else if (display === 'details') {
+        return (
+            <section className="Product__details">
+                <div className="Product__details__main">
+                    <img className="Product__details__image" src={product.url} alt="" />
+                    <div className="Product__details__main__info">
+                        <div className="Product__details__main__container">
+                            <p className="Product__details__label">PRODUCT NAME</p>
+                            <h2 id={product.product_id} className="Product__details__name" onClick={handleProductClick}>{product.name}</h2>
+                        </div>
+                        <div className="Product__details__main__container">
+                            <p className="Product__details__label">CATEGORY</p>
+                            <p className="Product__details__category">{product.category}</p>
+                        </div>
+                        <div className="Product__details__main__container">
+                            <p className="Product__details__label">PRICE</p>
+                            <p className="Product__details__price">{product.sell_price}</p>
+                        </div>
+                        <button className="Product__button" onClick={handleCartClick}>Add to Cart <i className="fas fa-cart-plus fa-lg"></i></button>
+                    </div>
+                </div>
+                <div className="Product__details__container">
+                    <div className="Product__details__info">
+                        <div className="Product__details__label__container">
+                            <p className="Product__details__label">IN STOCK</p>
+                            <p className="Product__details__stock">{product.stock_quantity}</p>
+                        </div>
+                        <div className="Product__details__label__container">
+                            <p className="Product__details__label">DESCRIPTION</p>
+                            <p className="Product__details__description">{product.description}</p>
+                        </div>
+                        <div className="Product__details__label__container">
+                            <p className="Product__details__label">MANUFACTURER</p>
+                            <p className="Product__details__manufacturer">{product.manufacturer}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
     else {
         return (
             <section className="Product">
                 <p className="Product__category">{product.category}</p>
-                <img className="Product__image" src={`https://source.unsplash.com/250x250/?${product.category}`} alt="" />
+                <img className="Product__image" src={product.url} alt="" />
                 <div className="Product__info">
-                    <h2 id={product.id} className="Product__name" onClick={handleProductClick}>{product.name}</h2>
+                <Link to={`/products/${productId}`}><h2 id={product.id} className="Product__name" onClick={handleProductClick}>{product.name}</h2></Link>
                     <p className="Product__price">{product.sell_price}</p>
                     <button className="Product__button" onClick={handleCartClick}>Add to Cart <i className="fas fa-cart-plus fa-lg"></i></button>
                 </div> 

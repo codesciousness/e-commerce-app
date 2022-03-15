@@ -4,7 +4,8 @@ import './OrderDetail.css';
 import Order from '../order/Order';
 import OrderItem from '../orderItem/OrderItem';
 import Loader from '../loader/Loader';
-import { loadOrderById, selectOrderId, selectOrder, selectLoadingOrder, selectLoadOrderError, 
+import Error from '../error/Error';
+import { loadOrderById, selectOrderId, selectOrder, selectLoadingOrder, selectLoadOrderSuccess, selectLoadOrderError, 
         clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
 import { selectUserId, selectLogoutSuccess } from '../../features/users/usersSlice';
 
@@ -12,6 +13,7 @@ const OrderDetail = () => {
     const orderId = useSelector(selectOrderId);
     const order = useSelector(selectOrder);
     const loadingOrder = useSelector(selectLoadingOrder);
+    const loadOrderSuccess = useSelector(selectLoadOrderSuccess);
     const loadOrderError = useSelector(selectLoadOrderError);
     const userId  = useSelector(selectUserId);
     const logoutSuccess  = useSelector(selectLogoutSuccess);
@@ -24,10 +26,10 @@ const OrderDetail = () => {
     }, [userId, orderId, dispatch]);
 
     useEffect(() => {
-        if (loadOrderError) {
+        if (loadOrderSuccess) {
             dispatch(clearOrdersStatusUpdates());
         }
-    }, [logoutSuccess, loadOrderError, dispatch]);
+    }, [loadOrderSuccess, logoutSuccess, dispatch]);
 
     if (loadingOrder) {
         return (
@@ -36,17 +38,11 @@ const OrderDetail = () => {
             </section>
         );
     }
-    if (loadOrderError) {
-        return (
-            <section className="OrderDetail">
-                <p className="OrderDetail__error">An unexpected error has occurred.</p>
-            </section>
-        );
-    }
     if (Object.entries(order).length === 0) return null;
     return (
         <section className="OrderDetail">
             <h2 className="OrderDetail__heading">Order Details</h2>
+            {loadOrderError && <Error msg={loadOrderError}/>}
             <Order order={order.summary}/>
             <h2 className="OrderDetail__item__heading">Items Ordered</h2>
             <ul className="OrderDetail__list">

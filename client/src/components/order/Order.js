@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Order.css';
 import Loader from '../loader/Loader';
-import { cancelOrder, setOrderId, clearOrder, selectOrders, selectCancelingOrder, selectCancelOrderError, clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
+import Error from '../error/Error';
+import { cancelOrder, setOrderId, clearOrder, selectOrders, selectCancelingOrder, selectCancelOrderError } from '../../features/orders/ordersSlice';
 import { selectUserId } from '../../features/users/usersSlice';
 
 const Order = ({ order }) => {
@@ -28,10 +29,7 @@ const Order = ({ order }) => {
         if (!orders.some(order => order.id === orderId)){
             dispatch(clearOrder());
         }
-        if (cancelOrderError) {
-            dispatch(clearOrdersStatusUpdates());
-        }
-    }, [orders, orderId, cancelOrderError, dispatch]);
+    }, [orders, orderId, dispatch]);
 
     if (cancelingOrder) {
         return (
@@ -40,16 +38,10 @@ const Order = ({ order }) => {
             </section>
         );
     }
-    if (cancelOrderError) {
-        return (
-            <section className="Order">
-                <p className="Order__error">An unexpected error has occurred.</p>
-            </section>
-        );
-    }
     if (Object.entries(order).length === 0) return null;
     return (
         <section className="Order">
+            {cancelOrderError && <Error msg={cancelOrderError}/>}
             <div className="Order__info">
                 <Link to={`/orders/${orderId}`}><h3 className="Order__id" onClick={handleOrderClick}>Order Id: {order.id}</h3></Link>
                 <p className="Order__date">Date: {date}</p>

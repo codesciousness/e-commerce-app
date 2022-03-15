@@ -66,7 +66,7 @@ const Cart = ({ inCheckout, address, payment }) => {
             <section className="Cart">
                 <h2 className="Cart__heading">Items in Cart</h2>
                 {loadCartError && <Error msg={loadCartError}/>}
-                {cart.items.map((cartItem, i) => <Product product={cartItem} inCart={true} key={cart.items[i].product_id}/>)}
+                {cart.items.map((cartItem, i) => <Product product={cartItem} display='inCart' key={cart.items[i].product_id}/>)}
                 <div className="Cart__info">
                     <p className="Cart__subtotal">{`Subtotal: $${cart.subtotal}`}</p>
                     {Button}

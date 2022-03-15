@@ -4,7 +4,9 @@ import './Products.css';
 import Product from '../../components/product/Product';
 import SearchTerm from '../searchTerm/SearchTerm';
 import Loader from '../../components/loader/Loader';
-import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsError, clearProdsStatusUpdates } from './productsSlice';
+import Error from '../../components/error/Error';
+import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsSuccess, selectLoadProductsError,
+        clearProdsStatusUpdates } from './productsSlice';
 import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 
 const Products = () => {
@@ -15,6 +17,7 @@ const Products = () => {
     const products = useSelector(selectFilteredProducts);
     const searchTerm = useSelector(selectSearchTerm);
     const loadingProducts = useSelector(selectLoadingProducts);
+    const loadProductsSuccess = useSelector(selectLoadProductsSuccess);
     const loadProductsError = useSelector(selectLoadProductsError);
     const dispatch = useDispatch();
 
@@ -32,22 +35,15 @@ const Products = () => {
     }, [category, sort, searchTerm, dispatch]);
 
     useEffect(() => {
-        if (loadProductsError) {
+        if (loadProductsSuccess) {
             dispatch(clearProdsStatusUpdates());
         }
-    }, [loadProductsError, dispatch]);
+    }, [loadProductsSuccess, dispatch]);
 
     if (loadingProducts) {
         return (
             <section className="Products">
                 <Loader />
-            </section>
-        );
-    }
-    if (loadProductsError) {
-        return (
-            <section className="Products">
-                <p className="Products__error">An unexpected error has occurred.</p>
             </section>
         );
     }
@@ -65,6 +61,7 @@ const Products = () => {
                 </select>
             </div>
             <ul className="Products__list">
+                {loadProductsError && <Error msg={loadProductsError}/>}
                 {products.map(product => <li key={product.id}><Product product={product} /></li>)}
             </ul>
         </section>

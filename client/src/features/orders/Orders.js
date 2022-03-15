@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import './Orders.css';
 import Order from '../../components/order/Order';
 import Loader from '../../components/loader/Loader';
-import { loadOrders, resetOrders, selectOrders, selectLoadingOrders, selectLoadOrdersError, selectCancelOrderSuccess, 
-        clearOrdersStatusUpdates } from './ordersSlice';
+import Error from '../../components/error/Error';
+import { loadOrders, resetOrders, selectOrders, selectLoadingOrders, selectLoadOrdersSuccess, selectLoadOrdersError,
+        selectCancelOrderSuccess, clearOrdersStatusUpdates } from './ordersSlice';
 import { selectUserId, selectLoginSuccess, selectLogoutSuccess, selectGoogleLoginSuccess } from '../users/usersSlice';
 import { selectCheckoutSuccess } from '../cart/cartSlice';
 
@@ -14,6 +15,7 @@ const Orders = () => {
     const [sort, setSort] = useState('');
     const orders = useSelector(selectOrders);
     const loadingOrders = useSelector(selectLoadingOrders);
+    const loadOrdersSuccess = useSelector(selectLoadOrdersSuccess);
     const loadOrdersError = useSelector(selectLoadOrdersError);
     const cancelOrderSuccess = useSelector(selectCancelOrderSuccess);
     const userId = useSelector(selectUserId);
@@ -44,22 +46,15 @@ const Orders = () => {
         if (logoutSuccess) {
             dispatch(resetOrders());
         }
-        if (loadOrdersError || cancelOrderSuccess) {
+        if (loadOrdersSuccess || cancelOrderSuccess) {
             dispatch(clearOrdersStatusUpdates());
         }
-    }, [sort, loadOrdersError, cancelOrderSuccess, userId, loginSuccess, logoutSuccess, googleLoginSuccess, checkoutSuccess, dispatch]);
+    }, [sort, loadOrdersSuccess, cancelOrderSuccess, userId, loginSuccess, logoutSuccess, googleLoginSuccess, checkoutSuccess, dispatch]);
 
     if (loadingOrders) {
         return (
             <section className="Orders">
                 <Loader />
-            </section>
-        );
-    }
-    if (loadOrdersError) {
-        return (
-            <section className="Orders">
-                <p className="Orders__error">An unexpected error has occurred.</p>
             </section>
         );
     }
@@ -81,6 +76,7 @@ const Orders = () => {
                 </select>
             </div>
             <ul className="Orders__list">
+                {loadOrdersError && <Error msg={loadOrdersError}/>}
                 {orders.map(order => <li key={order.id}><Order order={order}/></li>)}
             </ul>
         </section>

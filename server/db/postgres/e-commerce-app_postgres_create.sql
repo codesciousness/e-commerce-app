@@ -22,7 +22,9 @@ CREATE TABLE product (
 	manufacturer varchar(50) NOT NULL,
 	category varchar(50) NOT NULL,
 	sell_price money NOT NULL,
-	stock_quantity integer NOT NULL
+	stock_quantity integer NOT NULL,
+	url varchar(100) NOT NULL,
+	description text NOT NULL
 );
 
 CREATE TABLE cart (

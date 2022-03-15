@@ -1,0 +1,11 @@
+.ProductDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.ProductDetail__heading {
+    text-align: center;
+}
