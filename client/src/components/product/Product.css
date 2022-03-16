@@ -6,8 +6,8 @@
     box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
     padding: 1rem;
     margin: 2rem;
-    width: 20%;
-    max-width: 400px;
+    width: 300px;
+    height: auto;
     min-width: 300px;
 }
 
@@ -15,9 +15,11 @@
     padding: 0.5rem;
 }
 
-.Product__image {
+.Product__image, .Product__inCart__image, .Product__details__image {
     width: 250px;
     height: 250px;
+    min-width: 250px;
+    min-height: 250px;
     overflow: hidden;
 }
 
@@ -50,7 +52,7 @@
 }
 
 .Product__button:hover {
-    background-color: lightgreen;
+    background-color: lightseagreen;
     color: black;
 }
 
@@ -61,13 +63,7 @@
     box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
     padding: 2rem;
     margin: 1rem;
-    width: 60%;
-}
-
-.Product__inCart__image, .Product__details__image {
-    width: 250px;
-    height: 250px;
-    overflow: hidden;
+    width: 80%;
 }
 
 .Product__inCart__info, .Product__details__main__info {

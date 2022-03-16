@@ -6,8 +6,17 @@
     padding: 2rem;
 }
 
-.OrderDeatil__heading {
+.OrderDetail__heading {
     text-align: center;
+}
+
+.OrderDetail__item__heading {
+    margin-top: 1rem;
+}
+
+.OrderDetail__list {
+    width: 80%;
+    margin: auto;
 }
 
 .OrderDetail li {

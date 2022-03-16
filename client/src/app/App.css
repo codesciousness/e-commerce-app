@@ -66,11 +66,11 @@ a:hover {
 }
 
 .App__login__button:hover {
-  background-color: lightgreen;
+  background-color: lightseagreen;
   color: black;
 }
 
 .App__logout__button:hover {
-  background-color: red;
+  background-color: palevioletred;
   color: black;
 }

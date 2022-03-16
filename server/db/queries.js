@@ -24,7 +24,7 @@ const registerUser = (req, res, next) => {
     const saltRounds = 10;
     const findText = 'SELECT * FROM users WHERE email=$1';
     const findValues = [email];
-    const addText = `INSERT INTO users (id, cart_id, username, password, first_name, last_name, email)
+    const addText = `INSERT INTO users (user_id, cart_id, username, password, first_name, last_name, email)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *`;
     pg.query(findText, findValues, (err, result) => {
@@ -66,7 +66,7 @@ const registerUser = (req, res, next) => {
   
 const setUserId = (req, res, next, id) => {
     const userId = id;
-    const text = 'SELECT * FROM users WHERE id = $1';
+    const text = 'SELECT * FROM users WHERE user_id = $1';
     const values = [userId];
     pg.query(text, values, (err, result) => {
         if (err) {
@@ -81,7 +81,7 @@ const setUserId = (req, res, next, id) => {
 };
   
 const getUserById = (req, res, next) => {
-    const text = 'SELECT * FROM users WHERE id = $1';
+    const text = 'SELECT * FROM users WHERE user_id = $1';
     const values = [req.userId];
     pg.query(text, values, (err, result) => {
         if (err) {
@@ -100,7 +100,7 @@ const updateUser = (req, res, next) => {
     }
     const text = `UPDATE users
     SET username = $2, first_name = $3, last_name = $4, gender = $5, date_of_birth = $6, street_address = $7, city = $8, state = $9, zip_code = $10, email = $11, phone = $12
-    WHERE id = $1
+    WHERE user_id = $1
     RETURNING *`;
     const values = [req.userId, username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone];
     pg.query(text, values, (err, result) => {
@@ -125,7 +125,7 @@ const changePassword = (req, res, next) => {
     }
     const text = `UPDATE users
     SET password = $2
-    WHERE id = $1
+    WHERE user_id = $1
     RETURNING *`;
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -156,7 +156,7 @@ const getProducts = (req, res, next) => {
     let category;
     const input = req.query.category;
     const sortOption = req.query.sort;
-    const categories = ['Automotive', 'Beauty', 'Books', 'Computers', 'Electronics', 'Games', 'Grocery', 'Health', 'Home', 'Kids', 'Sports', 'Tools', 'Toys'];
+    const categories = ['Automotive', 'Beauty', 'Books', 'Electronics', 'Games', 'Garden', 'Grocery', 'Home', 'Fashion', 'Toys'];
     if (categories.includes(input)) {
         category = input;
     }
@@ -223,7 +223,7 @@ const getProducts = (req, res, next) => {
 
 const getProductById = (req, res, next) => {
     const { productId } = req.params;
-    const text = 'SELECT * FROM product WHERE id = $1';
+    const text = 'SELECT * FROM product WHERE product_id = $1';
     const values = [productId];
     pg.query(text, values, (err, result) => {
         if (err) {
@@ -240,7 +240,7 @@ const getProductById = (req, res, next) => {
 const setCartId = (req, res, next, id) => {
     const cartId = id;
     const userId = req.userId
-    const text = 'SELECT * FROM users WHERE id = $1';
+    const text = 'SELECT * FROM users WHERE user_id = $1';
     pg.query(text, [userId], (err, result) => {
         if (err) {
             return next(err);
@@ -258,10 +258,10 @@ const setCartId = (req, res, next, id) => {
 };
 
 const getCartById = (req, res, next) => {
-    const text = `SELECT cart_id, product_id, name, category, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
+    const text = `SELECT cart_id, product_id, name, category, url, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
     FROM cart
     JOIN product
-    ON cart.product_id = product.id
+    USING(product_id)
     WHERE cart_id = $1`;
     pg.query(text, [req.cartId], (err, result) => {
         if (err) {
@@ -309,7 +309,7 @@ const updateCart = (req, res, next) => {
                 return res.send(updatedCart);
             }
             //check to see if product exists
-            pg.query('SELECT * FROM product WHERE id = $1', [productId], (err, result) => {
+            pg.query('SELECT * FROM product WHERE product_id = $1', [productId], (err, result) => {
                 if (err) {
                     return next(err);
                 }
@@ -350,10 +350,10 @@ const checkout = (req, res, next) => {
         return res.status(400).send('Payment was not successful.');
     }
     //query items and verify cart is not empty
-    const findText = `SELECT cart_id, product_id, name, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
+    const findText = `SELECT cart_id, product_id, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
     FROM cart
     JOIN product
-    ON cart.product_id = product.id
+    USING(product_id)
     WHERE cart_id = $1`;
     pg.query(findText, [req.cartId], (err, result) => {
         if (err) {
@@ -391,7 +391,7 @@ const checkout = (req, res, next) => {
             }
         };
         //process order by adding rows into the order & order_details tables
-        const ordersText = `INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, users_id)
+        const ordersText = `INSERT INTO orders (date, status, total, ship_date, shipto_name, shipto_street, shipto_city, shipto_state, shipto_zipcode, email, pay_method, card_num, user_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
         RETURNING *`,
         ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, userId];
@@ -422,7 +422,7 @@ const checkout = (req, res, next) => {
                         const orderDetText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
                         FROM order_details
                         JOIN product
-                        ON order_details.product_id = product.id
+                        USING(product_id)
                         WHERE order_id = $1`;
                         const orderDetValues = [orderId];
                         pg.query(orderDetText, orderDetValues, (err, result) => {
@@ -452,8 +452,20 @@ const checkout = (req, res, next) => {
 const getOrders = (req, res, next) => {
     const values = [req.userId];
     const sortOption = req.query.sort;
+    const noSortText = `SELECT *
+    FROM orders
+    LEFT JOIN (
+    SELECT DISTINCT on (order_id) * FROM order_details
+    ORDER BY order_id
+    ) as order_details
+    USING(order_id)
+    LEFT JOIN product
+    USING(product_id)
+    WHERE user_id = $1`;
+    const sortOldText = noSortText + ' ORDER BY date';
+    const sortNewText = sortOldText + ' DESC';
     if (!sortOption) {
-        pg.query('SELECT * FROM orders WHERE users_id = $1', values, (err, result) => {
+        pg.query(noSortText, values, (err, result) => {
             if (err) {
                 return next(err);
             }
@@ -461,7 +473,7 @@ const getOrders = (req, res, next) => {
         });
     }
     else if (sortOption === 'oldest') {
-        pg.query('SELECT * FROM orders WHERE users_id = $1 ORDER BY date', values, (err, result) => {
+        pg.query(sortOldText, values, (err, result) => {
             if (err) {
                 return next(err);
             }
@@ -469,7 +481,7 @@ const getOrders = (req, res, next) => {
         });
     }
     else if (sortOption === 'newest') {
-        pg.query('SELECT * FROM orders WHERE users_id = $1 ORDER BY date DESC', values, (err, result) => {
+        pg.query(sortNewText, values, (err, result) => {
             if (err) {
                 return next(err);
             }
@@ -483,7 +495,7 @@ const getOrders = (req, res, next) => {
 
 const setOrderId = (req, res, next, id) => {
     const orderId = id;
-    const text = 'SELECT * FROM orders WHERE id = $1 AND users_id = $2';
+    const text = 'SELECT * FROM orders WHERE order_id = $1 AND user_id = $2';
     const values = [orderId, req.userId];
     pg.query(text, values, (err, result) => {
         if (err) {
@@ -498,7 +510,16 @@ const setOrderId = (req, res, next, id) => {
 };
 
 const getOrderById = (req, res, next) => {
-    const ordersText = 'SELECT * FROM orders WHERE id = $1 AND users_id = $2';
+    const ordersText = `SELECT *
+    FROM orders
+    LEFT JOIN (
+    SELECT DISTINCT on (order_id) * FROM order_details
+    ORDER BY order_id
+    ) as order_details
+    USING(order_id)
+    LEFT JOIN product
+    USING(product_id)
+    WHERE order_id = $1 AND user_id = $2`;
     const ordersValues = [req.orderId, req.userId];
     pg.query(ordersText, ordersValues, (err, result) => {
         if (err) {
@@ -508,10 +529,10 @@ const getOrderById = (req, res, next) => {
             return res.status(404).send('Order not found.');
         }
         const summary = result.rows[0];
-        const orderDetailsText = `SELECT order_id, product_id, name, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
+        const orderDetailsText = `SELECT order_id, product_id, name, url, order_quantity, item_price, (order_quantity * item_price)::DECIMAL as item_total
         FROM order_details
         JOIN product
-        ON order_details.product_id = product.id
+        USING(product_id)
         WHERE order_id = $1`;
         const orderDetailsValues = [req.orderId];
         pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
@@ -535,7 +556,7 @@ const deleteOrder = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        const ordersText = 'DELETE FROM orders WHERE id = $1 AND users_id = $2';
+        const ordersText = 'DELETE FROM orders WHERE order_id = $1 AND user_id = $2';
         const ordersValues = [req.orderId, req.userId];
         pg.query(ordersText, ordersValues, (err, result) => {
             if (err) {

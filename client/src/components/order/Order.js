@@ -14,7 +14,7 @@ const Order = ({ order }) => {
     const userId = useSelector(selectUserId);
     const date = order.date.slice(5,7) + '/' + order.date.slice(8,10) +'/' + order.date.slice(0,4);
     const payMethod = order.pay_method[0].toUpperCase() + order.pay_method.slice(1);
-    const orderId = order.id;
+    const orderId = order.order_id;
     const dispatch = useDispatch();
 
     const handleOrderClick = () => {
@@ -26,7 +26,7 @@ const Order = ({ order }) => {
     };
 
     useEffect(() => {
-        if (!orders.some(order => order.id === orderId)){
+        if (!orders.some(order => order.order_id === orderId)){
             dispatch(clearOrder());
         }
     }, [orders, orderId, dispatch]);
@@ -43,13 +43,13 @@ const Order = ({ order }) => {
         <section className="Order">
             {cancelOrderError && <Error msg={cancelOrderError}/>}
             <div className="Order__info">
-                <Link to={`/orders/${orderId}`}><h3 className="Order__id" onClick={handleOrderClick}>Order Id: {order.id}</h3></Link>
+                <Link to={`/orders/${orderId}`}><h3 className="Order__id" onClick={handleOrderClick}>Order Id: {orderId}</h3></Link>
                 <p className="Order__date">Date: {date}</p>
                 <p className="Order__status">Status: {order.status}</p>
                 {order.status === 'processing' && <button className="Order__button" onClick={handleButtonClick}>Cancel Order</button>}
             </div>
             <div className="Order__container">
-                <img className="Order__image" src='https://source.unsplash.com/200x200/?product' alt="" />
+                <img className="Order__image" src={order.url} alt="" />
                 <div className="Order__address">
                     <h3 className="Order__shipping__info">Shipping Address</h3>
                     <p className="Order__fullname">{order.shipto_name}</p>

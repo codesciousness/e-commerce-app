@@ -138,7 +138,7 @@ const usersSlice = createSlice({
             state.registerUserSuccess = true;
             state.registerUserError = false;
             state.user = action.payload;
-            state.userId = action.payload.id;
+            state.userId = action.payload.user_id;
         },
         [registerUser.rejected]: (state, action) => {
             state.registeringUser = false;
@@ -180,7 +180,7 @@ const usersSlice = createSlice({
             state.loginSuccess = true;
             state.loginError = false;
             state.user = action.payload;
-            state.userId = action.payload.id;
+            state.userId = action.payload.user_id;
         },
         [login.rejected]: (state, action) => {
             state.loggingIn = false;

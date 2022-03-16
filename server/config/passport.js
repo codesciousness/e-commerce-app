@@ -45,7 +45,7 @@ module.exports = (passport) => {
     const lastName = profile.name.familyName;
     const findText = 'SELECT * FROM users WHERE email=$1';
     const findValues = [email];
-    const addText = `INSERT INTO users (id, google_id, cart_id, username, password, first_name, last_name, email)
+    const addText = `INSERT INTO users (user_id, google_id, cart_id, username, password, first_name, last_name, email)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *`;
     const saltRounds = 10;
@@ -86,11 +86,11 @@ module.exports = (passport) => {
   }));
 
   passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.user_id);
   });
     
   passport.deserializeUser((id, done) => {
-    const text = 'SELECT * FROM users WHERE id=$1';
+    const text = 'SELECT * FROM users WHERE user_id=$1';
     const values = [id];
     db.query(text, values, (err, result) => {
       if (err) {

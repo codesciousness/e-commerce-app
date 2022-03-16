@@ -5,7 +5,7 @@ const OrderItem = ({ item }) => {
     if (Object.entries(item).length === 0) return null;
     return (
         <section className="OrderItem">
-            <img className="OrderItem__image" src='https://source.unsplash.com/200x200/?product' alt="" />
+            <img className="OrderItem__image" src={item.url} alt="" />
             <div className="OrderItem__info">
                 <div className="OrderItem__container">
                     <p className="OrderItem__label">PRODUCT NAME</p>

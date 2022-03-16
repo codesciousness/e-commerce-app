@@ -10,7 +10,7 @@ import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoad
 import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 
 const Products = () => {
-    const categories = ['', 'Automotive', 'Beauty', 'Books', 'Computers', 'Electronics', 'Games', 'Grocery', 'Health', 'Home', 'Kids', 'Sports', 'Tools', 'Toys'];
+    const categories = ['', 'Automotive', 'Beauty', 'Books', 'Electronics', 'Games', 'Garden', 'Grocery', 'Home', 'Fashion', 'Toys'];
     const sortOptions = ['', 'lowest', 'highest'];
     const [category, setCategory] = useState('');
     const [sort, setSort] = useState('');
@@ -62,7 +62,7 @@ const Products = () => {
             </div>
             <ul className="Products__list">
                 {loadProductsError && <Error msg={loadProductsError}/>}
-                {products.map(product => <li key={product.id}><Product product={product} /></li>)}
+                {products.map(product => <li key={product.product_id}><Product product={product} /></li>)}
             </ul>
         </section>
     );

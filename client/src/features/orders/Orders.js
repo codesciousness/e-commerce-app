@@ -77,7 +77,7 @@ const Orders = () => {
             </div>
             <ul className="Orders__list">
                 {loadOrdersError && <Error msg={loadOrdersError}/>}
-                {orders.map(order => <li key={order.id}><Order order={order}/></li>)}
+                {orders.map(order => <li key={order.order_id}><Order order={order}/></li>)}
             </ul>
         </section>
     );

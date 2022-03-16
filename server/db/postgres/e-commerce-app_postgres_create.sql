@@ -1,5 +1,5 @@
 CREATE TABLE users (
-	id uuid PRIMARY KEY,
+	user_id uuid PRIMARY KEY,
 	google_id varchar(30),
 	cart_id uuid NOT NULL UNIQUE,
 	username varchar(30) NOT NULL UNIQUE,
@@ -17,7 +17,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE product (
-	id serial PRIMARY KEY,
+	product_id serial PRIMARY KEY,
 	name varchar(50) NOT NULL,
 	manufacturer varchar(50) NOT NULL,
 	category varchar(50) NOT NULL,
@@ -29,13 +29,13 @@ CREATE TABLE product (
 
 CREATE TABLE cart (
 	cart_id uuid REFERENCES users(cart_id),
-	product_id serial REFERENCES product(id),
+	product_id serial REFERENCES product(product_id),
 	cart_quantity integer NOT NULL,
 	PRIMARY KEY (cart_id, product_id)
 );
 
 CREATE TABLE orders (
-	id serial PRIMARY KEY,
+	order_id serial PRIMARY KEY,
 	date date NOT NULL,
 	status varchar(20) NOT NULL,
 	total money NOT NULL,
@@ -48,12 +48,12 @@ CREATE TABLE orders (
 	email varchar(100) NOT NULL,
 	pay_method varchar(20) NOT NULL,
 	card_num char(4) NOT NULL,
-	users_id uuid REFERENCES users(id)
+	user_id uuid REFERENCES users(user_id)
 );
 
 CREATE TABLE order_details (
-	order_id serial REFERENCES orders(id),
-	product_id serial REFERENCES product(id),
+	order_id serial REFERENCES orders(order_id),
+	product_id serial REFERENCES product(product_id),
 	order_quantity integer NOT NULL,
 	item_price money NOT NULL,
 	PRIMARY KEY (order_id, product_id)

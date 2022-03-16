@@ -12,7 +12,7 @@ const Product = ({ product, display }) => {
     const cartId = useSelector(selectCartId);
     const userId = useSelector(selectUserId);
     const dispatch = useDispatch();
-    const productId = product.id ? product.id : product.product_id;
+    const productId = product.product_id;
 
     const handleProductClick = () => {
         dispatch(setProductId(productId));
@@ -124,7 +124,7 @@ const Product = ({ product, display }) => {
                 <p className="Product__category">{product.category}</p>
                 <img className="Product__image" src={product.url} alt="" />
                 <div className="Product__info">
-                <Link to={`/products/${productId}`}><h2 id={product.id} className="Product__name" onClick={handleProductClick}>{product.name}</h2></Link>
+                <Link to={`/products/${productId}`}><h2 id={product.product_id} className="Product__name" onClick={handleProductClick}>{product.name}</h2></Link>
                     <p className="Product__price">{product.sell_price}</p>
                     <button className="Product__button" onClick={handleCartClick}>Add to Cart <i className="fas fa-cart-plus fa-lg"></i></button>
                 </div> 

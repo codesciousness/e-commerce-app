@@ -27,6 +27,10 @@
     cursor: pointer;
 }
 
+.Orders__list {
+    width: 100%;
+}
+
 .Orders li {
     list-style: none;
 }

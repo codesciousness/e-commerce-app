@@ -30,7 +30,7 @@
 }
 
 .Checkout__label, .Checkout__input {
-    width: 60%;
+    width: 80%;
 }
 
 .Checkout__input, .Checkout__button {
@@ -52,6 +52,6 @@
 }
 
 .Checkout__button:hover {
-    background-color: lightgreen;
+    background-color: lightseagreen;
     color: black;
 }

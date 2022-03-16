@@ -102,7 +102,7 @@ const Checkout = () => {
     }
     return (
         <section className="Checkout">
-            <form className="Checkout__form" method="post" action="/cart/cartId/checkout">
+            <form className="Checkout__form" method="post" action="">
                 <div className="Checkout__address">
                     <h2 className="Checkout__address__heading">Ship To Address</h2>
                     <label className="Checkout__label" for="shipToName">FULL NAME</label>
