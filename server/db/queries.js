@@ -1,6 +1,7 @@
 const pg = require('./index');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
+const { validateCard, checkExpDate } = require('../util/credit-card');
 
 const getUsers = (req, res, next) => {
     pg.query('SELECT * FROM users', (err, result) => {
@@ -340,14 +341,23 @@ const checkout = (req, res, next) => {
     const { paySuccess, payMethod, cardNum, cardExp, cardCVV } = req.body.payment;
     const { shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email } = req.body.address;
     if (!userId) {
-        return res.status(400).send('User not signed in.');
+        return res.status(400).send('Please log in to complete this action.');
     }
     if (!shipToName || !shipToStreet || !shipToCity || !shipToState || !shipToZip || !email) {
-        return res.status(400).send('Please enter a valid shipping and email address.');
+        return res.status(400).send('Please fill out all shipping information.');
+    }
+    if (!cardNum || !cardExp || !cardCVV) {
+        return res.status(400).send('Please fill out all payment information.');
+    }
+    if (!checkExpDate(cardExp)) {
+        return res.status(400).send('Please enter a valid expiration date.');
+    }
+    if (!validateCard(cardNum, cardCVV, payMethod)) {
+        return res.status(400).send('Please enter a valid credit card number and security code.');
     }
     //verify that payment succeeded
     if (!paySuccess) {
-        return res.status(400).send('Payment was not successful.');
+        return res.status(400).send('Payment was not successful. Please try again.');
     }
     //query items and verify cart is not empty
     const findText = `SELECT cart_id, product_id, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
@@ -403,7 +413,7 @@ const checkout = (req, res, next) => {
                 return res.status(500).send('Internal Server Error');
             }
             const processedOrder = result.rows[0];
-            orderId = processedOrder.id;
+            orderId = processedOrder.order_id;
             const orderDetailsText = `INSERT INTO order_details (order_id, product_id, order_quantity, item_price)
             VALUES ($1, $2, $3, $4)
             RETURNING *`;

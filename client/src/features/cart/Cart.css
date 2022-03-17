@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    min-width: 300px;
     margin: auto;
     padding: 2rem;
 }
@@ -33,7 +34,6 @@
     background-color: black;
     color: white;
     font-size: 1.25rem;
-    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }

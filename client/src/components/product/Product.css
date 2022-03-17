@@ -46,7 +46,6 @@
     background-color: black;
     color: white;
     font-size: 1.25rem;
-    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
@@ -61,9 +60,11 @@
     justify-content: flex-start;
     align-items: center;
     box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
+    background-color: white;
     padding: 2rem;
     margin: 1rem;
     width: 80%;
+    min-width: 300px;
 }
 
 .Product__inCart__info, .Product__details__main__info {
@@ -135,6 +136,10 @@ input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
     margin: 0;
+}
+
+.Product__details {
+    min-width: 300px;
 }
 
 .Product__details__main {

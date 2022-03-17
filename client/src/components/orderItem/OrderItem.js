@@ -1,7 +1,17 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './OrderItem.css';
+import { setProductId } from '../../features/products/productsSlice';
 
 const OrderItem = ({ item }) => {
+    const dispatch = useDispatch();
+    const productId = item.product_id;
+
+    const handleClick = () => {
+        dispatch(setProductId(productId));
+    };
+
     if (Object.entries(item).length === 0) return null;
     return (
         <section className="OrderItem">
@@ -9,7 +19,7 @@ const OrderItem = ({ item }) => {
             <div className="OrderItem__info">
                 <div className="OrderItem__container">
                     <p className="OrderItem__label">PRODUCT NAME</p>
-                    <h2 className="OrderItem__name">{item.name}</h2>
+                    <Link to={`/products/${productId}`}><h2 className="OrderItem__name" onClick={handleClick}>{item.name}</h2></Link>
                 </div>
                 <div className="OrderItem__container">
                     <p className="OrderItem__label">QUANTITY</p>

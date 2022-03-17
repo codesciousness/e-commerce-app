@@ -6,6 +6,7 @@ import Cart from '../../features/cart/Cart';
 import Error from '../error/Error';
 import { selectCheckoutSuccess, selectCheckoutError, clearCartStatusUpdates } from '../../features/cart/cartSlice';
 import { selectUser } from '../../features/users/usersSlice';
+import { creditCardType } from '../../util/credit-card';
 
 const Checkout = () => {
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
@@ -62,9 +63,7 @@ const Checkout = () => {
         }
         else if (target.name === "cardNum") {
             setCardNum(target.value);
-        }
-        else if (target.name === "payMethod") {
-            setPayMethod(target.value);
+            setPayMethod(creditCardType(target.value));
         }
         else if (target.name === "cardExp") {
             setCardExp(target.value);
@@ -88,8 +87,8 @@ const Checkout = () => {
             setCardCVV('');
             setTimeout(() => {
                 navigate("/orders");
+                dispatch(clearCartStatusUpdates());
             }, 3000);
-            dispatch(clearCartStatusUpdates());
         }
     }, [checkoutSuccess, dispatch, navigate]);
 
@@ -127,16 +126,15 @@ const Checkout = () => {
                 <div className="Checkout__payment">
                     <h2 className="Checkout__payment__heading">Payment Information</h2>
                     <label className="Checkout__label" for="cardNum">CARD NUMBER</label>
-                    <input className="Checkout__input" id="cardNum" name="cardNum" placeholder="Enter your card number" required
+                    <input className="Checkout__input" id="cardNum" name="cardNum" placeholder="Enter your card number (no dashes or spaces)" required
                     value={cardNum} onChange={handleChange}/>
                     <label className="Checkout__label" for="payMethod">CARD TYPE</label>
-                    <input className="Checkout__input" id="payMethod" name="payMethod" required
-                    value={payMethod} onChange={handleChange}/>
+                    <input className="Checkout__input" id="payMethod" name="payMethod" required value={payMethod} readOnly/>
                     <label className="Checkout__label" for="cardExp">EXPIRATION DATE</label>
-                    <input className="Checkout__input" id="cardExp" name="cardExp" required
+                    <input className="Checkout__input" id="cardExp" name="cardExp" placeholder="Enter your expiration date (MM/YYYY)" required
                     value={cardExp} onChange={handleChange}/>
                     <label className="Checkout__label" for="cardCVV">SECURITY CODE</label>
-                    <input className="Checkout__input" id="cardCVV" name="cardCVV" required
+                    <input className="Checkout__input" id="cardCVV" name="cardCVV" placeholder="Enter your security code" required
                     value={cardCVV} onChange={handleChange}/>
                 </div>
                 {checkoutError && <Error msg={checkoutError}/>}

@@ -3,15 +3,19 @@
     margin: auto;
     background-color: whitesmoke;
     padding: 2rem;
+    width: 100%;
 }
 
 .Checkout__success {
     font-size: 3rem;
+    text-align: center;
 }
 
 .Checkout__form {
     margin: 0.25rem auto;
     padding: 2rem;
+    width: 80%;
+    min-width: 300px;
 }
 
 .Checkout__address, .Checkout__payment {
@@ -30,7 +34,7 @@
 }
 
 .Checkout__label, .Checkout__input {
-    width: 80%;
+    width: 100%;
 }
 
 .Checkout__input, .Checkout__button {
@@ -44,7 +48,6 @@
     background-color: black;
     color: white;
     font-size: 1.25rem;
-    font-weight: bold;
     letter-spacing: 2px;
     margin-top: 2rem;
     cursor: pointer;

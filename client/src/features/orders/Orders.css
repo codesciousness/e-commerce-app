@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
+    min-width: 300px;
 }
 
 .Orders__heading {

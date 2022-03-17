@@ -4,6 +4,7 @@
     align-items: center;
     border: 1px solid black;
     border-radius: 10px;
+    min-width: 300px;
     margin: 1rem 0;
     padding: 2rem;
 }
