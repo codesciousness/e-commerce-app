@@ -1,0 +1,62 @@
+.Navbar {
+    width: 100%;
+    height: 75px;
+    background: white;
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid lightseagreen;
+    overflow: hidden;
+}
+  
+.Navbar__title {
+    font-family: Hal;
+    font-size: 2rem;
+    margin: auto 0.75rem;
+}
+  
+.Navbar__list {
+    align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+  
+.Navbar__li {
+    margin: auto 0.75rem;
+}
+  
+.Navbar__div {
+    text-align: center;
+    cursor: pointer;
+}
+  
+.Navbar__div > .fas {
+    margin-bottom: 0.5rem;
+}
+  
+.Navbar__login__button, .Navbar__logout__button {
+    border: 1px solid black;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    font-size: 1.1rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+  
+.Navbar__login__button:hover {
+    background-color: lightseagreen;
+    color: black;
+}
+  
+.Navbar__logout__button:hover {
+    background-color: palevioletred;
+    color: black;
+}

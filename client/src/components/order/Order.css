@@ -36,6 +36,9 @@
     background-color: black;
     color: white;
     font-size: 1.25rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
@@ -55,4 +58,8 @@
     min-width: 250px;
     min-height: 250px;
     overflow: hidden;
+}
+
+.Order__shipping__info, .Order__total {
+    margin-bottom: 1rem;
 }

@@ -1,0 +1,7 @@
+.Header {
+    min-height: 70vh;
+    background: url(../../resources/images/joshua-rawson-harris-YNaSz-E7Qss-unsplash.jpg) no-repeat;
+    background-size: cover;
+    background-position: 50% 30%;
+    border-bottom: 2px solid black;
+}

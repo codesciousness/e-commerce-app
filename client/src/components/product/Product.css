@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
     padding: 1rem;
     margin: 2rem;
@@ -30,12 +31,17 @@
     align-items: center;
 }
 
+.Product__name, .Product__inCart__name, .Product__details__name {
+    font-family: Ikaros;
+}
+
 .Product__name, .Product__price {
     margin: 0.25rem 0;
 }
 
 .Product__price {
     font-size: 1.25rem;
+    margin: 1rem 0;
 }
 
 .Product__button {
@@ -46,6 +52,8 @@
     background-color: black;
     color: white;
     font-size: 1.25rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
@@ -75,10 +83,6 @@
     padding: 1rem;
 }
 
-.Product__inCart__name, .Product__details__name {
-    font-weight: lighter;
-}
-
 .Product__inCart__price, .Product__details__category, .Product__details__price {
     font-size: 1.25rem;
 }
@@ -90,6 +94,7 @@
 .Product__inCart__container, .Product__details__main__container {
     display: grid;
     place-items: center;
+    text-align: center;
 }
 
 .Product__inCart__label, .Product__details__label {
@@ -97,6 +102,7 @@
     font-size: 0.8rem;
     padding: 0.25rem;
     border-radius: 5px;
+    margin-bottom: 0.5rem;
 }
 
 .Product__inCart__quantity__container {

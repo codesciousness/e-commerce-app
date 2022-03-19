@@ -37,24 +37,9 @@
     width: 100%;
 }
 
-.Checkout__input, .Checkout__button {
+.Checkout__input {
     border: 1px solid black;
     padding: 0.75rem;
     border-radius: 5px;
     margin: 0.5rem;
-}
-
-.Checkout__button {
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    letter-spacing: 2px;
-    margin-top: 2rem;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Checkout__button:hover {
-    background-color: lightseagreen;
-    color: black;
 }

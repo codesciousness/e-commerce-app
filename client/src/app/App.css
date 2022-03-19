@@ -1,3 +1,13 @@
+@font-face {
+  font-family: Hal;
+  src: url(../resources/fonts/Hal/Hal.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: Ikaros;
+  src: url(../resources/fonts/Ikaros/Ikaros.ttf) format('truetype');
+}
+
 /* Universal Styles */
 
 * , *::before, *::after {
@@ -9,6 +19,7 @@
 
 html {
   font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -26,51 +37,6 @@ a:hover {
   color: lightseagreen;
 }
 
-.App__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid black;
-  padding: 1rem;
-}
-
-.App__navbar__list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style: none;
-}
-
-.App__navbar__li {
-  margin: auto 1rem;
-}
-
-.App__navbar__div {
-  text-align: center;
-  cursor: pointer;
-}
-
-.App__navbar__div > .fas {
-  margin-bottom: 0.5rem;
-}
-
-.App__login__button, .App__logout__button {
-  border: 1px solid black;
-  padding: 0.5rem 0.75rem;
-  border-radius: 5px;
-  background-color: black;
-  color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.App__login__button:hover {
-  background-color: lightseagreen;
-  color: black;
-}
-
-.App__logout__button:hover {
-  background-color: palevioletred;
-  color: black;
+.App__main {
+  padding-top: 75px;
 }
