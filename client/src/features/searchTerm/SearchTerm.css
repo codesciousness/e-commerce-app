@@ -28,3 +28,10 @@
         width: 80%;
     }
 }
+
+@media only screen and (max-width: 350px) {
+
+    .SearchTerm {
+        min-width: 200px;
+    }
+}

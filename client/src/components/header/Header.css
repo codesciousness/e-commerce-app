@@ -1,7 +1,161 @@
 .Header {
     min-height: 70vh;
-    background: url(../../resources/images/joshua-rawson-harris-YNaSz-E7Qss-unsplash.jpg) no-repeat;
-    background-size: cover;
-    background-position: 50% 30%;
     border-bottom: 2px solid black;
+    position: relative;
+}
+
+.Header__slides {
+    height: 70vh;
+    overflow: hidden;
+}
+
+.Header__slide {
+    display: none;
+    width: 100%;
+    position: relative;
+    top: -30%;
+}
+
+.Header__dots__nav {
+    position: absolute;
+    left: 47%;
+    top: 60vh;
+}
+
+.Header__dots {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: background-color 0.6s ease;
+}
+
+.-active {
+    background-color: rgb(220, 220, 240);
+}
+
+/* Media Queries */
+
+@media only screen and (max-width: 1200px) {
+
+    .Header__slide {
+        top: 0%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+
+    .Header {
+        min-height: 60vh;
+    }
+    
+    .Header__slides {
+        height: 60vh;
+    }
+
+    .Header__dots__nav {
+        top: 50vh;
+    }
+}
+
+@media only screen and (max-width: 775px) {
+
+    .Header {
+        min-height: 50vh;
+    }
+    
+    .Header__slides {
+        height: 50vh;
+    }
+
+    .Header__dots__nav {
+        top: 40vh;
+    }
+}
+
+@media only screen and (max-width: 650px) {
+
+    .Header {
+        min-height: 40vh;
+    }
+    
+    .Header__slides {
+        height: 40vh;
+    }
+
+    .Header__dots__nav {
+        top: 35vh;
+    }
+}
+
+@media only screen and (max-width: 515px) {
+
+    .Header {
+        min-height: 30vh;
+    }
+    
+    .Header__slides {
+        height: 30vh;
+    }
+
+    .Header__dots__nav {
+        left: 43%;
+        top: 25vh;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+
+    .Header {
+        min-height: 25vh;
+    }
+    
+    .Header__slides {
+        height: 25vh;
+    }
+
+    .Header__dots__nav {
+        top: 20vh;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+
+    .Header__dots__nav {
+        left: 40%;
+    }
+}
+
+@media only screen and (max-width: 315px) {
+
+    .Header {
+        min-height: 20vh;
+    }
+    
+    .Header__slides {
+        height: 20vh;
+    }
+
+    .Header__dots__nav {
+        top: 15vh;
+    }
+}
+
+@media only screen and (max-width: 260px) {
+
+    .Header {
+        min-height: 15vh;
+    }
+    
+    .Header__slides {
+        height: 15vh;
+    }
+
+    .Header__dots__nav {
+        top: 12vh;
+    }
 }

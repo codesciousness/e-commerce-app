@@ -26,6 +26,7 @@
 }
 
 .Checkout__address__heading, .Checkout__payment__heading {
+    text-align: center;
     margin: 1rem 0;
 }
 
@@ -42,4 +43,34 @@
     padding: 0.75rem;
     border-radius: 5px;
     margin: 0.5rem;
+}
+
+@media only screen and (max-width: 1100px) {
+
+    .Checkout__form {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .Checkout__form {
+        width: 95%;
+    }
+}
+
+@media only screen and (max-width: 950px) {
+
+    .Checkout {
+        padding: 2rem 0;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    .Checkout__form {
+        width: 90%;
+        min-width: 200px;
+        padding: 1rem;
+    }
 }

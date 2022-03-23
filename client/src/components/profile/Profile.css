@@ -42,6 +42,8 @@
 
 .Profile__button {
     width: 25%;
+    max-width: 300px;
+    min-width: 200px;
     background-color: black;
     color: white;
     font-size: 1.25rem;
@@ -64,4 +66,18 @@
 
 .Profile__password__dontmatch {
     border: 1px solid red;
+}
+
+@media only screen and (max-width: 500px) {
+
+    .Profile {
+        padding: 2rem 0;
+    }
+
+    .Profile__form {
+        margin: 1rem auto;
+        padding: 0;
+        width: 95%;
+        min-width: 200px;
+    }
 }

@@ -8,6 +8,11 @@
     background-color: whitesmoke;
     padding: 2rem;
 }
+
+.Login__title, .Login__registerLink {
+    text-align: center;
+}
+
 .Login__form {
     display: flex;
     flex-direction: column;
@@ -53,4 +58,20 @@
 .Login__google__button:hover {
     background-color: lightsteelblue;
     color: black;
+}
+
+@media only screen and (max-width: 400px) {
+
+    .Login {
+        padding: 2rem 0;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    
+    .Login__form {
+        width: 90%;
+        min-width: 200px;
+        padding: 2rem 1rem;
+    }
 }

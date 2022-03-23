@@ -4,8 +4,9 @@
     align-items: center;
     border: 1px solid black;
     border-radius: 10px;
+    width: 80%;
     min-width: 300px;
-    margin: 1rem 0;
+    margin: 1rem auto;
     padding: 2rem;
 }
 
@@ -50,4 +51,45 @@
 
 .OrderItem__total {
     font-weight: bold;
+}
+
+@media only screen and (max-width: 1250px) {
+
+    .OrderItem {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .OrderItem {
+        width: 95%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+
+    .OrderItem {
+        width: 300px;
+    }
+
+    .OrderItem, .OrderItem__info {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .OrderItem__container {
+        margin: 0.5rem auto;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+
+    .OrderItem {
+        padding: 0;
+        width: 252px;
+        min-width: 252px;
+        overflow: hidden;
+    }
 }

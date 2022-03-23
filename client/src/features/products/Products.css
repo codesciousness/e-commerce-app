@@ -1,6 +1,5 @@
 .Products {
     width: 100%;
-    min-width: 300px;
     margin: auto;
     padding: 2rem;
     text-align: center;
@@ -28,4 +27,31 @@
 
 .Products li {
     list-style: none;
+}
+
+/* Media Queries */
+
+@media only screen and (max-width: 600px) {
+
+    .Products__label {
+        display: block;
+    }
+    
+    .Products__category, .Products__sort {
+        margin: 1rem 0;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+
+    .Products {
+        padding: 0.5rem;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+
+    .Products {
+        padding: 0;
+    }
 }

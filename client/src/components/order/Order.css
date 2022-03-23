@@ -30,6 +30,7 @@
 }
 
 .Order__button {
+    min-width: 175px;
     border: 1px solid black;
     padding: 0.5rem 0.75rem;
     border-radius: 5px;
@@ -62,4 +63,56 @@
 
 .Order__shipping__info, .Order__total {
     margin-bottom: 1rem;
+}
+
+@media only screen and (max-width: 1250px) {
+
+    .Order {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .Order {
+        width: 95%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+
+    .Order {
+        width: 300px;
+    }
+
+    .Order__info, .Order__container {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .Order__info > * {
+        margin: 0.25rem auto;
+    }
+
+    .Order__address, .Order__payment {
+        margin: 1rem auto;
+    }
+
+    .Order__shipping__info {
+        margin-top: 0.5rem;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+
+    .Order {
+        padding: 0;
+        width: 252px;
+        min-width: 252px;
+    }
+
+    .Order__container {
+        padding-top: 0;
+    }
 }

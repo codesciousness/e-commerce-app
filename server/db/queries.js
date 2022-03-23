@@ -95,7 +95,6 @@ const getUserById = (req, res, next) => {
 
 const updateUser = (req, res, next) => {
     const { username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone } = req.body.userProfile;
-    console.log(req.body.userProfile);
     if (!username || !firstName || !lastName || !email) {
         return res.status(400).send('Please fill out all required fields.');
     }

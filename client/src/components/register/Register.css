@@ -8,6 +8,11 @@
     background-color: whitesmoke;
     padding: 2rem;
 }
+
+.Register__title, .Register__loginLink {
+    text-align: center;
+}
+
 .Register__form {
     display: flex;
     flex-direction: column;
@@ -53,4 +58,20 @@
 .Register__google__button:hover {
     background-color: lightsteelblue;
     color: black;
+}
+
+@media only screen and (max-width: 400px) {
+
+    .Register {
+        padding: 2rem 0;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    
+    .Register__form {
+        width: 90%;
+        min-width: 200px;
+        padding: 2rem 1rem;
+    }
 }

@@ -4,7 +4,6 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    min-width: 300px;
 }
 
 .Orders__heading {
@@ -23,7 +22,7 @@
     border: 1px solid black;
     padding: 1rem;
     border-radius: 5px;
-    margin: 1rem 3rem 1rem 1rem;
+    margin: 1rem;
     font-size: 1.25rem;
     cursor: pointer;
 }
@@ -34,4 +33,30 @@
 
 .Orders li {
     list-style: none;
+}
+
+@media only screen and (max-width: 400px) {
+
+    .Orders {
+        padding: 2rem 0;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+
+    .Orders__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .Orders__label {
+        display: block;
+        margin-top: 2rem;
+    }
+    
+    .Orders__sort {
+        margin: 1rem auto;
+    }
 }

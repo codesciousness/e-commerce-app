@@ -4,7 +4,8 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    min-width: 300px;
+    width: 100%;
+    margin: auto;
 }
 
 .OrderDetail__heading {
@@ -13,13 +14,22 @@
 
 .OrderDetail__item__heading {
     margin-top: 1rem;
+    text-align: center;
 }
 
 .OrderDetail__list {
-    width: 80%;
+    width: 100%;
     margin: auto;
 }
 
 .OrderDetail li {
     list-style: none;
+}
+
+
+@media only screen and (max-width: 400px) {
+
+    .OrderDetail {
+        padding: 2rem 0;
+    }
 }

@@ -9,6 +9,7 @@
     padding: 1rem;
     border-bottom: 1px solid lightseagreen;
     overflow: hidden;
+    z-index: 1;
 }
   
 .Navbar__title {
@@ -16,9 +17,12 @@
     font-size: 2rem;
     margin: auto 0.75rem;
 }
+
+.Navbar__div.home__icon {
+    display: none;
+}
   
 .Navbar__list {
-    align-self: flex-end;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,4 +63,49 @@
 .Navbar__logout__button:hover {
     background-color: palevioletred;
     color: black;
+}
+
+@media only screen and (max-width: 700px) {
+    
+    .Navbar {
+        justify-content: center;
+    }
+
+    .Navbar__title {
+        display: none;
+    }
+    
+    .Navbar__div.home__icon {
+        display: block;
+        margin-right: 0.3rem;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    li:nth-child(4) {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 415px) {
+
+    .Navbar__div p {
+        display: none;
+    }
+
+    .fa-sign-in-alt, .fa-sign-out-alt {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+
+    .Navbar__div.home__icon {
+        margin: auto 0.5rem;
+    }
+
+    .Navbar__li {
+        margin: auto 0.5rem;
+    }
 }
