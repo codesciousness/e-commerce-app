@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Order.css';
-import Loader from '../loader/Loader';
 import Error from '../error/Error';
-import { cancelOrder, setOrderId, clearOrder, selectOrders, selectCancelingOrder, selectCancelOrderError } from '../../features/orders/ordersSlice';
+import { cancelOrder, setOrderId, clearOrder, selectOrders, selectCancelOrderError } from '../../features/orders/ordersSlice';
 import { selectUserId } from '../../features/users/usersSlice';
 
 const Order = ({ order }) => {
-    const cancelingOrder = useSelector(selectCancelingOrder);
     const cancelOrderError = useSelector(selectCancelOrderError);
     const orders = useSelector(selectOrders);
     const userId = useSelector(selectUserId);
@@ -31,13 +29,6 @@ const Order = ({ order }) => {
         }
     }, [orders, orderId, dispatch]);
 
-    if (cancelingOrder) {
-        return (
-            <section className="Order">
-                <Loader />
-            </section>
-        );
-    }
     if (Object.entries(order).length === 0) return null;
     return (
         <section className="Order">

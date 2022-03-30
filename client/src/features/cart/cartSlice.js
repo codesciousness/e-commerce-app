@@ -24,9 +24,9 @@ async ({ cartId, userId, productId, cartQuantity }, { rejectWithValue }) => {
 });
 
 export const checkout = createAsyncThunk('cart/checkout',
-async ({ cartId, userId, address, payment }, { rejectWithValue }) => {
+async ({ cartId, userId, address, paymentInfo }, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`/users/${userId}/cart/${cartId}/checkout`, { userId, address, payment });
+        const response = await axios.post(`/users/${userId}/cart/${cartId}/checkout`, { userId, address, paymentInfo });
         return response.data;
     }
     catch (err) {

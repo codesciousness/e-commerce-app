@@ -64,11 +64,10 @@ export const checkExpDate = date => {
   return regexp.test(date);
 };
 
-export const validateCard = (cc, cvv, type) => {
+export const validateCard = (cc, type) => {
   const cardArr = stringToArray(cc);
   const validCard = checkLuhn(cardArr);
-  const validCVV = checkCVV(cvv);
   const cardType = creditCardType(cc);
   const typeMatch = cardType === type;
-  return validCard && validCVV && typeMatch;
+  return validCard && typeMatch;
 };

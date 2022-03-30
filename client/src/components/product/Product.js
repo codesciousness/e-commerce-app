@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Product.css';
 import { setProductId } from '../../features/products/productsSlice';
 import { loadCart, updateCart, selectCartId } from '../../features/cart/cartSlice';
@@ -11,8 +11,9 @@ const Product = ({ product, display }) => {
     const [quantity, setQuantity] = useState(product.cart_quantity);
     const cartId = useSelector(selectCartId);
     const userId = useSelector(selectUserId);
-    const dispatch = useDispatch();
     const productId = product.product_id;
+    const dispatch = useDispatch();
+    let navigate = useNavigate();
 
     const handleProductClick = () => {
         dispatch(setProductId(productId));
@@ -31,7 +32,10 @@ const Product = ({ product, display }) => {
     };
 
     const handleCartClick = () => {
-        if (cartQuantity) {
+        if (!userId) {
+            navigate("/login");
+        }
+        else if (cartQuantity) {
             setCartQuantity(prev => prev + 1);
         }
         else {

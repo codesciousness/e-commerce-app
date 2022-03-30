@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Header.css';
 import img1 from '../../resources/images/joshua-rawson-harris-YNaSz-E7Qss-unsplash.jpg';
 import img2 from '../../resources/images/brooke-lark-W1B2LpQOBxA-unsplash.jpg';
@@ -6,8 +6,9 @@ import img3 from '../../resources/images/freestocks-VFrcRtEQKL8-unsplash.jpg';
 import img4 from '../../resources/images/justin-lim-JKjBsuKpatU-unsplash.jpg';
 
 const Header = () => {
-    let timeout;
-    let slideIndex = 0;
+    let slideIndex = 0
+    let dotClick = false;
+    const intervals = [];
 
     const handleClick = ({ target }) => {
         if (target.id === 'dot1') {
@@ -22,8 +23,8 @@ const Header = () => {
         else if (target.id === 'dot4') {
             slideIndex = 3;
         }
-        clearTimeout(timeout);
         showSlides();
+        dotClick = true;
     };
     
     const showSlides = () => {
@@ -44,10 +45,23 @@ const Header = () => {
             slides[slideIndex-1].style.display = 'block';
             dots[slideIndex-1].className += ' -active';
         }
-        timeout = setTimeout(showSlides, 5000);
     };
 
-    showSlides();
+    useEffect(() => {
+        const interval = setInterval(showSlides, 5000);
+        intervals.push(interval);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        if (dotClick) {
+            intervals.forEach(clearInterval);
+            const interval = setInterval(showSlides, 5000);
+            intervals.push(interval);
+            dotClick = false;
+            return () => clearInterval(interval);
+        }
+    }, [dotClick]);
 
     return (
         <header className="Header">

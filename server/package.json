@@ -26,6 +26,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.1",
+    "stripe": "^8.213.0",
     "swagger-ui-express": "^4.3.0",
     "uuid": "^8.3.2"
   }
