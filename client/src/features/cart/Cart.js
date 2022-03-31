@@ -132,6 +132,7 @@ const Cart = () => {
                 dispatch(clearCartStatusUpdates());
             }, 3000);
         }
+        return () => dispatch(clearCartStatusUpdates());
     }, [checkoutSuccess, cartId, userId, dispatch, navigate]);
 
     if (checkoutSuccess) {

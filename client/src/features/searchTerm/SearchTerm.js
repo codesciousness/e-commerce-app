@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './SearchTerm.css';
 import { setSearchTerm, clearSearchTerm, selectSearchTerm } from './searchTermSlice';
@@ -14,6 +14,10 @@ const SearchTerm = () => {
     const handleClick = () => {
         dispatch(clearSearchTerm());
     };
+
+    useEffect(() => {
+        return () => dispatch(clearSearchTerm());
+    }, [dispatch]);
 
     return (
         <form className="SearchTerm">

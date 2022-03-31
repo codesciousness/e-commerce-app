@@ -7,7 +7,7 @@ import Loader from '../../components/loader/Loader';
 import Error from '../../components/error/Error';
 import { loadOrders, resetOrders, selectOrders, selectLoadingOrders, selectLoadOrdersSuccess, selectLoadOrdersError,
         selectCancelOrderSuccess, clearOrdersStatusUpdates } from './ordersSlice';
-import { selectUserId, selectLoginSuccess, selectLogoutSuccess, selectGoogleLoginSuccess } from '../users/usersSlice';
+import { selectUserId, selectLoginSuccess, selectLogoutSuccess } from '../users/usersSlice';
 import { selectCheckoutSuccess } from '../cart/cartSlice';
 
 const Orders = () => {
@@ -21,7 +21,6 @@ const Orders = () => {
     const userId = useSelector(selectUserId);
     const loginSuccess = useSelector(selectLoginSuccess);
     const logoutSuccess = useSelector(selectLogoutSuccess);
-    const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();
@@ -40,7 +39,7 @@ const Orders = () => {
     }, [sort, userId, dispatch, navigate]);
 
     useEffect(() => {
-        if (cancelOrderSuccess || loginSuccess || googleLoginSuccess || checkoutSuccess) {
+        if (cancelOrderSuccess || loginSuccess || checkoutSuccess) {
             dispatch(loadOrders({ userId, sort }));
         }
         if (logoutSuccess) {
@@ -49,7 +48,8 @@ const Orders = () => {
         if (loadOrdersSuccess || cancelOrderSuccess) {
             dispatch(clearOrdersStatusUpdates());
         }
-    }, [sort, loadOrdersSuccess, cancelOrderSuccess, userId, loginSuccess, logoutSuccess, googleLoginSuccess, checkoutSuccess, dispatch]);
+        return () => dispatch(clearOrdersStatusUpdates());
+    }, [sort, loadOrdersSuccess, cancelOrderSuccess, userId, loginSuccess, logoutSuccess, checkoutSuccess, dispatch]);
 
     if (loadingOrders) {
         return (

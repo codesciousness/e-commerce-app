@@ -16,9 +16,6 @@ export const registerUser = createAsyncThunk('users/registerUser',
 async ({ firstName, lastName, email, username, password }, { rejectWithValue }) => {
     try {
         const response = await axios.post('/users/register', { firstName, lastName, email, username, password });
-        if (response.ok) {
-            login({ username, password });   
-        }
         return response.data;
     }
     catch (err) {
@@ -70,6 +67,12 @@ async () => {
     window.location = 'http://localhost:4001/auth/google';
 });
 
+export const session = createAsyncThunk('users/session',
+async () => {
+    const response = await axios.get('/auth/session');
+    return response.data;
+});
+
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
@@ -92,9 +95,9 @@ const usersSlice = createSlice({
         loggingOut: false,
         logoutSuccess: false,
         logoutError: false,
-        googleLoggingIn: false,
-        googleLoginSuccess: false,
-        googleLoginError: false
+        gettingSession: false,
+        sessionSuccess: false,
+        sessionError: false
     },
     reducers: {
         clearUsersStatusUpdates: (state) => {
@@ -109,8 +112,8 @@ const usersSlice = createSlice({
             state.loginError = false;
             state.logoutSuccess = false;
             state.logoutError = false;
-            state.googleLoginSuccess = false;
-            state.googleLoginError = false;
+            state.sessionSuccess = false;
+            state.sessionError = false;
             return state;
         }
     },
@@ -201,18 +204,20 @@ const usersSlice = createSlice({
             state.loggingOut = false;
             state.logoutError = true;
         },
-        [googleLogin.pending]: (state, action) => {
-            state.googleLoggingIn = true;
-            state.googleLoginError = false;
+        [session.pending]: (state, action) => {
+            state.gettingSession = true;
+            state.sessionError = false;
         },
-        [googleLogin.fulfilled]: (state, action) => {
-            state.googleLoggingIn = false;
-            state.googleLoginSuccess = true;
-            state.googleLoginError = false;
+        [session.fulfilled]: (state, action) => {
+            state.gettingSession = false;
+            state.sessionSuccess = true;
+            state.sessionError = false;
+            state.user = action.payload;
+            state.userId = action.payload.user_id;
         },
-        [googleLogin.rejected]: (state, action) => {
-            state.googleLoggingIn = false;
-            state.googleLoginError = true;
+        [session.rejected]: (state, action) => {
+            state.gettingSession = false;
+            state.sessionError = true;
         }
     }
 });
@@ -239,6 +244,6 @@ export const selectLoginError = state => state.users.loginError;
 export const selectLoggingOut = state => state.users.loggingOut;
 export const selectLogoutSuccess = state => state.users.logoutSuccess;
 export const selectLogoutError = state => state.users.logoutError;
-export const selectGoogleLoggingIn = state => state.users.googleLoggingIn;
-export const selectGoogleLoginSuccess = state => state.users.googleLoginSuccess;
-export const selectGoogleLoginError = state => state.users.googleLoginError;
+export const selectGettingSession = state => state.users.gettingSession;
+export const selectSessionSuccess = state => state.users.sessionSuccess;
+export const selectSessionError = state => state.users.sessionError;

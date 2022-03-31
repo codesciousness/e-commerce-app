@@ -38,6 +38,7 @@ const Products = () => {
         if (loadProductsSuccess) {
             dispatch(clearProdsStatusUpdates());
         }
+        return () => dispatch(clearProdsStatusUpdates());
     }, [loadProductsSuccess, dispatch]);
 
     if (loadingProducts) {

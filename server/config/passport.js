@@ -55,7 +55,7 @@ module.exports = (passport) => {
       }
       if (result.rows.length > 0) {
         const user = result.rows[0];
-        done(null, user, {message: `Email address: ${user.email} is already registered. Please login.`});
+        done(null, user);
       }
       else {
         bcrypt.genSalt(saltRounds, function(err, salt) {

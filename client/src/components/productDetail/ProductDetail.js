@@ -25,6 +25,7 @@ const ProductDetail = () => {
         if (loadProductSuccess) {
             dispatch(clearProdsStatusUpdates());
         }
+        return () => dispatch(clearProdsStatusUpdates());
     }, [loadProductSuccess, dispatch]);
 
     if (loadingProduct) {

@@ -6,7 +6,7 @@ import Loader from '../../components/loader/Loader';
 import Error from '../error/Error';
 import { loadUserById, updateUser, changePassword, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
         selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError,  selectChangePasswordSuccess, selectChangePasswordError,
-        selectLoginSuccess, selectGoogleLoginSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+        selectLoginSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Profile = () => {
     const user = useSelector(selectUser);
@@ -34,7 +34,6 @@ const Profile = () => {
     const changePasswordSuccess = useSelector(selectChangePasswordSuccess);
     const changePasswordError = useSelector(selectChangePasswordError);
     const loginSuccess = useSelector(selectLoginSuccess);
-    const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -135,7 +134,7 @@ const Profile = () => {
     }, []);
 
     useEffect(() => {
-        if (registerUserSuccess || updateUserSuccess || loginSuccess || googleLoginSuccess) {
+        if (registerUserSuccess || updateUserSuccess || loginSuccess) {
             dispatch(loadUserById(userId));
         }
         if (changePasswordSuccess) {
@@ -145,7 +144,8 @@ const Profile = () => {
         if (loadUserError || updateUserSuccess || changePasswordSuccess) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [userId, loadUserError, registerUserSuccess, updateUserSuccess, changePasswordSuccess, loginSuccess, googleLoginSuccess, dispatch])
+        return () => dispatch(clearUsersStatusUpdates());
+    }, [userId, loadUserError, registerUserSuccess, updateUserSuccess, changePasswordSuccess, loginSuccess, dispatch])
 ;
     if (loadingUser || updatingUser) {
         return (

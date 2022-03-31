@@ -1,9 +1,12 @@
 const pg = require('./index');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 const { v4: uuidv4 } = require('uuid');
 const { validateCard } = require('../util/credit-card');
 require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST);
+const jwt = require('jsonwebtoken');
+const { generateAccessToken } = require('../util/jwt');
 
 const getUsers = (req, res, next) => {
     pg.query('SELECT * FROM users', (err, result) => {
@@ -36,7 +39,7 @@ const registerUser = (req, res, next) => {
         }
         if (result.rows.length > 0) {
             const user = result.rows[0];
-            return res.send(user);
+            return res.status(400).send(`Email address: ${user.email} is already registered. Please login.`);
         }
         bcrypt.genSalt(saltRounds, function(err, salt) {
             if (err) {
@@ -58,13 +61,47 @@ const registerUser = (req, res, next) => {
                             if (!newUser) {
                                 return res.status(500).send('Internal Server Error');
                             }
-                            res.status(201).send(newUser);
+                            next();
                         });
                     }
                 });
             };
         });
     });
+};
+
+const loginUser = (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) return next(err);
+        const { username, password } = req.body;
+        if (!username || !password) {
+            info.message = 'Please fill out all fields.';
+        }
+        if (!user) {
+            return res.status(401).send(info.message);
+        }
+        req.logIn(user, err => {
+            if (err) return next(err);
+        });
+        //const token = generateAccessToken({ user: user });
+        //res.json(token);
+        res.send(user);
+    })(req, res, next);
+};
+
+const logoutUser = (req, res) => {
+    req.session = null;
+    req.logout();
+    res.send();
+};
+
+const getSession = (req, res) => {
+    if (req.isAuthenticated() && req.session) {
+        res.send(req.user);
+    }
+    else {
+        res.status(401).send('Not Authorized.');
+    }
 };
   
 const setUserId = (req, res, next, id) => {
@@ -591,6 +628,9 @@ const deleteOrder = (req, res, next) => {
 module.exports = {
     getUsers,
     registerUser,
+    loginUser,
+    logoutUser,
+    getSession,
     setUserId,
     getUserById,
     updateUser,

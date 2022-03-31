@@ -19,7 +19,7 @@ const authenticate = (req, res, next) => {
 
 // POST /users/register to create a new user and save user to the database
 
-usersRouter.post('/register', db.registerUser);
+usersRouter.post('/register', db.registerUser, db.loginUser);
 
 //userId param
 

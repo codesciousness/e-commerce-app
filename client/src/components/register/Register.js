@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 import Loader from '../../components/loader/Loader';
 import Error from '../error/Error';
-import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, selectGoogleLoggingIn, 
-        selectGoogleLoginSuccess, selectGoogleLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, 
+        clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Register = () => {
     const [firstName, setFirstName] = useState('');
@@ -16,9 +16,6 @@ const Register = () => {
     const registeringUser = useSelector(selectRegisteringUser);
     const registerUserSuccess = useSelector(selectRegisterUserSuccess);
     const registerUserError = useSelector(selectRegisterUserError);
-    const googleLoggingIn = useSelector(selectGoogleLoggingIn);
-    const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
-    const googleLoginError = useSelector(selectGoogleLoginError);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -51,20 +48,19 @@ const Register = () => {
     };
 
     useEffect(() => {
-        if (registerUserSuccess || googleLoginSuccess) {
+        if (registerUserSuccess) {
             setFirstName('');
             setLastName('');
             setEmail('');
             setUsername('');
             setPassword('');
             navigate('/');
-        }
-        if (registerUserSuccess || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [registerUserSuccess, googleLoginSuccess, googleLoginError, dispatch, navigate]);
+        return () => dispatch(clearUsersStatusUpdates());
+    }, [registerUserSuccess, dispatch, navigate]);
 
-    if (registeringUser || googleLoggingIn) {
+    if (registeringUser) {
         return (
             <section className="Register">
                 <Loader />

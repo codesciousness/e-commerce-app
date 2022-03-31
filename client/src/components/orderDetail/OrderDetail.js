@@ -29,6 +29,7 @@ const OrderDetail = () => {
         if (loadOrderSuccess) {
             dispatch(clearOrdersStatusUpdates());
         }
+        return () => dispatch(clearOrdersStatusUpdates());
     }, [loadOrderSuccess, logoutSuccess, dispatch]);
 
     if (loadingOrder) {

@@ -4,8 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import Loader from '../loader/Loader';
 import Error from '../error/Error';
-import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, selectGoogleLoggingIn, 
-        selectGoogleLoginSuccess, selectGoogleLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -13,9 +12,6 @@ const Login = () => {
     const loggingIn = useSelector(selectLoggingIn);
     const loginSuccess = useSelector(selectLoginSuccess);
     const loginError = useSelector(selectLoginError);
-    const googleLoggingIn = useSelector(selectGoogleLoggingIn);
-    const googleLoginSuccess = useSelector(selectGoogleLoginSuccess);
-    const googleLoginError = useSelector(selectGoogleLoginError);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -39,17 +35,16 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (loginSuccess || googleLoginSuccess) {
+        if (loginSuccess) {
             setUsername('');
             setPassword('');
             navigate('/');
-        }
-        if (loginSuccess || googleLoginSuccess || googleLoginError) {
             dispatch(clearUsersStatusUpdates());
         }
-    }, [loginSuccess, googleLoginSuccess, googleLoginError, dispatch, navigate]);
+        return () => dispatch(clearUsersStatusUpdates());
+    }, [loginSuccess, dispatch, navigate]);
 
-    if (loggingIn || googleLoggingIn) {
+    if (loggingIn) {
         return (
             <section className="Login">
                 <Loader />
