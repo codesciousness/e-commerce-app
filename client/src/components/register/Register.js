@@ -48,6 +48,10 @@ const Register = () => {
     };
 
     useEffect(() => {
+        return () => dispatch(clearUsersStatusUpdates());
+    }, [dispatch]);
+
+    useEffect(() => {
         if (registerUserSuccess) {
             setFirstName('');
             setLastName('');
@@ -57,7 +61,6 @@ const Register = () => {
             navigate('/');
             dispatch(clearUsersStatusUpdates());
         }
-        return () => dispatch(clearUsersStatusUpdates());
     }, [registerUserSuccess, dispatch, navigate]);
 
     if (registeringUser) {

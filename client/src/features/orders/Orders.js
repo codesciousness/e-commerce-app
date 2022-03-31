@@ -48,7 +48,6 @@ const Orders = () => {
         if (loadOrdersSuccess || cancelOrderSuccess) {
             dispatch(clearOrdersStatusUpdates());
         }
-        return () => dispatch(clearOrdersStatusUpdates());
     }, [sort, loadOrdersSuccess, cancelOrderSuccess, userId, loginSuccess, logoutSuccess, checkoutSuccess, dispatch]);
 
     if (loadingOrders) {

@@ -125,6 +125,10 @@ const Profile = () => {
     };
 
     useEffect(() => {
+        return () => dispatch(clearUsersStatusUpdates());
+    }, [dispatch]);
+
+    useEffect(() => {
         if (!userId) {
             navigate('/login');
         }
@@ -144,7 +148,6 @@ const Profile = () => {
         if (loadUserError || updateUserSuccess || changePasswordSuccess) {
             dispatch(clearUsersStatusUpdates());
         }
-        return () => dispatch(clearUsersStatusUpdates());
     }, [userId, loadUserError, registerUserSuccess, updateUserSuccess, changePasswordSuccess, loginSuccess, dispatch])
 ;
     if (loadingUser || updatingUser) {

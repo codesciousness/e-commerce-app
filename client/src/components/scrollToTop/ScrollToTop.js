@@ -6,6 +6,7 @@ import { selectCheckoutSuccess } from '../../features/cart/cartSlice';
 const ScrollToTop = (props) => {
   const checkoutSuccess = useSelector(selectCheckoutSuccess);
   const location = useLocation();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location, checkoutSuccess]);

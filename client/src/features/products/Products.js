@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Products.css';
 import Product from '../../components/product/Product';
 import SearchTerm from '../searchTerm/SearchTerm';
-import Loader from '../../components/loader/Loader';
+import ProductLoader from '../../components/productLoader/ProductLoader';
 import Error from '../../components/error/Error';
 import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsSuccess, selectLoadProductsError,
         clearProdsStatusUpdates } from './productsSlice';
@@ -12,6 +12,7 @@ import { selectSearchTerm } from '../searchTerm/searchTermSlice';
 const Products = () => {
     const categories = ['', 'Automotive', 'Beauty', 'Books', 'Electronics', 'Games', 'Garden', 'Grocery', 'Home', 'Fashion', 'Toys'];
     const sortOptions = ['', 'lowest', 'highest'];
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const [category, setCategory] = useState('');
     const [sort, setSort] = useState('');
     const products = useSelector(selectFilteredProducts);
@@ -38,13 +39,14 @@ const Products = () => {
         if (loadProductsSuccess) {
             dispatch(clearProdsStatusUpdates());
         }
-        return () => dispatch(clearProdsStatusUpdates());
     }, [loadProductsSuccess, dispatch]);
 
     if (loadingProducts) {
         return (
             <section className="Products">
-                <Loader />
+                <ul className="Products__list">
+                    {arr.map(num => <li key={num}><ProductLoader /></li>)}
+                </ul>
             </section>
         );
     }

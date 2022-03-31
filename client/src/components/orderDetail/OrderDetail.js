@@ -7,7 +7,7 @@ import Loader from '../loader/Loader';
 import Error from '../error/Error';
 import { loadOrderById, selectOrderId, selectOrder, selectLoadingOrder, selectLoadOrderSuccess, selectLoadOrderError, 
         clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
-import { selectUserId, selectLogoutSuccess } from '../../features/users/usersSlice';
+import { selectUserId } from '../../features/users/usersSlice';
 
 const OrderDetail = () => {
     const orderId = useSelector(selectOrderId);
@@ -16,7 +16,6 @@ const OrderDetail = () => {
     const loadOrderSuccess = useSelector(selectLoadOrderSuccess);
     const loadOrderError = useSelector(selectLoadOrderError);
     const userId  = useSelector(selectUserId);
-    const logoutSuccess  = useSelector(selectLogoutSuccess);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,8 +28,7 @@ const OrderDetail = () => {
         if (loadOrderSuccess) {
             dispatch(clearOrdersStatusUpdates());
         }
-        return () => dispatch(clearOrdersStatusUpdates());
-    }, [loadOrderSuccess, logoutSuccess, dispatch]);
+    }, [loadOrderSuccess, dispatch]);
 
     if (loadingOrder) {
         return (

@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './Home.css';
 import Header from '../header/Header';
 import Products from '../../features/products/Products';
-import { session, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { session, selectUserId } from '../../features/users/usersSlice';
 
 const Home = () => {
+    const userId = useSelector(selectUserId);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(session());
-        dispatch(clearUsersStatusUpdates());
-    }, [dispatch]);
+        if (!userId) {
+            dispatch(session());
+        }
+    }, [userId, dispatch]);
 
     return (
         <section className="Home">

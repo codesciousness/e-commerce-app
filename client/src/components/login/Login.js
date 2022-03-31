@@ -35,13 +35,16 @@ const Login = () => {
     };
 
     useEffect(() => {
+        return () => dispatch(clearUsersStatusUpdates());
+    }, [dispatch]);
+
+    useEffect(() => {
         if (loginSuccess) {
             setUsername('');
             setPassword('');
             navigate('/');
             dispatch(clearUsersStatusUpdates());
         }
-        return () => dispatch(clearUsersStatusUpdates());
     }, [loginSuccess, dispatch, navigate]);
 
     if (loggingIn) {

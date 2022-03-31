@@ -104,6 +104,10 @@ const Cart = () => {
     }
 
     useEffect(() => {
+        return () => dispatch(clearCartStatusUpdates());
+    }, [dispatch]);
+
+    useEffect(() => {
         if (!userId) {
             navigate('/login');
         }
@@ -132,7 +136,6 @@ const Cart = () => {
                 dispatch(clearCartStatusUpdates());
             }, 3000);
         }
-        return () => dispatch(clearCartStatusUpdates());
     }, [checkoutSuccess, cartId, userId, dispatch, navigate]);
 
     if (checkoutSuccess) {

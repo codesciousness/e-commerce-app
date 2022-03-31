@@ -1,0 +1,122 @@
+.ProductLoader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
+    padding: 1rem;
+    margin: 2rem;
+    width: 300px;
+    height: auto;
+    min-width: 300px;
+}
+
+.ProductLoader__category {
+    margin-bottom: 0.75rem;
+}
+
+.ProductLoader__category, .ProductLoader__info {
+    padding: 0.5rem;
+}
+
+.ProductLoader__image {
+    width: 250px;
+    height: 250px;
+    min-width: 250px;
+    min-height: 250px;
+    overflow: hidden;
+}
+
+.ProductLoader__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ProductLoader__name, .ProductLoader__price {
+    margin: 0.25rem auto;
+}
+
+.ProductLoader__price {
+    font-size: 1.25rem;
+    margin: 1rem auto;
+    padding: 0.25rem;
+}
+
+.ProductLoader__button {
+    min-width: 175px;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 0.5rem auto;
+    background-color: black;
+    color: white;
+    font-size: 1.25rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.ProductLoader__category,
+.ProductLoader__image, 
+.ProductLoader__name, 
+.ProductLoader__price, 
+.ProductLoader__button {
+    color:lightgray;
+    background: lightgray;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ProductLoader__category::before,
+.ProductLoader__image::before, 
+.ProductLoader__name::before, 
+.ProductLoader__price::before, 
+.ProductLoader__button::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, transparent 0%, #E8E8E8 50%, transparent 100%);
+    background-size: 300% 100%;
+    border-radius: 5px;
+    animation: loading 1s infinite;
+}
+
+@keyframes loading {
+    from {
+        background-position: 0 0;
+    }
+    to   {
+        background-position: 100% 0;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+
+    .ProductLoader {
+        margin: 1.5rem auto;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+
+    .ProductLoader {
+        margin: 1rem auto;
+        padding: 0.5rem;
+        width: 250px;
+        min-width: 250px;
+    }
+
+    .ProductLoader__image {
+        border-radius: 0;
+    }
+}
