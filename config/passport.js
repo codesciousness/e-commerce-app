@@ -3,7 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20');
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
-const keys = require('./keys');
+require('dotenv').config();
 
 module.exports = (passport) => {
   passport.use(new LocalStrategy((username, password, done) => {
@@ -31,8 +31,8 @@ module.exports = (passport) => {
   }));
 
   passport.use(new GoogleStrategy({
-    clientID: keys.google.clientID,
-    clientSecret: keys.google.clientSecret,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/redirect'
     }, (accessToken, refreshToken, profile, done) => {
     const userId = uuidv4();

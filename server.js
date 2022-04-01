@@ -49,7 +49,7 @@ app.use(session({
   name: 'sid',
   resave: false,
   saveUninitialized: false,
-  secret: keys.session.secret,
+  secret: process.env.SESSION_SECRET,
   cookie: {
     maxAge: oneDay,
     sameSite: true,
