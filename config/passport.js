@@ -33,7 +33,8 @@ module.exports = (passport) => {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/redirect'
+    callbackURL: '/auth/google/redirect',
+    proxy: true
     }, (accessToken, refreshToken, profile, done) => {
     const userId = uuidv4();
     const cartId = uuidv4();
