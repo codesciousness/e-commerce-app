@@ -64,7 +64,7 @@ async () => {
 
 export const googleLogin = createAsyncThunk('users/googleLogin',
 async () => {
-    window.location = 'http://localhost:4001/auth/google';
+    window.location = '/auth/google';
 });
 
 export const session = createAsyncThunk('users/session',

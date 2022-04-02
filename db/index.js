@@ -11,10 +11,18 @@ const devConfig = {
   idleTimeoutMillis: 30000
 };
 
-// Alternate option: const devConfig = `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+/* Alternate option: const devConfig = {
+  connectionString: `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  ssl: {
+    rejectUnauthorized: false
+  }
+};*/
 
 const prodConfig = {
-  connectionString: process.env.DATABASE_URL // heroku addon
+  connectionString: process.env.DATABASE_URL, // heroku addon
+  ssl: {
+    rejectUnauthorized: false
+  }
 };
 
 const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;
