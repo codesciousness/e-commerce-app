@@ -28,6 +28,7 @@ export default function App() {
             <Route path="profile" element={<Users />}/>
             <Route path="orders" element={<Orders />}/>
             <Route path="orders/:orderId" element={<OrderDetail />}/>
+            <Route path='*' element={<Home />}/>
           </Routes>
         </ScrollToTop>
       </main>

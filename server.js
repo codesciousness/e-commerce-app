@@ -10,7 +10,8 @@ const passport = require('passport');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const flash = require('connect-flash');
-const keys = require('./config/keys');
+const path = require('path');
+require('dotenv').config();
 const { PORT = 4001, NODE_ENV = 'development' } = process.env;
 const IN_PROD = NODE_ENV === 'production';
 const oneDay = 1000 * 60 * 60 * 24;
@@ -18,25 +19,26 @@ const corsOptions = {
   origin: ['http://localhost:4001/', 'http://localhost:3000/']
 };
 
-//Config dotenv
-require('dotenv').config();
-
 //Passport config
 require('./config/passport')(passport);
-
-app.use('/public', express.static('public'));
-
-app.get('/', (req, res, next) => { 
-  res.sendFile('index.html', { root: __dirname });
-});
 
 // Add middleware for handling CORS requests
 app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 
+// Serve server's index.html file
+/*app.get('/', (req, res, next) => { 
+  res.sendFile('index.html', { root: __dirname });
+});*/
+
+// Serve static content in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+};
+
 app.use(flash());
 
-// Add middware for parsing request bodies here:
+// Add middware for parsing request bodies
 app.use(bodyParser.json());
 
 // Logging
@@ -44,7 +46,7 @@ app.use(morgan('dev'));
 
 app.use(cookieParser());
 
-//Add middleware for sessions
+// Add middleware for sessions
 app.use(session({
   name: 'sid',
   resave: false,
@@ -60,15 +62,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Mount your existing apiRouter below.
+// Use apiRouter
 app.use(apiRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Add your code to start the server listening at PORT below:
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
+
+// Add code to start the server listening
 app.listen(PORT, () => {
   console.log(`Server listening on Port ${PORT}`);
-  //To generate jwt token secret: console.log(require('crypto').randomBytes(64).toString('hex'));
+  // To generate jwt token secret: console.log(require('crypto').randomBytes(64).toString('hex'));
 });
 
 module.exports = app;
