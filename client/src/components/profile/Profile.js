@@ -101,7 +101,7 @@ const Profile = () => {
         else if (target.name === "state") {
             setState(target.value);
         }
-        else if (target.name === "zip") {
+        else if (target.name === "zipcode") {
             setZip(target.value);
         }
         else if (target.name === "password") {
@@ -175,16 +175,16 @@ const Profile = () => {
                     <input className={lastName ? "Profile__input" : "Profile__input__required"} id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]" required
                     value={lastName} onChange={handleChange}/>
                     <label className="Profile__label" for="email">EMAIL</label>
-                    <input className={email ? "Profile__input" : "Profile__input__required"} id="email" name="email" placeholder="Enter your email address" type="email" required
+                    <input className={email ? "Profile__input" : "Profile__input__required"} id="email" name="email" placeholder="Email address" type="email" required
                     value={email} onChange={handleChange}/>
                     <label className="Profile__label" for="gender">GENDER</label>
-                    <input className="Profile__input" id="gender" name="gender" placeholder="Enter your gender" pattern="[A-Za-z]" 
+                    <input className="Profile__input" id="gender" name="gender" placeholder="Gender" pattern="[A-Za-z]" 
                     value={gender} onChange={handleChange}/>
                     <label className="Profile__label" for="dob">DATE OF BIRTH</label>
-                    <input className="Profile__input" id="dob" name="dob" placeholder="Enter your date of birth" 
+                    <input className="Profile__input" id="dob" name="dob" placeholder="Date of birth" 
                     value={dob} onChange={handleChange}/>
                     <label className="Profile__label" for="phone">PHONE NUMBER</label>
-                    <input className="Profile__input" id="phone" name="phone" placeholder="Enter your phone number" 
+                    <input className="Profile__input" id="phone" name="phone" placeholder="Phone number" 
                     value={phone} onChange={handleChange}/>
                     <label className="Profile__label" for="streetAddress">STREET ADDRESS</label>
                     <input className="Profile__input" id="streetAddress" name="streetAddress" placeholder="Street Address" 
