@@ -71,6 +71,7 @@ Backend:
 - Node: 16.14.0
 - Bcrypt: 5.0.1
 - Body Parser: 1.19.0
+- Connect Pg Simple: 7.0.0
 - Cookie Parser: 1.4.5
 - Cors: 2.8.5
 - Dotenv: 10.0.0

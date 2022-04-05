@@ -11,12 +11,14 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const flash = require('connect-flash');
 const path = require('path');
+const db = require('./db');
 require('dotenv').config();
 const { PORT = 4001, NODE_ENV = 'development' } = process.env;
 const IN_PROD = NODE_ENV === 'production';
 const oneDay = 1000 * 60 * 60 * 24;
 const corsOptions = {
-  origin: ['http://localhost:4001/', 'http://localhost:3000/']
+  origin: ['http://localhost:4001/', 'http://localhost:3000/', 'https://plus-ultra-store.herokuapp.com/'],
+  credentials: true
 };
 
 //Passport config
@@ -32,8 +34,9 @@ app.use(cors(corsOptions));
 });*/
 
 // Serve static content in production
-if (process.env.NODE_ENV === 'production') {
+if (IN_PROD) {
   app.use(express.static(path.join(__dirname, 'client/build')));
+  app.set('trust proxy', true);
 };
 
 app.use(flash());
@@ -48,14 +51,16 @@ app.use(cookieParser());
 
 // Add middleware for sessions
 app.use(session({
+  store: db.sessionHandler(session),
   name: 'sid',
   resave: false,
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET,
   cookie: {
+    httpOnly: IN_PROD,
     maxAge: oneDay,
     sameSite: true,
-    secure: IN_PROD,
+    secure: IN_PROD
   }
 }));
 

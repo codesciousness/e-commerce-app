@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const pgSession = require('connect-pg-simple');
 require('dotenv').config();
 
 const devConfig = {
@@ -21,6 +22,7 @@ const devConfig = {
 const prodConfig = {
   connectionString: process.env.DATABASE_URL, // heroku addon
   ssl: {
+    require: true,
     rejectUnauthorized: false
   }
 };
@@ -31,6 +33,10 @@ const pool = new Pool(config);
 
 module.exports = {
   query: (text, params, callback) => {
-    return pool.query(text, params, callback)
+    return pool.query(text, params, callback);
   },
+  sessionHandler: (session) => {
+    const pgs = pgSession(session);
+    return new pgs({pool});
+  }
 };

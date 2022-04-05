@@ -58,3 +58,11 @@ CREATE TABLE order_details (
 	item_price money NOT NULL,
 	PRIMARY KEY (order_id, product_id)
 );
+
+CREATE TABLE session (
+	sid varchar PRIMARY KEY,
+	sess json NOT NULL,
+	expire timestamp(6) NOT NULL
+);
+
+CREATE INDEX idx_session_expire ON session(expire);
