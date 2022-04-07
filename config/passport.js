@@ -11,7 +11,7 @@ module.exports = (passport) => {
     const values = [username];
     db.query(text, values, (err, result) => {
       if (err) {
-        return done(err);
+        return done(err, false, {message: 'Internal Server Error'});
       }
       if (result.rows.length > 0) {
         const user = result.rows[0];
@@ -52,7 +52,7 @@ module.exports = (passport) => {
     const saltRounds = 10;
     db.query(findText, findValues, (err, result) => {
       if (err) {
-        return done(err);
+        return done(err, false, {message: 'Internal Server Error'});
       }
       if (result.rows.length > 0) {
         const user = result.rows[0];
@@ -61,19 +61,19 @@ module.exports = (passport) => {
       else {
         bcrypt.genSalt(saltRounds, function(err, salt) {
           if (err) {
-            throw err;
+            return done(err, false, {message: 'Internal Server Error'});
           }
           else {
             bcrypt.hash(password, salt, function(err, hash) {
               if (err) {
-                throw err;
+                return done(err, false, {message: 'Internal Server Error'});
               }
               else {
                 const passwordHash = hash;
                 const addValues = [userId, googleId, cartId, username, passwordHash, firstName, lastName, email];
                 db.query(addText, addValues, (err, result) => {
                   if (err) {
-                    return done(err);
+                    return done(err, false, {message: 'Internal Server Error'});
                   }
                   const newUser = result.rows[0];
                   done(null, newUser);
@@ -95,7 +95,7 @@ module.exports = (passport) => {
     const values = [id];
     db.query(text, values, (err, result) => {
       if (err) {
-        return done(err);
+        return done(err, false, {message: 'Internal Server Error'});
       }
       const user = result.rows[0];
       done(null, user);

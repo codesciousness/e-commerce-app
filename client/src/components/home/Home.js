@@ -3,17 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import './Home.css';
 import Header from '../header/Header';
 import Products from '../../features/products/Products';
-import { session, selectUserId } from '../../features/users/usersSlice';
+import { session, selectUserId, selectSessionSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 
 const Home = () => {
     const userId = useSelector(selectUserId);
+    const sessionSuccess = useSelector(selectSessionSuccess);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (!userId) {
             dispatch(session());
         }
-    }, [userId, dispatch]);
+        if (sessionSuccess) {
+            dispatch(clearUsersStatusUpdates());
+        }
+    }, [userId, sessionSuccess, dispatch]);
 
     return (
         <section className="Home">

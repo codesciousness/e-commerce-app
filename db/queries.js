@@ -8,10 +8,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST);
 const jwt = require('jsonwebtoken');
 const { generateAccessToken } = require('../util/jwt');
 
-const getUsers = (req, res, next) => {
+const getUsers = (req, res) => {
     pg.query('SELECT * FROM users', (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         res.send(result.rows);
     });
@@ -35,7 +35,7 @@ const registerUser = (req, res, next) => {
     RETURNING *`;
     pg.query(findText, findValues, (err, result) => {
         if (err) {
-        return next(err);
+        return res.status(500).send('Internal Server Error');
         }
         if (result.rows.length > 0) {
             const user = result.rows[0];
@@ -43,22 +43,19 @@ const registerUser = (req, res, next) => {
         }
         bcrypt.genSalt(saltRounds, function(err, salt) {
             if (err) {
-                throw err;
+                return res.status(500).send('Internal Server Error');
             }
             else {
                 bcrypt.hash(password, salt, function(err, hash) {
                     if (err) {
-                        throw err;
+                        return res.status(500).send('Internal Server Error');
                     }
                     else {
                         const passwordHash = hash;
                         const addValues = [userId, cartId, username, passwordHash, firstName, lastName, email];
                         pg.query(addText, addValues, (err, result) => {
                             const newUser = result.rows[0];
-                            if (err) {
-                                return next(err);
-                            }
-                            if (!newUser) {
+                            if (err || !newUser) {
                                 return res.status(500).send('Internal Server Error');
                             }
                             next();
@@ -72,7 +69,7 @@ const registerUser = (req, res, next) => {
 
 const loginUser = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
+        if (err) return res.status(500).send('Internal Server Error');
         const { username, password } = req.body;
         if (!username || !password) {
             info.message = 'Please fill out all fields.';
@@ -81,7 +78,7 @@ const loginUser = (req, res, next) => {
             return res.status(401).send(info.message);
         }
         req.logIn(user, err => {
-            if (err) return next(err);
+            if (err) return res.status(500).send('Internal Server Error');
         });
         //const token = generateAccessToken({ user: user });
         //res.json(token);
@@ -90,18 +87,15 @@ const loginUser = (req, res, next) => {
 };
 
 const logoutUser = (req, res) => {
-    req.session = null;
     req.logout();
     res.send();
 };
 
 const getSession = (req, res) => {
-    if (req.isAuthenticated() && req.session) {
-        res.send(req.user);
-    }
-    else {
+    if (!req.isAuthenticated() || !req.session) {
         res.status(401).send('Not Authorized.');
     }
+    res.send(req.user);
 };
   
 const setUserId = (req, res, next, id) => {
@@ -110,7 +104,7 @@ const setUserId = (req, res, next, id) => {
     const values = [userId];
     pg.query(text, values, (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('User not found.');
@@ -120,19 +114,19 @@ const setUserId = (req, res, next, id) => {
     });
 };
   
-const getUserById = (req, res, next) => {
+const getUserById = (req, res) => {
     const text = 'SELECT * FROM users WHERE user_id = $1';
     const values = [req.userId];
     pg.query(text, values, (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         const user = result.rows[0];
         res.send(user);
     });
 };
 
-const updateUser = (req, res, next) => {
+const updateUser = (req, res) => {
     const { username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone } = req.body.userProfile;
     if (!username || !firstName || !lastName || !email) {
         return res.status(400).send('Please fill out all required fields.');
@@ -143,10 +137,7 @@ const updateUser = (req, res, next) => {
     RETURNING *`;
     const values = [req.userId, username, firstName, lastName, gender, dob, streetAddress, city, state, zip, email, phone];
     pg.query(text, values, (err, result) => {
-        if (err) {
-            return next(err);
-        }
-        if (!result.rows.length) {
+        if (err || !result.rows.length) {
             return res.status(500).send('Internal Server Error');
         }
         const updatedUser = result.rows[0];
@@ -154,7 +145,7 @@ const updateUser = (req, res, next) => {
     });
 };
 
-const changePassword = (req, res, next) => {
+const changePassword = (req, res) => {
     const { password } = req.body;
     if (!password) {
         return res.status(400).send('Please enter a password.');
@@ -169,19 +160,19 @@ const changePassword = (req, res, next) => {
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function(err, salt) {
         if (err) {
-            throw err;
+            return res.status(500).send('Internal Server Error');
         }
         else {
             bcrypt.hash(password, salt, function(err, hash) {
                 if (err) {
-                    throw err;
+                    return res.status(500).send('Internal Server Error');
                 }
                 else {
                     const passwordHash = hash;
                     const values = [req.userId, passwordHash];
                     pg.query(text, values, (err, result) => {
                         if (err) {
-                            return next(err);
+                            return res.status(500).send('Internal Server Error');
                         }
                         res.send();
                     });
@@ -191,7 +182,7 @@ const changePassword = (req, res, next) => {
     });
 };
 
-const getProducts = (req, res, next) => {
+const getProducts = (req, res) => {
     let category;
     const input = req.query.category;
     const sortOption = req.query.sort;
@@ -203,7 +194,7 @@ const getProducts = (req, res, next) => {
         if (!sortOption) {
             pg.query('SELECT * FROM product WHERE category = $1', [category], (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 res.send(result.rows);
             });
@@ -211,7 +202,7 @@ const getProducts = (req, res, next) => {
         else if (sortOption === 'lowest') {
             pg.query('SELECT * FROM product WHERE category = $1 ORDER BY sell_price', [category], (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 res.send(result.rows);
             });
@@ -219,7 +210,7 @@ const getProducts = (req, res, next) => {
         else if (sortOption === 'highest') {
             pg.query('SELECT * FROM product WHERE category = $1 ORDER BY sell_price DESC', [category], (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 res.send(result.rows);
             });
@@ -232,7 +223,7 @@ const getProducts = (req, res, next) => {
         if (!sortOption) {
             pg.query('SELECT * FROM product', (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 res.send(result.rows);
             });
@@ -240,7 +231,7 @@ const getProducts = (req, res, next) => {
         else if (sortOption === 'lowest') {
             pg.query('SELECT * FROM product ORDER BY sell_price', (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 res.send(result.rows);
             });
@@ -248,7 +239,7 @@ const getProducts = (req, res, next) => {
         else if (sortOption === 'highest') {
             pg.query('SELECT * FROM product ORDER BY sell_price DESC', (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 res.send(result.rows);
             });
@@ -260,13 +251,13 @@ const getProducts = (req, res, next) => {
     
 };
 
-const getProductById = (req, res, next) => {
+const getProductById = (req, res) => {
     const { productId } = req.params;
     const text = 'SELECT * FROM product WHERE product_id = $1';
     const values = [productId];
     pg.query(text, values, (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('Product not found.');
@@ -282,7 +273,7 @@ const setCartId = (req, res, next, id) => {
     const text = 'SELECT * FROM users WHERE user_id = $1';
     pg.query(text, [userId], (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('User not found.');
@@ -296,7 +287,7 @@ const setCartId = (req, res, next, id) => {
     });
 };
 
-const getCartById = (req, res, next) => {
+const getCartById = (req, res) => {
     const text = `SELECT cart_id, product_id, name, category, url, cart_quantity, sell_price, (cart_quantity * sell_price)::DECIMAL as item_total
     FROM cart
     JOIN product
@@ -304,7 +295,7 @@ const getCartById = (req, res, next) => {
     WHERE cart_id = $1`;
     pg.query(text, [req.cartId], (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('Cart not found.');
@@ -318,7 +309,7 @@ const getCartById = (req, res, next) => {
     });
 };
 
-const updateCart = (req, res, next) => {
+const updateCart = (req, res) => {
     const { productId, cartQuantity } = req.body;
     if (cartQuantity < 0) {
         return res.status(400).send('Bad Request');
@@ -328,7 +319,7 @@ const updateCart = (req, res, next) => {
         const deleteValues = [req.cartId, productId];
         pg.query(deleteText, deleteValues, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             res.status(204).send();
         });
@@ -341,7 +332,7 @@ const updateCart = (req, res, next) => {
         const updateValues = [req.cartId, productId, cartQuantity];
         pg.query(updateText, updateValues, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             if (result.rows.length > 0) {
                 const updatedCart = result.rows[0];
@@ -350,7 +341,7 @@ const updateCart = (req, res, next) => {
             //check to see if product exists
             pg.query('SELECT * FROM product WHERE product_id = $1', [productId], (err, result) => {
                 if (err) {
-                    return next(err);
+                    return res.status(500).send('Internal Server Error');
                 }
                 if (!result.rows.length) {
                     return res.status(400).send('Bad Request');
@@ -360,10 +351,7 @@ const updateCart = (req, res, next) => {
                 VALUES ($1, $2, $3)
                 RETURNING *`;
                 pg.query(insertText, updateValues, (err, result) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    if (!result.rows.length) {
+                    if (err || !result.rows.length) {
                         return res.status(500).send('Internal Server Error');
                     }
                     const addedToCart = result.rows[0];
@@ -374,7 +362,7 @@ const updateCart = (req, res, next) => {
     }
 };
 
-const checkout = async (req, res, next) => {
+const checkout = async (req, res) => {
     const userId = req.userId;
     const { payMethod, cardNum, stripeId, amount } = req.body.paymentInfo;
     const { shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email } = req.body.address;
@@ -415,7 +403,7 @@ const checkout = async (req, res, next) => {
     WHERE cart_id = $1`;
     pg.query(findText, [req.cartId], (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('Cart not found.');
@@ -454,10 +442,7 @@ const checkout = async (req, res, next) => {
         RETURNING *`,
         ordersValues = [order.date, 'processing', order.total, null, shipToName, shipToStreet, shipToCity, shipToState, shipToZip, email, payMethod, order.payment.cardNum, userId];
         pg.query(ordersText, ordersValues, (err, result) => {
-            if (err) {
-                return next(err);
-            }
-            if (!result.rows.length) {
+            if (err || !result.rows.length) {
                 return res.status(500).send('Internal Server Error');
             }
             const processedOrder = result.rows[0];
@@ -469,10 +454,7 @@ const checkout = async (req, res, next) => {
             order.items.forEach(item => {
                 let orderDetailsValues = [orderId, item.product_id, item.cart_quantity, item.sell_price];
                 pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    if (!result.rows.length) {
+                    if (err || !result.rows.length) {
                         return res.status(500).send('Internal Server Error');
                     }
                     itemsAdded++;
@@ -485,13 +467,13 @@ const checkout = async (req, res, next) => {
                         const orderDetValues = [orderId];
                         pg.query(orderDetText, orderDetValues, (err, result) => {
                             if (err) {
-                                return next(err);
+                                return res.status(500).send('Internal Server Error');
                             }
                             const orderDetails = result.rows;
                             const clearCartText = 'DELETE FROM cart WHERE cart_id = $1';
                             pg.query(clearCartText, [req.cartId], (err, result) => {
                                 if (err) {
-                                    return next(err);
+                                    return res.status(500).send('Internal Server Error');
                                 }
                                 const completedOrder = {
                                     processedOrder,
@@ -507,7 +489,7 @@ const checkout = async (req, res, next) => {
     });
 };
 
-const getOrders = (req, res, next) => {
+const getOrders = (req, res) => {
     const values = [req.userId];
     const sortOption = req.query.sort;
     const noSortText = `SELECT *
@@ -525,7 +507,7 @@ const getOrders = (req, res, next) => {
     if (!sortOption) {
         pg.query(noSortText, values, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             res.send(result.rows);
         });
@@ -533,7 +515,7 @@ const getOrders = (req, res, next) => {
     else if (sortOption === 'oldest') {
         pg.query(sortOldText, values, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             res.send(result.rows);
         });
@@ -541,7 +523,7 @@ const getOrders = (req, res, next) => {
     else if (sortOption === 'newest') {
         pg.query(sortNewText, values, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             res.send(result.rows);
         });
@@ -557,7 +539,7 @@ const setOrderId = (req, res, next, id) => {
     const values = [orderId, req.userId];
     pg.query(text, values, (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('User not found.');
@@ -567,7 +549,7 @@ const setOrderId = (req, res, next, id) => {
     });
 };
 
-const getOrderById = (req, res, next) => {
+const getOrderById = (req, res) => {
     const ordersText = `SELECT *
     FROM orders
     LEFT JOIN (
@@ -581,7 +563,7 @@ const getOrderById = (req, res, next) => {
     const ordersValues = [req.orderId, req.userId];
     pg.query(ordersText, ordersValues, (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         if (!result.rows.length) {
             return res.status(404).send('Order not found.');
@@ -595,7 +577,7 @@ const getOrderById = (req, res, next) => {
         const orderDetailsValues = [req.orderId];
         pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             const items = result.rows;
             const order = {
@@ -607,18 +589,18 @@ const getOrderById = (req, res, next) => {
     });
 };
 
-const deleteOrder = (req, res, next) => {
+const deleteOrder = (req, res) => {
     const orderDetailsText = 'DELETE FROM order_details WHERE order_id = $1';
     const orderDetailsValues = [req.orderId];
     pg.query(orderDetailsText, orderDetailsValues, (err, result) => {
         if (err) {
-            return next(err);
+            return res.status(500).send('Internal Server Error');
         }
         const ordersText = 'DELETE FROM orders WHERE order_id = $1 AND user_id = $2';
         const ordersValues = [req.orderId, req.userId];
         pg.query(ordersText, ordersValues, (err, result) => {
             if (err) {
-                return next(err);
+                return res.status(500).send('Internal Server Error');
             }
             res.status(204).send();
         });
