@@ -53,7 +53,7 @@
     background-color: black;
     color: white;
     font-size: 1.25rem;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease-in-out;

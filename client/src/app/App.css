@@ -8,6 +8,8 @@
   src: url(../resources/fonts/Ikaros/Ikaros.ttf) format('truetype');
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 /* Universal Styles */
 
 * , *::before, *::after {
