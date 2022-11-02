@@ -34,12 +34,16 @@
 }
   
 .Navbar__div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     text-align: center;
     cursor: pointer;
 }
   
-.Navbar__div > .fas {
-    margin-bottom: 0.5rem;
+.Navbar__div p {
+    margin-top: 0.25rem;
 }
   
 .Navbar__login__button, .Navbar__logout__button {

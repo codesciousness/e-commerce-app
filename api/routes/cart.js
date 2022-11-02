@@ -1,14 +1,8 @@
 const express = require('express');
 const cartRouter = express.Router({ mergeParams: true });
 const db = require('../../db/queries');
+const authenticate = require('../../util/authenticate');
 require('dotenv').config();
-
-const authenticate = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      next();
-    }
-    else return res.status(401).send('Please log in to complete this action.');
-  };
   
 cartRouter.use(authenticate);
 
