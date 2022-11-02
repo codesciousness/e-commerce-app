@@ -6,28 +6,22 @@ const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 module.exports = (passport) => {
-  passport.use(new LocalStrategy((username, password, done) => {
+  passport.use(new LocalStrategy(async (username, password, done) => {
     const text = 'SELECT * FROM users WHERE username=$1';
     const values = [username];
-    db.query(text, values, (err, result) => {
-      if (err) {
-        return done(err, false, {message: 'Internal Server Error'});
-      }
-      if (result.rows.length > 0) {
-        const user = result.rows[0];
-        bcrypt.compare(password, user.password, function(err, isMatch) {
-          if (isMatch) {
-            done(null, user);
-          }
-          else {
-            done(null, false, {message: 'Incorrect password.'});
-          }
-        });
-      }
-      else {
-        done(null, false, {message: 'Username does not exist.'});
-      }
-    });
+    try {
+      const { rows } = await db.query(text, values);
+      if (!rows.length) return done(null, false, {message: 'Incorrect login credentials.'});
+      if (rows.length) {
+        const user = rows[0];
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) return done(null, false, {message: 'Incorrect login credentials.'});
+        return done(null, user);
+      };
+    }
+    catch(err) {
+      return done(err, false, {message: 'Internal Server Error'});
+    }
   }));
 
   passport.use(new GoogleStrategy({
@@ -35,7 +29,7 @@ module.exports = (passport) => {
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/redirect',
     proxy: true
-    }, (accessToken, refreshToken, profile, done) => {
+    }, async (accessToken, refreshToken, profile, done) => {
     const userId = uuidv4();
     const cartId = uuidv4();
     const googleId = profile.id;
@@ -50,40 +44,22 @@ module.exports = (passport) => {
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *`;
     const saltRounds = 10;
-    db.query(findText, findValues, (err, result) => {
-      if (err) {
-        return done(err, false, {message: 'Internal Server Error'});
-      }
-      if (result.rows.length > 0) {
-        const user = result.rows[0];
-        done(null, user);
-      }
-      else {
-        bcrypt.genSalt(saltRounds, function(err, salt) {
-          if (err) {
-            return done(err, false, {message: 'Internal Server Error'});
-          }
-          else {
-            bcrypt.hash(password, salt, function(err, hash) {
-              if (err) {
-                return done(err, false, {message: 'Internal Server Error'});
-              }
-              else {
-                const passwordHash = hash;
-                const addValues = [userId, googleId, cartId, username, passwordHash, firstName, lastName, email];
-                db.query(addText, addValues, (err, result) => {
-                  if (err) {
-                    return done(err, false, {message: 'Internal Server Error'});
-                  }
-                  const newUser = result.rows[0];
-                  done(null, newUser);
-                });
-              }
-            });
-          };
-        });
-      }
-    });
+    try {
+      const { rows } = await db.query(findText, findValues);
+      if (rows.length) {
+        const user = rows[0];
+        return done(null, user);
+      };
+      const salt = await bcrypt.genSalt(saltRounds);
+      const passwordHash = await bcrypt.hash(password, salt);
+      const addValues = [userId, googleId, cartId, username, passwordHash, firstName, lastName, email];
+      const result = await db.query(addText, addValues);
+      const newUser = result.rows[0];
+      return done(null, newUser);
+    }
+    catch(err) {
+      return done(err, false, {message: 'Internal Server Error'});
+    }
   }));
 
   passport.serializeUser((user, done) => {
