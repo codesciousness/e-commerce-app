@@ -10,10 +10,11 @@
 
 .OrderDetail__heading {
     text-align: center;
+    margin-bottom: 1rem;
 }
 
 .OrderDetail__item__heading {
-    margin-top: 1rem;
+    margin: 1rem auto;
     text-align: center;
 }
 

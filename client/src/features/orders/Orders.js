@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import './Orders.css';
 import Alert from '../../material-ui/Alert';
 import Order from '../../components/order/Order';
@@ -9,6 +9,7 @@ import { loadOrders, resetOrders, selectOrders, selectLoadingOrders, selectLoadO
         selectCancelOrderSuccess, clearOrdersStatusUpdates } from './ordersSlice';
 import { selectUserId, selectLoginSuccess, selectLogoutSuccess } from '../users/usersSlice';
 import { selectCheckoutSuccess } from '../cart/cartSlice';
+import BackgroundImg from '../../resources/images/light-wool-pattern.png';
 
 const Orders = () => {
     const sortOptions = ['', 'oldest', 'newest'];
@@ -25,13 +26,17 @@ const Orders = () => {
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
+
     const handleChange = ({ target }) => {
         setSort(target.value);
     };
 
     useEffect(() => {
         if (!userId) {
-            navigate('/login');
+            navigate('/login', { replace: true });
         }
         else {
             dispatch(loadOrders({ userId, sort }));
@@ -66,7 +71,7 @@ const Orders = () => {
         );
     }
     return (
-        <section className="Orders">
+        <section style={style} className="Orders">
             <h2 className="Orders__heading">Order History</h2>
             <div className="Orders__container">
                 <span className="Orders__label">Sort:</span>

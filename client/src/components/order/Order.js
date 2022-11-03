@@ -35,7 +35,9 @@ const Order = ({ order }) => {
         <section className="Order">
             {cancelOrderError && <Alert severity='error' msg={cancelOrderError}/>}
             <div className="Order__info">
-                <Link to={`/orders/${orderId}`}><h3 className="Order__id" onClick={handleOrderClick}>Order Id: {orderId}</h3></Link>
+                <Link to={`/orders/${orderId}`}>
+                    <h3 className="Order__id" onClick={handleOrderClick}>Order Id: {orderId}</h3>
+                </Link>
                 <p className="Order__date">Date: {date}</p>
                 <p className="Order__status">Status: {order.status}</p>
                 {order.status === 'processing' && <Button name="Cancel Order" onClick={handleButtonClick}/>}

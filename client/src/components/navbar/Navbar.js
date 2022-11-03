@@ -79,7 +79,13 @@ const Navbar = () => {
 
     return (
         <nav className="Navbar">
-            <Link to='/'><h1 className="Navbar__title">Plus Ultra Store</h1><div className="Navbar__div home__icon"><i className="fas fa-home fa-lg"></i><p>Home</p></div></Link>
+            <Link to='/'>
+                <h1 className="Navbar__title">Plus Ultra Store</h1>
+                <div className="Navbar__div home__icon">
+                    <i className="fas fa-home fa-lg"></i>
+                    <p>Home</p>
+                </div>
+            </Link>
             <ul className="Navbar__list">
                 <li className="Navbar__li">
                     <Link to='cart'>
@@ -105,14 +111,14 @@ const Navbar = () => {
                         </div>
                     </Link>
                 </li>
-                <li className="Navbar__li">
+                {!userId && <li className="Navbar__li">
                     <Link to='register'>
                         <div className="Navbar__div">
                             <Login/>
                             <p>Signup</p>
                         </div>
                     </Link>
-                </li>
+                </li>}
                 {button}
             </ul>
         </nav>

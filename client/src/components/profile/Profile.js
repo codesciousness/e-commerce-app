@@ -10,7 +10,7 @@ import Loader from '../../components/loader/Loader';
 import { loadUserById, updateUser, changePassword, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
         selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError,  selectChangePasswordSuccess, selectChangePasswordError,
         selectLoginSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
-import BackgroundImg from '../../resources/images/confectionary-pattern.png';
+import BackgroundImg from '../../resources/images/gplay-pattern.png';
 
 const Profile = () => {
     const user = useSelector(selectUser);
@@ -126,7 +126,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (!userId) {
-            navigate('/login');
+            navigate('/login', { replace: true });
         }
         else {
             dispatch(loadUserById(userId));

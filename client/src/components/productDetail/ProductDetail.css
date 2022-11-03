@@ -1,16 +1,13 @@
 .ProductDetail {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
     width: 100%;
-    margin: auto;
+    min-height: 100vh;
+    padding: 2rem;
 }
 
 .ProductDetail__heading {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 @media only screen and (max-width: 360px) {

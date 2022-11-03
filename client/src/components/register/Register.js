@@ -91,7 +91,7 @@ const Register = () => {
                 <TextInput name="Email" value={email} type="email" onChange={handleChange}/>
                 <TextInput name="Username" value={username} onChange={handleChange}/>
                 <TextInput name="Password" value={password} type="password" onChange={handleChange}/>
-                <p><Checkbox label="I agree to Terms of Use and Privacy Policy"/></p>
+                <p><Checkbox label="I agree to the Terms of Use and Privacy Policy"/></p>
                 <Button name="Register" fullWidth onClick={handleClick}/>
                 <Button name="Google Signup" fullWidth onClick={handleClick}/>
                 <Link to='/login'><p className="Register__loginLink">Already registered? Please Login.</p></Link>

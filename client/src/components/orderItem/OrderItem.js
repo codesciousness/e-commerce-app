@@ -19,7 +19,9 @@ const OrderItem = ({ item }) => {
             <div className="OrderItem__info">
                 <div className="OrderItem__container">
                     <p className="OrderItem__label">PRODUCT NAME</p>
-                    <Link to={`/products/${productId}`}><h2 className="OrderItem__name" onClick={handleClick}>{item.name}</h2></Link>
+                    <Link to={`/products/${productId}`}>
+                        <h2 className="OrderItem__name" onClick={handleClick}>{item.name}</h2>
+                    </Link>
                 </div>
                 <div className="OrderItem__container">
                     <p className="OrderItem__label">QUANTITY</p>

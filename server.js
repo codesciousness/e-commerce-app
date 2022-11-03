@@ -51,7 +51,6 @@ app.use(cookieParser());
 
 // Add middleware for sessions
 app.use(session({
-  store: db.sessionHandler(session),
   name: 'sid',
   resave: false,
   saveUninitialized: false,
@@ -61,7 +60,8 @@ app.use(session({
     maxAge: oneDay,
     sameSite: true,
     secure: IN_PROD
-  }
+  },
+  store: db.sessionHandler(session)
 }));
 
 app.use(passport.initialize());

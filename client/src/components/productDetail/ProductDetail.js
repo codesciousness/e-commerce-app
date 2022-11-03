@@ -6,6 +6,7 @@ import Product from '../product/Product';
 import Loader from '../loader/Loader';
 import { loadProductById, selectProductId, selectProduct, selectLoadingProduct, selectLoadProductSuccess, selectLoadProductError, 
         clearProdsStatusUpdates } from '../../features/products/productsSlice';
+import BackgroundImg from '../../resources/images/subtle-grey-pattern.png';
 
 const ProductDetail = () => {
     const productId = useSelector(selectProductId);
@@ -14,6 +15,10 @@ const ProductDetail = () => {
     const loadProductSuccess = useSelector(selectLoadProductSuccess);
     const loadProductError = useSelector(selectLoadProductError);
     const dispatch = useDispatch();
+
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
 
     useEffect(() => {
         if (productId) {
@@ -36,7 +41,7 @@ const ProductDetail = () => {
     }
     if (Object.entries(product).length === 0) return null;
     return (
-        <section className="ProductDetail">
+        <section style={style} className="ProductDetail">
             <h2 className="ProductDetail__heading">Product Details</h2>
             {loadProductError && <Alert severity='error' msg={loadProductError} onClose={() => dispatch(clearProdsStatusUpdates())}/>}
             <Product product={product} display='details'/>

@@ -35,7 +35,7 @@ const Product = ({ product, display }) => {
 
     const handleCartClick = () => {
         if (!userId) {
-            navigate("/login");
+            navigate('/login', { replace: true });
         }
         else if (cartQuantity) {
             setCartQuantity(prev => prev + 1);
@@ -60,15 +60,16 @@ const Product = ({ product, display }) => {
                 <div className="Product__inCart__info">
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">PRODUCT NAME</p>
-                        <Link to={`/products/${productId}`}><h2 id={product.product_id} className="Product__inCart__name" 
-                        onClick={handleProductClick}>{product.name}</h2></Link>
+                        <Link to={`/products/${productId}`}>
+                            <h2 id={product.product_id} className="Product__inCart__name" onClick={handleProductClick}>{product.name}</h2>
+                        </Link>
                     </div>
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">QUANTITY</p>
                         <div className="Product__inCart__quantity__container">
                             <IconButton onClick={handleRemoveClick}><RemoveCircle/></IconButton>
                             <input id="quantity" className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100"
-                            value={cartQuantity} readOnly/>
+                                value={cartQuantity} readOnly/>
                             <IconButton onClick={handleAddClick}><AddCircle/></IconButton>
                         </div>
                     </div>
@@ -130,7 +131,9 @@ const Product = ({ product, display }) => {
                 <p className="Product__category">{product.category}</p>
                 <img className="Product__image" src={product.url} alt="" />
                 <div className="Product__info">
-                <Link to={`/products/${productId}`}><h2 id={product.product_id} className="Product__name" onClick={handleProductClick}>{product.name}</h2></Link>
+                    <Link to={`/products/${productId}`}>
+                        <h2 id={product.product_id} className="Product__name" onClick={handleProductClick}>{product.name}</h2>
+                    </Link>
                     <p className="Product__price">{product.sell_price}</p>
                     <Button name="Add to Cart" endIcon={<i className="fas fa-cart-plus fa-lg"></i>} onClick={handleCartClick}/>
                 </div> 

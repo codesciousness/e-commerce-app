@@ -8,6 +8,7 @@ import Loader from '../loader/Loader';
 import { loadOrderById, selectOrderId, selectOrder, selectLoadingOrder, selectLoadOrderSuccess, selectLoadOrderError, 
         clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
 import { selectUserId } from '../../features/users/usersSlice';
+import BackgroundImg from '../../resources/images/light-wool-pattern.png';
 
 const OrderDetail = () => {
     const orderId = useSelector(selectOrderId);
@@ -17,6 +18,10 @@ const OrderDetail = () => {
     const loadOrderError = useSelector(selectLoadOrderError);
     const userId  = useSelector(selectUserId);
     const dispatch = useDispatch();
+
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
 
     useEffect(() => {
         if (userId && orderId) {
@@ -39,7 +44,7 @@ const OrderDetail = () => {
     }
     if (Object.entries(order).length === 0) return null;
     return (
-        <section className="OrderDetail">
+        <section style={style} className="OrderDetail">
             <h2 className="OrderDetail__heading">Order Details</h2>
             {loadOrderError && <Alert severity='error' msg={loadOrderError} onClose={() => dispatch(clearOrdersStatusUpdates())}/>}
             <Order order={order.summary}/>

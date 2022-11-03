@@ -12,6 +12,7 @@ import { loadCart, checkout, setCartId, selectCartId, selectCart, selectLoadingC
         selectCheckoutSuccess, selectCheckoutError, clearCartStatusUpdates } from './cartSlice';
 import { selectUserId, selectUser } from '../users/usersSlice';
 import { creditCardType } from '../../util/credit-card';
+import BackgroundImg from '../../resources/images/light-wool-pattern.png';
 
 const Cart = () => {
     const cart = useSelector(selectCart);
@@ -48,6 +49,10 @@ const Cart = () => {
         email
     };
 
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
+
     const handleClick = async () => {
         if (!stripe || !elements) {
             return;
@@ -74,27 +79,27 @@ const Cart = () => {
     };
 
     const handleChange = ({ target }) => {
-        if (target.name === "fullname") {
+        if (target.name === 'fullname') {
             setShipToName(target.value);
         }
-        else if (target.name === "streetaddress") {
+        else if (target.name === 'streetaddress') {
             setShipToStreet(target.value);
         }
-        else if (target.name === "city") {
+        else if (target.name === 'city') {
             setShipToCity(target.value);
         }
-        else if (target.name === "state") {
+        else if (target.name === 'state') {
             setShipToState(target.value);
         }
-        else if (target.name === "zipcode") {
+        else if (target.name === 'zipcode') {
             setShipToZip(target.value);
         }
-        else if (target.name === "email") {
+        else if (target.name === 'email') {
             setEmail(target.value);
         }
-        else if (target.name === "verifycardnumber") {
+        else if (target.name === 'verifycardnumber') {
             setCardNum(target.value);
-            setPayMethod(creditCardType(cardNum));
+            setPayMethod(creditCardType(target.value));
         }
     };
 
@@ -111,7 +116,7 @@ const Cart = () => {
 
     useEffect(() => {
         if (!userId) {
-            navigate('/login');
+            navigate('/login', { replace: true });
         }
         else {
             dispatch(setCartId(user.cart_id));
@@ -155,7 +160,7 @@ const Cart = () => {
         );
     }
     return (
-        <section className="Cart">
+        <section style={style} className="Cart">
             {inCheckout && <form className="Cart__form" method="post" action="">
                 <div className="Cart__address">
                     <h2 className="Cart__address__heading">Ship To Address</h2>
@@ -170,7 +175,7 @@ const Cart = () => {
                     <h2 className="Cart__payment__heading">Payment Information</h2>
                     <CardNumberElement className="Cart__input" id="cardNumStripe" name="cardNumStripe" required/>
                     <TextInput name="Verify Card Number" value={cardNum} placeholder="Re-enter your card number" onChange={handleChange}/>
-                    <TextInput name="Card Type" value={payMethod} onChange={handleChange}/>
+                    <TextInput name="Card Type" value={payMethod}/>
                     <CardExpiryElement className="Cart__input" id="cardExp" name="cardExp" required/>
                     <CardCvcElement className="Cart__input" id="cardCVC" name="cardCVC" required/>
                 </div>

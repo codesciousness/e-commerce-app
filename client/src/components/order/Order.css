@@ -1,9 +1,10 @@
 .Order {
-    border: 1px solid black;
-    border-radius: 10px;
-    margin: 1rem auto;
     width: 80%;
     min-width: 300px;
+    margin: 1rem auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
 }
 
 .Order__info {
