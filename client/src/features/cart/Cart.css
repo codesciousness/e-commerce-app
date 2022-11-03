@@ -1,9 +1,8 @@
 .Cart {
     min-height: 100vh;
-    margin: auto;
-    background-color: whitesmoke;
     padding: 2rem;
     width: 100%;
+    margin: auto;
 }
 
 .Cart__success {
@@ -12,10 +11,9 @@
 }
 
 .Cart__form {
-    margin: 0.25rem auto;
-    padding: 2rem;
-    width: 80%;
+    width: 100%;
     min-width: 300px;
+    padding: 2rem;
 }
 
 .Cart__address, .Cart__payment {
@@ -23,6 +21,11 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    width: 80%;
+    margin: 2rem auto;
+    padding: 3rem;
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
 }
 
 .Cart__address__heading, .Cart__payment__heading {
@@ -34,11 +37,8 @@
     margin-top: 3rem;
 }
 
-.Cart__label, .Cart__input {
-    width: 100%;
-}
-
 .Cart__input {
+    width: 100%;
     border: 1px solid black;
     padding: 0.75rem;
     border-radius: 5px;
@@ -85,27 +85,6 @@
     font-size: 1.5rem;
     font-weight: bold;
     background: white;
-}
-
-.Cart__checkout__button {
-    min-width: 200px;
-    border: 1px solid black;
-    padding: 1rem;
-    border-radius: 5px;
-    margin: 0.5rem;
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Cart__checkout__button:hover {
-    background-color: lightseagreen;
-    color: black;
 }
 
 @media only screen and (max-width: 1100px) {

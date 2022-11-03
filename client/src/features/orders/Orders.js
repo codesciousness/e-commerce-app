@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import './Orders.css';
+import Alert from '../../material-ui/Alert';
 import Order from '../../components/order/Order';
 import Loader from '../../components/loader/Loader';
-import Error from '../../components/error/Error';
 import { loadOrders, resetOrders, selectOrders, selectLoadingOrders, selectLoadOrdersSuccess, selectLoadOrdersError,
         selectCancelOrderSuccess, clearOrdersStatusUpdates } from './ordersSlice';
 import { selectUserId, selectLoginSuccess, selectLogoutSuccess } from '../users/usersSlice';
@@ -75,7 +75,7 @@ const Orders = () => {
                 </select>
             </div>
             <ul className="Orders__list">
-                {loadOrdersError && <Error msg={loadOrdersError}/>}
+                {loadOrdersError && <Alert severity='error' msg={loadOrdersError} onClose={() => dispatch(clearOrdersStatusUpdates())}/>}
                 {orders.map(order => <li key={order.order_id}><Order order={order}/></li>)}
             </ul>
         </section>

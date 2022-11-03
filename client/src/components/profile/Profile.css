@@ -1,71 +1,33 @@
 .Profile {
     width: 100%;
     min-height: 100vh;
-    background-color: whitesmoke;
     padding: 2rem;
 }
 
-.Profile__title {
+.Profile__title, .Profile__form__title {
     text-align: center;
 }
 
 .Profile__form {
     display: grid;
     place-items: center;
-    margin: 1rem auto;
-    padding: 0 2rem;
-    min-width: 300px;
+    margin: 2rem;
 }
 
 .Profile__container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    width: 80%;
-    margin: 1rem;
+    width: 50%;
+    max-width: 1000px;
+    min-width: 300px;
+    margin: 1rem auto;
+    padding: 3rem;
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
 }
 
-.Profile__label {
-    margin: 0.5rem;
-}
-
-.Profile__input, .Profile__input__required, .Profile__button {
-    border: 1px solid black;
-    padding: 1rem;
-    border-radius: 5px;
-    margin: 0.5rem;
-}
-
-.Profile__input__required {
-    border: 1px solid red;
-}
-
-.Profile__button {
-    width: 25%;
-    max-width: 300px;
-    min-width: 200px;
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 1.5rem auto;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Profile__button:hover {
-    background-color: lightseagreen;
-    color: black;
-}
-
-.Profile__password__match {
-    border: 1px solid lightgreen;
-}
-
-.Profile__password__dontmatch {
-    border: 1px solid red;
+.Profile__container > * {
+    margin: 0.25rem 0;
 }
 
 @media only screen and (max-width: 500px) {

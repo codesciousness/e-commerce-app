@@ -1,15 +1,10 @@
 .Login {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     width: 100%;
     min-height: 100vh;
-    background-color: whitesmoke;
     padding: 2rem;
 }
 
-.Login__title, .Login__registerLink {
+.Login__title, .Login__form__title, .Login__registerLink {
     text-align: center;
 }
 
@@ -19,45 +14,14 @@
     width: 25%;
     max-width: 500px;
     min-width: 300px;
-    margin: 0.25rem auto;
-    padding: 2rem;
+    margin: 2rem auto;
+    padding: 3rem;
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(145, 145, 165, 0.6);
 }
 
-.Login__label {
-    margin: 0.5rem;
-}
-
-.Login__input, .Login__button, .Login__google__button {
-    border: 1px solid black;
-    padding: 1rem;
-    border-radius: 5px;
-    margin: 0.5rem;
-}
-
-.Login__button, .Login__google__button {
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 2rem;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Login__button:hover {
-    background-color: lightseagreen;
-    color: black;
-}
-
-.Login__google__button {
-    margin: 0.5rem;
-}
-
-.Login__google__button:hover {
-    background-color: lightsteelblue;
-    color: black;
+.Login__form > * {
+    margin: 0.25rem 0;
 }
 
 @media only screen and (max-width: 400px) {

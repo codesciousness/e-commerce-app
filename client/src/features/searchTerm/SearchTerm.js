@@ -17,9 +17,9 @@ const SearchTerm = () => {
 
     return (
         <form className="SearchTerm">
-            <i className="fas fa-search fa-lg SearchTerm__icon"></i>
+            <span className="SearchTerm__icon"><i className="fas fa-search fa-lg"></i></span>
             <input className="SearchTerm__input" placeholder="Search..." autoFocus="autoFocus" onChange={handleChange} value={searchTerm} />
-            {searchTerm && <i className="fas fa-times fa-lg SearchTerm__icon" onClick={handleClick} role="button"></i>}
+            {searchTerm && <span className="SearchTerm__icon button"><i className="fas fa-times fa-lg" onClick={handleClick} role="button"></i></span>}
         </form>
     );
 }

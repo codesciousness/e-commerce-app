@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { Login, Person, ShoppingBag } from '@mui/icons-material';
-import CartBadge from '../../material-ui/Badge';
+import CartBadge from '../../material-ui/CartBadge';
+import Button from '../../material-ui/Button';
 import { logout, selectUserId, selectUser, selectLogoutSuccess, selectLogoutError,
     clearUsersStatusUpdates } from '../../features/users/usersSlice';
 import { loadCart, setCartId, clearCart, selectCart, 
@@ -20,7 +21,7 @@ const Navbar = () => {
     const cartId = useSelector(selectCartId);
     const dispatch = useDispatch();
     let navigate = useNavigate();
-    let Button;
+    let button;
 
     const getNumItems = () => {
         if (cart.items) {
@@ -34,28 +35,28 @@ const Navbar = () => {
 
     const handleClick = (e) => {
         e.preventDefault();
-        if (e.target.id === 'logoutButton') {
-        dispatch(logout());
-        dispatch(clearCart());
-        dispatch(clearOrder());
-        dispatch(clearProduct());
+        if (e.target.id === 'logout-button') {
+            dispatch(logout());
+            dispatch(clearCart());
+            dispatch(clearOrder());
+            dispatch(clearProduct());
         }
     };
         
     if (userId) {
-        Button =
+        button =
         <li className="Navbar__li">
             <Link to='/'>
-            <button id='logoutButton' className="Navbar__logout__button" onClick={handleClick}><i className="fas fa-sign-out-alt fa-lg"></i> Logout</button>
+                <Button name="Logout" startIcon={<i className="fas fa-sign-out-alt fa-lg"></i>} onClick={handleClick}/>
             </Link>
         </li>
         
     }
     else {
-        Button = 
+        button = 
         <li className="Navbar__li">
             <Link to='login'>
-            <button id='loginButton' className="Navbar__login__button"><i className="fas fa-sign-in-alt fa-lg"></i> Login</button>
+                <Button name="Login" startIcon={<i className="fas fa-sign-in-alt fa-lg"></i>}/>
             </Link>
         </li> 
     }
@@ -112,7 +113,7 @@ const Navbar = () => {
                         </div>
                     </Link>
                 </li>
-                {Button}
+                {button}
             </ul>
         </nav>
     );

@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import './Profile.css';
+import { AccountCircle } from '@mui/icons-material';
+import TextInput from '../../material-ui/TextInput';
+import Alert from '../../material-ui/Alert';
+import Button from '../../material-ui/Button';
 import Loader from '../../components/loader/Loader';
-import Error from '../error/Error';
 import { loadUserById, updateUser, changePassword, selectUser, selectUserId, selectLoadingUser, selectLoadUserError, selectRegisterUserSuccess,
         selectUpdatingUser, selectUpdateUserSuccess, selectUpdateUserError,  selectChangePasswordSuccess, selectChangePasswordError,
         selectLoginSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import BackgroundImg from '../../resources/images/confectionary-pattern.png';
 
 const Profile = () => {
     const user = useSelector(selectUser);
@@ -23,8 +27,8 @@ const Profile = () => {
     const [state, setState] = useState(user.state);
     const [zip, setZip] = useState(user.zip_code);
     const [password, setPassword] = useState('');
-    const [passCheck, setPassCheck] = useState('');
-    const passwordMatch = password === passCheck;
+    const [passMatch, setPassMatch] = useState('');
+    const passwordMatch = password === passMatch;
     const loadingUser = useSelector(selectLoadingUser);
     const loadUserError = useSelector(selectLoadUserError);
     const registerUserSuccess = useSelector(selectRegisterUserSuccess);
@@ -36,6 +40,10 @@ const Profile = () => {
     const loginSuccess = useSelector(selectLoginSuccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();
+
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
 
     const formatDate = () => {
         if (userId && dob && dob.length === 24) {
@@ -58,66 +66,54 @@ const Profile = () => {
         zip
     };
 
-    const styleInput = () => {
-        if (!password) {
-            return 'Profile__input'
-        }
-        else if (password && passwordMatch) {
-            return 'Profile__input Profile__password__match'
-        }
-        else if (password && !passwordMatch) {
-            return 'Profile__input Profile__password__dontmatch'
-        }
-    }
-
     const handleChange = ({ target }) => {
-        if (target.name === "username") {
+        if (target.name === 'username') {
             setUsername(target.value);
         }
-        else if (target.name === "firstName") {
+        else if (target.name === 'firstname') {
             setFirstName(target.value);
         }
-        else if (target.name === "lastName") {
+        else if (target.name === 'lastname') {
             setLastName(target.value);
         }
-        else if (target.name === "email") {
+        else if (target.name === 'email') {
             setEmail(target.value);
         }
-        else if (target.name === "gender") {
+        else if (target.name === 'gender') {
             setGender(target.value);
         }
-        else if (target.name === "dob") {
+        else if (target.name === 'dateofbirth') {
             setDob(target.value);
         }
-        else if (target.name === "phone") {
+        else if (target.name === 'phonenumber') {
             setPhone(target.value);
         }
-        else if (target.name === "streetAddress") {
+        else if (target.name === 'streetaddress') {
             setStreetAddress(target.value);
         }
-        else if (target.name === "city") {
+        else if (target.name === 'city') {
             setCity(target.value);
         }
-        else if (target.name === "state") {
+        else if (target.name === 'state') {
             setState(target.value);
         }
-        else if (target.name === "zipcode") {
+        else if (target.name === 'zipcode') {
             setZip(target.value);
         }
-        else if (target.name === "password") {
+        else if (target.name === 'newpassword') {
             setPassword(target.value);
         }
-        else if (target.name === "passCheck") {
-            setPassCheck(target.value);
+        else if (target.name === 'passwordmatch') {
+            setPassMatch(target.value);
         }
     };
 
     const handleClick = (e) => {
         e.preventDefault();
-        if (e.target.id === 'profileButton') {
+        if (e.target.id === 'updateprofile-button') {
             dispatch(updateUser({ userId, userProfile }));
         }
-        else if (e.target.id === 'passwordButton') {
+        else if (e.target.id === 'changepassword-button') {
             if (passwordMatch) {
                 dispatch(changePassword({ userId, password }));
             }
@@ -143,7 +139,7 @@ const Profile = () => {
         }
         if (changePasswordSuccess) {
             setPassword('');
-            setPassCheck('');
+            setPassMatch('');
         }
         if (loadUserError || updateUserSuccess || changePasswordSuccess) {
             dispatch(clearUsersStatusUpdates());
@@ -159,55 +155,34 @@ const Profile = () => {
     }
     if (!userId) return null;
     return (
-        <section className="Profile">
+        <section style={style}className="Profile">
             <h2 className="Profile__title">User Profile</h2>
             <form className="Profile__form" method="post" action="">
                 <div className="Profile__container">
-                    {loadUserError && <Error msg={loadUserError}/>}
-                    {updateUserError && <Error msg={updateUserError}/>}
-                    <label className="Profile__label" for="username">USERNAME</label>
-                    <input className={username ? "Profile__input" : "Profile__input__required"} id="username" name="username" placeholder="Username" required
-                    value={username} onChange={handleChange}/>
-                    <label className="Profile__label" for="firstName">FIRST NAME</label>
-                    <input className={firstName ? "Profile__input" : "Profile__input__required"} id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]" required
-                    value={firstName} onChange={handleChange}/>
-                    <label className="Profile__label" for="lastName">LAST NAME</label>
-                    <input className={lastName ? "Profile__input" : "Profile__input__required"} id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]" required
-                    value={lastName} onChange={handleChange}/>
-                    <label className="Profile__label" for="email">EMAIL</label>
-                    <input className={email ? "Profile__input" : "Profile__input__required"} id="email" name="email" placeholder="Email address" type="email" required
-                    value={email} onChange={handleChange}/>
-                    <label className="Profile__label" for="gender">GENDER</label>
-                    <input className="Profile__input" id="gender" name="gender" placeholder="Gender" pattern="[A-Za-z]" 
-                    value={gender} onChange={handleChange}/>
-                    <label className="Profile__label" for="dob">DATE OF BIRTH</label>
-                    <input className="Profile__input" id="dob" name="dob" placeholder="Date of birth" 
-                    value={dob} onChange={handleChange}/>
-                    <label className="Profile__label" for="phone">PHONE NUMBER</label>
-                    <input className="Profile__input" id="phone" name="phone" placeholder="Phone number" 
-                    value={phone} onChange={handleChange}/>
-                    <label className="Profile__label" for="streetAddress">STREET ADDRESS</label>
-                    <input className="Profile__input" id="streetAddress" name="streetAddress" placeholder="Street Address" 
-                    value={streetAddress} onChange={handleChange}/>
-                    <label className="Profile__label" for="city">CITY</label>
-                    <input className="Profile__input" id="city" name="city" placeholder="City" 
-                    value={city} onChange={handleChange}/>
-                    <label className="Profile__label" for="state">STATE</label>
-                    <input className="Profile__input" id="state" name="state" placeholder="State" 
-                    value={state} onChange={handleChange}/>
-                    <label className="Profile__label" for="zipcode">ZIP CODE</label>
-                    <input className="Profile__input" id="zipcode" name="zipcode" placeholder="Zip Code" 
-                    value={zip} onChange={handleChange}/>
-                    <input id="profileButton" className="Profile__button" type="submit" value="UPDATE PROFILE" onClick={handleClick}/>
+                    <h3 className="Profile__form__title">{`Hi, ${user.first_name}!`}</h3>
+                    <AccountCircle sx={{ fontSize: 72, alignSelf: 'center' }}/>
+                    {loadUserError && <Alert severity='error' msg={loadUserError} onClose={() => dispatch(clearUsersStatusUpdates())}/>}
+                    {updateUserError && <Alert severity='error' msg={updateUserError} onClose={() => dispatch(clearUsersStatusUpdates())}/>}
+                    <TextInput name="Username" value={username} onChange={handleChange}/>
+                    <TextInput name="First Name" value={firstName} onChange={handleChange}/>
+                    <TextInput name="Last Name" value={lastName} onChange={handleChange}/>
+                    <TextInput name="Email" value={email} type="email" onChange={handleChange}/>
+                    <TextInput name="Gender" value={gender} onChange={handleChange}/>
+                    <TextInput name="Date of Birth" value={dob} onChange={handleChange}/>
+                    <TextInput name="Phone Number" value={phone} onChange={handleChange}/>
+                    <TextInput name="Street Address" value={streetAddress} onChange={handleChange}/>
+                    <TextInput name="City" value={city} onChange={handleChange}/>
+                    <TextInput name="State" value={state} onChange={handleChange}/>
+                    <TextInput name="Zip Code" value={zip} onChange={handleChange}/>
+                    <Button name="Update Profile" fullWidth onClick={handleClick}/>
                 </div>
                 <div className="Profile__container">
-                    {changePasswordError && <Error msg={changePasswordError}/>}
-                    <label className="Profile__label" for="password"> CHANGE PASSWORD</label>
-                    <input className={styleInput()} id="password" name="password" placeholder="Enter a new password" type="password" required
-                    value={password} onChange={handleChange}/>
-                    {password && <input className={styleInput()} id="passCheck" name="passCheck" placeholder="Re-enter your new passord" type="password" required
-                    value={passCheck} onChange={handleChange}/>}
-                    {password && passwordMatch && <input id="passwordButton" className="Profile__button" type="submit" value="CHANGE PASSWORD" onClick={handleClick}/>}
+                    <h3 className="Profile__form__title">Change Password</h3>
+                    {changePasswordError && <Alert severity='error' msg={changePasswordError} onClose={() => dispatch(clearUsersStatusUpdates())}/>}
+                    <TextInput name="New Password" value={password} type="password" onChange={handleChange}/>
+                    {password && <TextInput name="Password Match" value={passMatch} type="password" 
+                        placeholder="Re-enter your new passord" onChange={handleChange}/>}
+                    {password && passwordMatch && <Button name="Change Password" fullWidth onClick={handleClick}/>}
                 </div>  
             </form>
         </section>

@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
+import { AccountCircle } from '@mui/icons-material';
+import TextInput from '../../material-ui/TextInput';
+import Alert from '../../material-ui/Alert';
+import Button from '../../material-ui/Button';
+import Checkbox from '../../material-ui/Checkbox';
 import Loader from '../../components/loader/Loader';
-import Error from '../error/Error';
 import { registerUser, selectRegisteringUser, selectRegisterUserSuccess, selectRegisterUserError, googleLogin, 
         clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import BackgroundImg from '../../resources/images/confectionary-pattern.png';
 
 const Register = () => {
     const [firstName, setFirstName] = useState('');
@@ -19,30 +24,34 @@ const Register = () => {
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
+
     const handleChange = ({ target }) => {
-        if (target.name === "firstName") {
+        if (target.name === 'firstname') {
             setFirstName(target.value);
         }
-        else if (target.name === "lastName") {
+        else if (target.name === 'lastname') {
             setLastName(target.value);
         }
-        else if (target.name === "email") {
+        else if (target.name === 'email') {
             setEmail(target.value);
         }
-        else if (target.name === "username") {
+        else if (target.name === 'username') {
             setUsername(target.value);
         }
-        else if (target.name === "password") {
+        else if (target.name === 'password') {
             setPassword(target.value);
         }
     };
 
     const handleClick = (e) => {
         e.preventDefault();
-        if (e.target.id === 'registerButton') {
+        if (e.target.id === 'register-button') {
             dispatch(registerUser({ firstName, lastName, email, username, password }));
         }
-        else if (e.target.id === 'googleRegisterButton') {
+        else if (e.target.id === 'googlesignup-button') {
             dispatch(googleLogin());
         }
     };
@@ -71,29 +80,22 @@ const Register = () => {
         );
     }
     return (
-        <section className="Register">
+        <section style={style} className="Register">
             <h2 className="Register__title">New User Registration</h2>
             <form className="Register__form" method="post" action="">
-                {registerUserError && <Error msg={registerUserError}/>}
-                <label className="Register__label" for="firstName">FIRST NAME</label>
-                <input className="Register__input" id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]" required
-                value={firstName} onChange={handleChange}/>
-                <label className="Register__label" for="lastName">LAST NAME</label>
-                <input className="Register__input" id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]" required
-                value={lastName} onChange={handleChange}/>
-                <label className="Register__label" for="email">EMAIL</label>
-                <input className="Register__input" id="email" name="email" placeholder="Enter your email address" type="email" required
-                value={email} onChange={handleChange}/>
-                <label className="Register__label" for="username">USERNAME</label>
-                <input className="Register__input" id="username" name="username" placeholder="Username" required
-                value={username} onChange={handleChange}/>
-                <label className="Register__label" for="password">PASSWORD</label>
-                <input className="Register__input" id="password" name="password" placeholder="Enter a valid password" type="password" required
-                value={password} onChange={handleChange}/>
-                <input id="registerButton" className="Register__button" type="submit" value="REGISTER" onClick={handleClick}/>
-                <button id="googleRegisterButton" className="Register__google__button" onClick={handleClick}>GOOGLE SIGNUP</button>
+                <h3 className="Register__form__title">Register</h3>
+                <AccountCircle sx={{ fontSize: 72, alignSelf: 'center' }}/>
+                {registerUserError && <Alert severity='error' msg={registerUserError} onClose={() => dispatch(clearUsersStatusUpdates())}/>}
+                <TextInput name="First Name" value={firstName} onChange={handleChange}/>
+                <TextInput name="Last Name" value={lastName} onChange={handleChange}/>
+                <TextInput name="Email" value={email} type="email" onChange={handleChange}/>
+                <TextInput name="Username" value={username} onChange={handleChange}/>
+                <TextInput name="Password" value={password} type="password" onChange={handleChange}/>
+                <p><Checkbox label="I agree to Terms of Use and Privacy Policy"/></p>
+                <Button name="Register" fullWidth onClick={handleClick}/>
+                <Button name="Google Signup" fullWidth onClick={handleClick}/>
+                <Link to='/login'><p className="Register__loginLink">Already registered? Please Login.</p></Link>
             </form>
-            <Link to='/login'><p className="Register__loginLink">Already registered? Please Login.</p></Link>
         </section>
     );
 }

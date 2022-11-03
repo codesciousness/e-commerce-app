@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './ProductDetail.css';
+import Alert from '../../material-ui/Alert';
 import Product from '../product/Product';
 import Loader from '../loader/Loader';
-import Error from '../error/Error';
 import { loadProductById, selectProductId, selectProduct, selectLoadingProduct, selectLoadProductSuccess, selectLoadProductError, 
         clearProdsStatusUpdates } from '../../features/products/productsSlice';
 
@@ -38,7 +38,7 @@ const ProductDetail = () => {
     return (
         <section className="ProductDetail">
             <h2 className="ProductDetail__heading">Product Details</h2>
-            {loadProductError && <Error msg={loadProductError}/>}
+            {loadProductError && <Alert severity='error' msg={loadProductError} onClose={() => dispatch(clearProdsStatusUpdates())}/>}
             <Product product={product} display='details'/>
         </section>
     );

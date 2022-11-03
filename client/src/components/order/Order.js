@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Order.css';
-import Error from '../error/Error';
+import Alert from '../../material-ui/Alert';
+import Button from '../../material-ui/Button';
 import { cancelOrder, setOrderId, clearOrder, selectOrders, selectCancelOrderError } from '../../features/orders/ordersSlice';
 import { selectUserId } from '../../features/users/usersSlice';
 
@@ -32,12 +33,12 @@ const Order = ({ order }) => {
     if (Object.entries(order).length === 0) return null;
     return (
         <section className="Order">
-            {cancelOrderError && <Error msg={cancelOrderError}/>}
+            {cancelOrderError && <Alert severity='error' msg={cancelOrderError}/>}
             <div className="Order__info">
                 <Link to={`/orders/${orderId}`}><h3 className="Order__id" onClick={handleOrderClick}>Order Id: {orderId}</h3></Link>
                 <p className="Order__date">Date: {date}</p>
                 <p className="Order__status">Status: {order.status}</p>
-                {order.status === 'processing' && <button className="Order__button" onClick={handleButtonClick}>Cancel Order</button>}
+                {order.status === 'processing' && <Button name="Cancel Order" onClick={handleButtonClick}/>}
             </div>
             <div className="Order__container">
                 <img className="Order__image" src={order.url} alt="" />

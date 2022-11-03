@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './OrderDetail.css';
+import Alert from '../../material-ui/Alert';
 import Order from '../order/Order';
 import OrderItem from '../orderItem/OrderItem';
 import Loader from '../loader/Loader';
-import Error from '../error/Error';
 import { loadOrderById, selectOrderId, selectOrder, selectLoadingOrder, selectLoadOrderSuccess, selectLoadOrderError, 
         clearOrdersStatusUpdates } from '../../features/orders/ordersSlice';
 import { selectUserId } from '../../features/users/usersSlice';
@@ -41,7 +41,7 @@ const OrderDetail = () => {
     return (
         <section className="OrderDetail">
             <h2 className="OrderDetail__heading">Order Details</h2>
-            {loadOrderError && <Error msg={loadOrderError}/>}
+            {loadOrderError && <Alert severity='error' msg={loadOrderError} onClose={() => dispatch(clearOrdersStatusUpdates())}/>}
             <Order order={order.summary}/>
             <h2 className="OrderDetail__item__heading">Items Ordered</h2>
             <ul className="OrderDetail__list">

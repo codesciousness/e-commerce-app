@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import { AccountCircle } from '@mui/icons-material';
+import TextInput from '../../material-ui/TextInput';
+import Alert from '../../material-ui/Alert';
+import Button from '../../material-ui/Button';
+import Checkbox from '../../material-ui/Checkbox';
 import Loader from '../loader/Loader';
-import Error from '../error/Error';
-import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { login, googleLogin, selectLoggingIn, selectLoginSuccess,
+    selectLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import BackgroundImg from '../../resources/images/confectionary-pattern.png';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -15,21 +21,25 @@ const Login = () => {
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
+    const style = {
+        backgroundImage: `url(${BackgroundImg})`
+    };
+
     const handleChange = ({ target }) => {
-        if (target.name === "username") {
+        if (target.name === 'username') {
             setUsername(target.value);
         }
-        else if (target.name === "password") {
+        else if (target.name === 'password') {
             setPassword(target.value);
         }
     };
 
     const handleClick = (e) => {
         e.preventDefault();
-        if (e.target.id === 'loginButton') {
+        if (e.target.id === 'login-button') {
             dispatch(login({ username, password }));
         }
-        else if (e.target.id === 'googleLoginButton') {
+        else if (e.target.id === 'googlelogin-button') {
             dispatch(googleLogin());
         }
     };
@@ -55,20 +65,19 @@ const Login = () => {
         );
     }
     return (
-        <section className="Login">
+        <section style={style} className="Login">
             <h2 className="Login__title">User Login</h2>
             <form className="Login__form" method="post" action="">
-                {loginError && <Error msg={loginError}/>}
-                <label className="Login__label" for="username">USERNAME</label>
-                <input className="Login__input" id="username" name="username" placeholder="Username" required
-                value={username} onChange={handleChange}/>
-                <label className="Login__label" for="password">PASSWORD</label>
-                <input className="Login__input" id="password" name="password" placeholder="Enter a valid password" type="password" required
-                value={password} onChange={handleChange}/>
-                <input id='loginButton' className="Login__button" type="submit" value="LOGIN" onClick={handleClick}/>
-                <button id='googleLoginButton' className="Login__google__button" onClick={handleClick}>GOOGLE LOGIN</button>
+                <h3 className="Login__form__title">Login</h3>
+                <AccountCircle sx={{ fontSize: 72, alignSelf: 'center' }}/>
+                {loginError && <Alert severity='error' msg={loginError} onClose={() => dispatch(clearUsersStatusUpdates())}/>}
+                <TextInput name="Username" value={username} onChange={handleChange}/>
+                <TextInput name="Password" value={password} type="password" onChange={handleChange}/>
+                <p><Checkbox label="Remember me"/></p>
+                <Button name="Login" fullWidth onClick={handleClick}/>
+                <Button name="Google Login" fullWidth onClick={handleClick}/>
+                <Link to='/register'><p className="Login__registerLink">New user? Please Register.</p></Link>
             </form>
-            <Link to='/register'><p className="Login__registerLink">New user? Please Register.</p></Link>
         </section>
     );
 }

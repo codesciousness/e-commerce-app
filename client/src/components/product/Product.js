@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Product.css';
+import IconButton from '@mui/material/IconButton';
+import { AddCircle, RemoveCircle } from '@mui/icons-material';
+import Button from '../../material-ui/Button';
 import { setProductId } from '../../features/products/productsSlice';
 import { loadCart, updateCart, selectCartId } from '../../features/cart/cartSlice';
 import { selectUserId } from '../../features/users/usersSlice';
@@ -19,16 +22,15 @@ const Product = ({ product, display }) => {
         dispatch(setProductId(productId));
     };
 
-    const handleQuantityClick = ({ target }) => {
-        if (target.id === "addButton") {
-            setCartQuantity(prev => prev + 1);
-        }
-        else if (target.id === "subButton") {
-            setCartQuantity(prev => {
-                if (!prev) return
-                else return prev - 1;
-            });
-        }
+    const handleAddClick = () => {
+        setCartQuantity(prev => prev + 1);
+    };
+
+    const handleRemoveClick = () => {
+        setCartQuantity(prev => {
+            if (!prev) return
+            else return prev - 1;
+        });
     };
 
     const handleCartClick = () => {
@@ -64,10 +66,10 @@ const Product = ({ product, display }) => {
                     <div className="Product__inCart__container">
                         <p className="Product__inCart__label">QUANTITY</p>
                         <div className="Product__inCart__quantity__container">
-                            <button id="subButton" className="Product__inCart__button" onClick={handleQuantityClick}>-</button>
+                            <IconButton onClick={handleRemoveClick}><RemoveCircle/></IconButton>
                             <input id="quantity" className="Product__inCart__quantity" type="number" name="quantity" min="0" max="100"
                             value={cartQuantity} readOnly/>
-                            <button id="addButton" className="Product__inCart__button" onClick={handleQuantityClick}>+</button>
+                            <IconButton onClick={handleAddClick}><AddCircle/></IconButton>
                         </div>
                     </div>
                     <div className="Product__inCart__container">
@@ -100,7 +102,7 @@ const Product = ({ product, display }) => {
                             <p className="Product__details__label">PRICE</p>
                             <p className="Product__details__price">{product.sell_price}</p>
                         </div>
-                        <button className="Product__button" onClick={handleCartClick}>Add to Cart <i className="fas fa-cart-plus fa-lg"></i></button>
+                        <Button name="Add to Cart" endIcon={<i className="fas fa-cart-plus fa-lg"></i>} onClick={handleCartClick}/>
                     </div>
                 </div>
                 <div className="Product__details__container">
@@ -130,7 +132,7 @@ const Product = ({ product, display }) => {
                 <div className="Product__info">
                 <Link to={`/products/${productId}`}><h2 id={product.product_id} className="Product__name" onClick={handleProductClick}>{product.name}</h2></Link>
                     <p className="Product__price">{product.sell_price}</p>
-                    <button className="Product__button" onClick={handleCartClick}>Add to Cart <i className="fas fa-cart-plus fa-lg"></i></button>
+                    <Button name="Add to Cart" endIcon={<i className="fas fa-cart-plus fa-lg"></i>} onClick={handleCartClick}/>
                 </div> 
             </section>
         );

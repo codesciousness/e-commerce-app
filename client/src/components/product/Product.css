@@ -44,26 +44,6 @@
     margin: 1rem 0;
 }
 
-.Product__button {
-    min-width: 175px;
-    border: 1px solid black;
-    padding: 1rem;
-    border-radius: 5px;
-    margin: 0.5rem;
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Product__button:hover {
-    background-color: lightseagreen;
-    color: black;
-}
-
 .Product__inCart {
     display: flex;
     justify-content: flex-start;
@@ -113,25 +93,13 @@
     align-items: center;
 }
 
-.Product__inCart__button {
-    padding: 0.5rem;
-    font-size: 1.25rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Product__inCart__button:hover {
-    background-color: black;
-    color: white;
-}
-
 .Product__inCart__quantity {
-    border: 1px solid black;
     padding: 0.5rem 0;
     font-size: 1.25rem;
     font-weight: bold;
     text-align: center;
+    border-radius: 50px;
+    border: 1px solid black;
 }
 
 input[type=number]::-webkit-inner-spin-button,

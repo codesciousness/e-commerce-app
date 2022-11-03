@@ -29,26 +29,6 @@
     color: lightseagreen;
 }
 
-.Order__button {
-    min-width: 175px;
-    border: 1px solid black;
-    padding: 0.5rem 0.75rem;
-    border-radius: 5px;
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.Order__button:hover {
-    background-color: palevioletred;
-    color: black;
-}
-
 .Order__image, .Order__address, .Order__payment {
     margin: 0 1rem;
 }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Products.css';
+import Alert from '../../material-ui/Alert';
 import Product from '../../components/product/Product';
 import SearchTerm from '../searchTerm/SearchTerm';
 import ProductLoader from '../../components/productLoader/ProductLoader';
-import Error from '../../components/error/Error';
 import { loadProducts, selectFilteredProducts, selectLoadingProducts, selectLoadProductsSuccess, selectLoadProductsError,
         clearProdsStatusUpdates } from './productsSlice';
 import { selectSearchTerm } from '../searchTerm/searchTermSlice';
@@ -64,7 +64,7 @@ const Products = () => {
                 </select>
             </div>
             <ul className="Products__list">
-                {loadProductsError && <Error msg={loadProductsError}/>}
+                {loadProductsError && <Alert severity='error' msg={loadProductsError} onClose={() => dispatch(clearProdsStatusUpdates())}/>}
                 {products.map(product => <li key={product.product_id}><Product product={product} /></li>)}
             </ul>
         </section>

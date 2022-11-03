@@ -1,15 +1,15 @@
 .Navbar {
     width: 100%;
     height: 75px;
-    background: white;
     position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border-bottom: 1px solid lightseagreen;
+    background-color: white;
+    border-bottom: 1px solid lightgray;
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
 }
   
 .Navbar__title {
@@ -44,29 +44,6 @@
   
 .Navbar__div p {
     margin-top: 0.25rem;
-}
-  
-.Navbar__login__button, .Navbar__logout__button {
-    border: 1px solid black;
-    padding: 0.5rem 0.75rem;
-    border-radius: 5px;
-    background-color: black;
-    color: white;
-    font-size: 1.1rem;
-    font-family: Impact, 'Anton', 'Arial Narrow Bold', sans-serif;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-  
-.Navbar__login__button:hover {
-    background-color: lightseagreen;
-    color: black;
-}
-  
-.Navbar__logout__button:hover {
-    background-color: palevioletred;
-    color: black;
 }
 
 @media only screen and (max-width: 700px) {
