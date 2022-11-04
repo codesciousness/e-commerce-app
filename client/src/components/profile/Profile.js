@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import './Profile.css';
 import { AccountCircle } from '@mui/icons-material';
 import TextInput from '../../material-ui/TextInput';
@@ -39,7 +39,6 @@ const Profile = () => {
     const changePasswordError = useSelector(selectChangePasswordError);
     const loginSuccess = useSelector(selectLoginSuccess);
     const dispatch = useDispatch();
-    let navigate = useNavigate();
 
     const style = {
         backgroundImage: `url(${BackgroundImg})`
@@ -125,10 +124,7 @@ const Profile = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (!userId) {
-            navigate('/login', { replace: true });
-        }
-        else {
+        if (userId) {
             dispatch(loadUserById(userId));
         }
     }, []);
@@ -183,7 +179,14 @@ const Profile = () => {
                     {password && <TextInput name="Password Match" value={passMatch} type="password" 
                         placeholder="Re-enter your new passord" onChange={handleChange}/>}
                     {password && passwordMatch && <Button name="Change Password" fullWidth onClick={handleClick}/>}
-                </div>  
+                </div>
+                <div className="Profile__container">
+                    <h3 className="Profile__form__title">Order History</h3>
+                    <div className="Profile__box">
+                        <span className="Profile__icon"><i class="fas fa-box-open fa-2xl"></i></span>
+                        <Link to='/orders'><p className="Profile__link">View past orders</p></Link>
+                    </div>
+                </div>
             </form>
         </section>
     );

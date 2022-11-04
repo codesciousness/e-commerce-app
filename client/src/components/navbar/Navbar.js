@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
-import { Login, Person, ShoppingBag } from '@mui/icons-material';
+import { Login, Person } from '@mui/icons-material';
 import CartBadge from '../../material-ui/CartBadge';
 import Button from '../../material-ui/Button';
 import { logout, selectUserId, selectUser, selectLogoutSuccess, selectLogoutError,
@@ -95,30 +95,24 @@ const Navbar = () => {
                         </div>
                     </Link>
                 </li>
-                <li className="Navbar__li">
-                    <Link to='orders'>
-                        <div className="Navbar__div">
-                            <ShoppingBag/>
-                            <p>Orders</p>
-                        </div>
-                    </Link>
-                </li>
-                <li className="Navbar__li">
-                    <Link to='profile'>
-                        <div className="Navbar__div">
-                            <Person/>
-                            <p>Profile</p>
-                        </div>
-                    </Link>
-                </li>
-                {!userId && <li className="Navbar__li">
-                    <Link to='register'>
-                        <div className="Navbar__div">
-                            <Login/>
-                            <p>Signup</p>
-                        </div>
-                    </Link>
-                </li>}
+                {userId ? 
+                    <li className="Navbar__li">
+                        <Link to='profile'>
+                            <div className="Navbar__div">
+                                <Person/>
+                                <p>Profile</p>
+                            </div>
+                        </Link>
+                    </li> : 
+                    <li className="Navbar__li">
+                        <Link to='register'>
+                            <div className="Navbar__div">
+                                <Login/>
+                                <p>Signup</p>
+                            </div>
+                        </Link>
+                    </li>
+                }
                 {button}
             </ul>
         </nav>

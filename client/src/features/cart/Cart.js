@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import './Cart.css';
 import TextInput from '../../material-ui/TextInput';
@@ -116,7 +116,7 @@ const Cart = () => {
 
     useEffect(() => {
         if (!userId) {
-            navigate('/login', { replace: true });
+            navigate('/login');
         }
         else {
             dispatch(setCartId(user.cart_id));
@@ -139,7 +139,7 @@ const Cart = () => {
             setPayMethod('');
             dispatch(loadCart({ cartId, userId }));
             setTimeout(() => {
-                navigate("/orders");
+                navigate('/orders');
                 dispatch(clearCartStatusUpdates());
             }, 3000);
         }

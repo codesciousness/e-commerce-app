@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from '../components/home/Home';
@@ -11,8 +12,23 @@ import ScrollToTop from '../components/scrollToTop/ScrollToTop';
 import StripeContainer from '../components/stripeContainer/StripeContainer';
 import Orders from '../features/orders/Orders';
 import Users from '../features/users/Users';
+import { session, selectUserId, selectSessionSuccess, 
+  clearUsersStatusUpdates } from '../features/users/usersSlice';
 
 export default function App() {
+  const userId = useSelector(selectUserId);
+  const sessionSuccess = useSelector(selectSessionSuccess);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userId) {
+      dispatch(session());
+    }
+    if (sessionSuccess) {
+      dispatch(clearUsersStatusUpdates());
+    }
+  }, [userId, sessionSuccess, dispatch]);
+
   return (
     <div className="App">
       <Navbar />

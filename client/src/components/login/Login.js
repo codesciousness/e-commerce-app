@@ -8,8 +8,8 @@ import Alert from '../../material-ui/Alert';
 import Button from '../../material-ui/Button';
 import Checkbox from '../../material-ui/Checkbox';
 import Loader from '../loader/Loader';
-import { login, googleLogin, selectLoggingIn, selectLoginSuccess,
-    selectLoginError, clearUsersStatusUpdates } from '../../features/users/usersSlice';
+import { login, googleLogin, selectLoggingIn, selectLoginSuccess, selectLoginError,
+    selectSessionSuccess, clearUsersStatusUpdates } from '../../features/users/usersSlice';
 import BackgroundImg from '../../resources/images/confectionary-pattern.png';
 
 const Login = () => {
@@ -18,6 +18,7 @@ const Login = () => {
     const loggingIn = useSelector(selectLoggingIn);
     const loginSuccess = useSelector(selectLoginSuccess);
     const loginError = useSelector(selectLoginError);
+    const sessionSuccess = useSelector(selectSessionSuccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -56,6 +57,12 @@ const Login = () => {
             dispatch(clearUsersStatusUpdates());
         }
     }, [loginSuccess, dispatch, navigate]);
+
+    useEffect(() => {
+        if (sessionSuccess) {
+            navigate(-1);
+        }
+    }, [sessionSuccess, navigate]);
 
     if (loggingIn) {
         return (

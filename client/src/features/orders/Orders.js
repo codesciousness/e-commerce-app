@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import './Orders.css';
 import Alert from '../../material-ui/Alert';
 import Order from '../../components/order/Order';
@@ -24,7 +23,6 @@ const Orders = () => {
     const logoutSuccess = useSelector(selectLogoutSuccess);
     const checkoutSuccess = useSelector(selectCheckoutSuccess);
     const dispatch = useDispatch();
-    let navigate = useNavigate();
 
     const style = {
         backgroundImage: `url(${BackgroundImg})`
@@ -35,13 +33,10 @@ const Orders = () => {
     };
 
     useEffect(() => {
-        if (!userId) {
-            navigate('/login', { replace: true });
-        }
-        else {
+        if (userId) {
             dispatch(loadOrders({ userId, sort }));
         }
-    }, [sort, userId, dispatch, navigate]);
+    }, [sort, userId, dispatch]);
 
     useEffect(() => {
         if (cancelOrderSuccess || loginSuccess || checkoutSuccess) {

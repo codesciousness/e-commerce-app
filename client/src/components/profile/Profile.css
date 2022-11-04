@@ -30,6 +30,28 @@
     margin: 0.25rem 0;
 }
 
+.Profile__box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
+}
+
+.Profile__icon {
+    padding: 1rem 1.5rem;
+    margin-right: 1rem;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
+    background-color: rgba(32, 178, 170, 0.1);
+}
+
+.Profile__link {
+    font-size: 1.25rem;
+}
+
 @media only screen and (max-width: 500px) {
 
     .Profile {
