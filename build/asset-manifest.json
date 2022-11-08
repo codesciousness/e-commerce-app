@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.99cd981c.css",
+    "main.js": "/static/js/main.5b8cb944.js",
+    "static/media/brooke-lark-W1B2LpQOBxA-unsplash.jpg": "/static/media/brooke-lark-W1B2LpQOBxA-unsplash.ddda7ad83510556210a1.jpg",
+    "static/media/freestocks-VFrcRtEQKL8-unsplash.jpg": "/static/media/freestocks-VFrcRtEQKL8-unsplash.bf801cfbea2ea046e12a.jpg",
+    "static/media/joshua-rawson-harris-YNaSz-E7Qss-unsplash.jpg": "/static/media/joshua-rawson-harris-YNaSz-E7Qss-unsplash.ec3c57d4df51f656d095.jpg",
+    "static/media/justin-lim-JKjBsuKpatU-unsplash.jpg": "/static/media/justin-lim-JKjBsuKpatU-unsplash.72028ff7c09a9b75b84c.jpg",
+    "static/media/Hal.ttf": "/static/media/Hal.b315a9983f32b80ae24a.ttf",
+    "static/media/subtle-grey-pattern.png": "/static/media/subtle-grey-pattern.6e76f1ab2fb93f47c8ca.png",
+    "static/media/Ikaros.ttf": "/static/media/Ikaros.228cf823a232d7d7f62e.ttf",
+    "static/media/light-wool-pattern.png": "/static/media/light-wool-pattern.7e82e91b2277c66c90bb.png",
+    "static/media/gplay-pattern.png": "/static/media/gplay-pattern.d54b6931c0a99f2c3be9.png",
+    "index.html": "/index.html",
+    "main.99cd981c.css.map": "/static/css/main.99cd981c.css.map",
+    "main.5b8cb944.js.map": "/static/js/main.5b8cb944.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.99cd981c.css",
+    "static/js/main.5b8cb944.js"
+  ]
+}

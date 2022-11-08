@@ -17,7 +17,7 @@ const { PORT = 4001, NODE_ENV = 'development' } = process.env;
 const IN_PROD = NODE_ENV === 'production';
 const oneDay = 1000 * 60 * 60 * 24;
 const corsOptions = {
-  origin: ['http://localhost:4001/', 'http://localhost:3000/', 'https://plus-ultra-store.herokuapp.com/'],
+  origin: ['http://localhost:4001/', 'http://localhost:3000/', 'https://e-commerce-app.projects.mycodefolio.com/'],
   credentials: true
 };
 
@@ -35,7 +35,7 @@ app.use(cors(corsOptions));
 
 // Serve static content in production
 if (IN_PROD) {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, 'build')));
   app.set('trust proxy', true);
 };
 
@@ -73,7 +73,7 @@ app.use(apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+  res.sendFile(path.join(__dirname, 'build/index.html'));
 });
 
 // Add code to start the server listening
