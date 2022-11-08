@@ -38,7 +38,7 @@ For part two of the project, we were instructed to continue building an e-commer
 - Build the checkout flow and enable users to complete a purchase using a payment processor (Stripe recommended)
 - Set up order history and enable users to view order history
 - Allow access to protected resources only after the user logs in
-- Publish the application to Heroku
+- Publish the application to Heroku (originally published on Heroku, has since been redeployed on Google Cloud)
 
 ## Table of Contents
 
@@ -50,7 +50,7 @@ For part two of the project, we were instructed to continue building an e-commer
 
 ## Features
 
-I chose to implement the E-commerce Store application utilizing React and Redux, and added a few additonal features as well. The home page was created with a large hero section with a user interactive slideshow. The products returned by the database can be filtered using the category filters and/or by search terms. Orders can be canceled as long as they are in processing status and the order history can also be sorted by date. Under the user's profile there is a change password option. Third-party registration and authentication was implemented utilizing Google, and the recommended Stripe payment processor functionality was added. I integrated error states into each component with custom error messages passed from the server. Lastly, I created an animated product loader component and a spinning loader that I utilized for loading states throughout the app. The application has responsive layout changes for all device types and is deployed via Heroku at [Plus Ultra Store](https://plus-ultra-store.herokuapp.com/).
+I chose to implement the E-commerce Store application utilizing React and Redux, and added a few additonal features as well. The home page was created with a large hero section with a user interactive slideshow. The products returned by the database can be filtered using the category filters and/or by search terms. Orders can be canceled as long as they are in processing status and the order history can also be sorted by date. Under the user's profile there is a change password option. Third-party registration and authentication was implemented utilizing Google, and the recommended Stripe payment processor functionality was added. I integrated error states into each component with custom error messages passed from the server. Lastly, I created an animated product loader component and a spinning loader that I utilized for loading states throughout the app. The application has responsive layout changes for all device types and is deployed via Google Cloud and CapRover at [Plus Ultra Store](https://e-commerce-app.projects.mycodefolio.com/).
 
 ## Technologies
 
